@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Detail</title>
+  <style>
+    :root {
+      --bg: #f5f1ea;
+      --fg: #18180f;
+      --muted: rgba(24, 24, 15, 0.72);
+      --soft-muted: rgba(24, 24, 15, 0.38);
+      --border: rgba(24, 24, 15, 0.12);
+      --panel: rgba(255, 255, 255, 0.42);
+      --font-display: "Bricolage Grotesque", sans-serif;
+      --font-body: "DM Sans", sans-serif;
+      --ease-out-expo: cubic-bezier(.16,1,.3,1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(255, 107, 157, 0.14), transparent 28%),
+        radial-gradient(circle at 80% 15%, rgba(78, 191, 237, 0.16), transparent 24%),
+        var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .back-link {
+      position: fixed;
+      top: 1.8rem;
+      left: 2rem;
+      z-index: 20;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.88rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 0.18rem;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .detail-page {
+      width: 100%;
+    }
+
+    .detail-hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      align-items: start;
+      padding: 7rem 2rem 3rem;
+      position: relative;
+    }
+
+    .detail-copy {
+      grid-column: 2 / 3;
+      width: min(100%, 58rem);
+      margin-left: auto;
+      position: sticky;
+      top: 6rem;
+      transition: color .45s ease, opacity .45s ease;
+    }
+
+    body.scrolled-copy .detail-copy,
+    body.scrolled-copy .detail-copy .meta-value,
+    body.scrolled-copy .detail-copy .abstract {
+      color: var(--soft-muted);
+    }
+
+    .eyebrow {
+      margin: 0 0 1rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .detail-title {
+      margin: 0 0 1.4rem;
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 7vw, 7rem);
+      line-height: 0.92;
+      max-width: 12ch;
+    }
+
+    .abstract {
+      margin: 0;
+      max-width: 38rem;
+      font-size: clamp(1.05rem, 1.8vw, 1.28rem);
+      line-height: 1.85;
+      color: var(--muted);
+      transition: color .45s ease;
+    }
+
+    .detail-meta {
+      margin-top: 2.8rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.8rem 2rem;
+      max-width: 42rem;
+    }
+
+    .meta-block {
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .meta-label {
+      margin: 0 0 0.8rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .meta-value {
+      margin: 0;
+      color: var(--fg);
+      line-height: 1.8;
+      transition: color .45s ease;
+    }
+
+    .detail-gallery {
+      padding: 0 0 5rem;
+    }
+
+    .gallery-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .gallery-item {
+      width: 100%;
+    }
+
+    .gallery-item.primary {
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+    }
+
+    .gallery-frame {
+      position: relative;
+      overflow: hidden;
+      background: var(--panel);
+      border-radius: 0;
+      min-height: 72vh;
+      display: grid;
+      place-items: end start;
+      isolation: isolate;
+    }
+
+    .gallery-item:not(.primary) .gallery-frame {
+      width: min(1400px, calc(100vw - 4rem));
+      aspect-ratio: 16 / 10;
+      min-height: auto;
+      margin: 0 auto;
+      border-radius: 8px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.14);
+    }
+
+    .gallery-visual {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.01);
+    }
+
+    .gallery-caption {
+      position: relative;
+      z-index: 1;
+      margin: 1.35rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.62);
+      backdrop-filter: blur(14px);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(24, 24, 15, 0.7);
+    }
+
+    @media (max-width: 960px) {
+      .detail-hero {
+        grid-template-columns: 1fr;
+        padding: 6rem 1.5rem 2rem;
+      }
+
+      .detail-copy {
+        grid-column: 1;
+        width: 100%;
+        position: static;
+      }
+
+      body.scrolled-copy .detail-copy,
+      body.scrolled-copy .detail-copy .meta-value,
+      body.scrolled-copy .detail-copy .abstract {
+        color: inherit;
+      }
+
+      .detail-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-item.primary .gallery-frame {
+        min-height: 52vh;
+      }
+
+      .gallery-item:not(.primary) .gallery-frame {
+        width: min(100%, calc(100vw - 3rem));
+      }
+
+      .back-link {
+        left: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="./index.html#work">Back to work</a>
+
+  <main class="detail-page">
+    <section class="detail-hero">
+      <div class="detail-copy">
+        <p class="eyebrow" id="detailEyebrow">Project detail</p>
+        <h1 class="detail-title" id="detailTitle">Project</h1>
+        <p class="abstract" id="detailAbstract"></p>
+
+        <div class="detail-meta">
+          <section class="meta-block">
+            <p class="meta-label">Services</p>
+            <p class="meta-value" id="detailServices"></p>
+          </section>
+          <section class="meta-block">
+            <p class="meta-label">Credits</p>
+            <p class="meta-value" id="detailCredits"></p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="detail-gallery">
+      <div class="gallery-list" id="galleryList"></div>
+    </section>
+  </main>
+
+  <script>
+    const PROJECTS = {
+      "rememberita": {
+        title: "Rememberita",
+        eyebrow: "Tangible memory ritual",
+        abstract: "Rememberita explores how memory can be held through small physical rituals rather than screens alone. The project turns personal recollection into a tactile interaction, combining gentle sensory cues, form, and pacing so the act of remembering becomes slow, intimate, and embodied.",
+        services: ["#Tangible", "#PhysicalComputing"],
+        credits: ["Nerea Asensio"],
+        theme: {
+          bg: "#F3EDE8",
+          fg: "#18180F",
+          muted: "rgba(24,24,15,0.68)",
+          soft: "rgba(24,24,15,0.34)",
+          border: "rgba(24,24,15,0.12)",
+          panel: "rgba(255,255,255,0.4)"
+        },
+        images: [
+          { label: "Hero still", bg: "linear-gradient(135deg, #d7b59b 0%, #c8c0b0 38%, #f0e6db 100%)" },
+          { label: "Prototype details", bg: "linear-gradient(135deg, #e8d4c4 0%, #cdb09f 100%)" },
+          { label: "Interaction sequence", bg: "linear-gradient(135deg, #efe6dc 0%, #c8c0b0 100%)" },
+          { label: "Material study", bg: "linear-gradient(135deg, #dec4ae 0%, #f5ebe1 100%)" },
+          { label: "Ambient setup", bg: "linear-gradient(135deg, #d5b7a2 0%, #e8ddd2 100%)" }
+        ]
+      },
+      "meeting-pond": {
+        title: "Meeting Pond",
+        eyebrow: "Connected presence system",
+        abstract: "Meeting Pond imagines remote connection as a calm shared atmosphere rather than a constant stream of notifications. The project uses connected objects and subtle behaviours to create a sense of presence across distance, translating attention and absence into a poetic, low-friction relational interface.",
+        services: ["#ConnectedObjects", "#PresenceAndDistance"],
+        credits: ["Nerea Asensio", "Alice Bernard", "Matteo Riva"],
+        theme: {
+          bg: "#EEF6F2",
+          fg: "#121915",
+          muted: "rgba(18,25,21,0.68)",
+          soft: "rgba(18,25,21,0.34)",
+          border: "rgba(18,25,21,0.12)",
+          panel: "rgba(255,255,255,0.48)"
+        },
+        images: [
+          { label: "System overview", bg: "linear-gradient(135deg, #8cbcab 0%, #d8ebe4 100%)" },
+          { label: "Object pair", bg: "linear-gradient(135deg, #b7d5c8 0%, #8ebaa7 100%)" },
+          { label: "Presence cue", bg: "linear-gradient(135deg, #dcefe7 0%, #9bb5a4 100%)" },
+          { label: "Spatial placement", bg: "linear-gradient(135deg, #aac7b8 0%, #edf7f3 100%)" },
+          { label: "Behaviour mapping", bg: "linear-gradient(135deg, #89afa0 0%, #d6ebe3 100%)" }
+        ]
+      },
+      "financial-planning-hub": {
+        title: "Financial Planning Hub",
+        eyebrow: "Service platform",
+        abstract: "Financial Planning Hub reframes complex banking tasks into a more legible and supportive product experience. The work focused on clarifying hierarchy, surfacing key decisions at the right moment, and designing an interface that feels guided and trustworthy without becoming rigid or over-explained.",
+        services: ["#UIProduct", "#Banking"],
+        credits: ["Nerea Asensio", "Luca Ferretti"],
+        theme: {
+          bg: "#F2F0FA",
+          fg: "#161420",
+          muted: "rgba(22,20,32,0.68)",
+          soft: "rgba(22,20,32,0.34)",
+          border: "rgba(22,20,32,0.12)",
+          panel: "rgba(255,255,255,0.46)"
+        },
+        images: [
+          { label: "Dashboard overview", bg: "linear-gradient(135deg, #7d7ac7 0%, #d8d5f0 100%)" },
+          { label: "Journey mapping", bg: "linear-gradient(135deg, #bbb7e5 0%, #8a86cf 100%)" },
+          { label: "Component system", bg: "linear-gradient(135deg, #eceafb 0%, #a8a0c8 100%)" },
+          { label: "Key flow", bg: "linear-gradient(135deg, #958ed8 0%, #dddaf5 100%)" },
+          { label: "Mobile behaviour", bg: "linear-gradient(135deg, #cfcaf1 0%, #867ecc 100%)" },
+          { label: "Visual language", bg: "linear-gradient(135deg, #f3f0fe 0%, #aaa3d8 100%)" }
+        ]
+      },
+      "human-loci": {
+        title: "Human Loci",
+        eyebrow: "Sound artifact",
+        abstract: "Human Loci investigates how place can be remembered, reactivated, and felt through sound. The project combines a physical artifact with spatial listening cues to translate atmosphere into an intimate encounter, positioning memory, territory, and emotion as something inhabited rather than merely represented.",
+        services: ["#SoundAndPlace", "#PhysicalArtifact"],
+        credits: ["Nerea Asensio", "Giulia Romano"],
+        theme: {
+          bg: "#F5F1F5",
+          fg: "#1C171C",
+          muted: "rgba(28,23,28,0.68)",
+          soft: "rgba(28,23,28,0.34)",
+          border: "rgba(28,23,28,0.12)",
+          panel: "rgba(255,255,255,0.44)"
+        },
+        images: [
+          { label: "Artifact view", bg: "linear-gradient(135deg, #ceb9ca 0%, #f0e8ef 100%)" },
+          { label: "Material close-up", bg: "linear-gradient(135deg, #e7d8e5 0%, #c0b0be 100%)" },
+          { label: "Listening setup", bg: "linear-gradient(135deg, #d8c6d5 0%, #f5eff4 100%)" },
+          { label: "Spatial relation", bg: "linear-gradient(135deg, #cbb9cb 0%, #ede3eb 100%)" },
+          { label: "Exhibition still", bg: "linear-gradient(135deg, #bda9bc 0%, #ebe2ea 100%)" }
+        ]
+      },
+      "elen": {
+        title: "ELEN",
+        eyebrow: "Speculative identity system",
+        abstract: "ELEN is a speculative exploration of identity, autonomy, and the systems that classify us. The project frames data as something lived and political, creating a visual and narrative world where interfaces shape not just access to information, but also the way identity becomes negotiated, performed, and controlled.",
+        services: ["#Speculative", "#DataAndIdentity"],
+        credits: ["Nerea Asensio"],
+        theme: {
+          bg: "#161217",
+          fg: "#F0EAF5",
+          muted: "rgba(240,234,245,0.72)",
+          soft: "rgba(240,234,245,0.34)",
+          border: "rgba(240,234,245,0.12)",
+          panel: "rgba(255,255,255,0.06)"
+        },
+        images: [
+          { label: "World building", bg: "linear-gradient(135deg, #4a4250 0%, #1b181d 100%)" },
+          { label: "Identity artifact", bg: "linear-gradient(135deg, #2e2830 0%, #574d59 100%)" },
+          { label: "Narrative frame", bg: "linear-gradient(135deg, #211d23 0%, #463d49 100%)" },
+          { label: "Speculative scenario", bg: "linear-gradient(135deg, #5d5161 0%, #2b252d 100%)" },
+          { label: "Interface fragments", bg: "linear-gradient(135deg, #3b333e 0%, #1e1a20 100%)" }
+        ]
+      },
+      "lynx-2-0": {
+        title: "Lynx 2.0",
+        eyebrow: "Interactive web system",
+        abstract: "Lynx 2.0 focuses on interaction at the level of systems, orchestration, and connected services. The work brings technical integrations into a more expressive and usable interface, translating backend complexity into a front-end experience that feels fast, responsive, and confidently structured.",
+        services: ["#WebInteractive", "#APIIntegration"],
+        credits: ["Nerea Asensio", "Davide Rossi"],
+        theme: {
+          bg: "#F7F2DA",
+          fg: "#1F1A0B",
+          muted: "rgba(31,26,11,0.68)",
+          soft: "rgba(31,26,11,0.34)",
+          border: "rgba(31,26,11,0.12)",
+          panel: "rgba(255,255,255,0.44)"
+        },
+        images: [
+          { label: "Platform overview", bg: "linear-gradient(135deg, #d8c776 0%, #f5edd0 100%)" },
+          { label: "Interaction model", bg: "linear-gradient(135deg, #c8b870 0%, #ebdfac 100%)" },
+          { label: "API orchestration", bg: "linear-gradient(135deg, #e7daa0 0%, #c2ae55 100%)" },
+          { label: "Flow architecture", bg: "linear-gradient(135deg, #f8efc7 0%, #c8b870 100%)" },
+          { label: "Responsive system", bg: "linear-gradient(135deg, #dcc667 0%, #efe3b3 100%)" }
+        ]
+      },
+      "adaptune": {
+        title: "Adaptune",
+        eyebrow: "Adaptive music intelligence",
+        abstract: "Adaptune explores how AI can shape musical systems that respond in real time to context, mood, and behaviour. The project looks at adaptation not as a novelty layer but as a core experiential quality, building a system where responsiveness becomes emotional, ambient, and compositionally meaningful.",
+        services: ["#AIMusic", "#AdaptiveSystems"],
+        credits: ["Nerea Asensio", "Tommaso De Luca", "Ines Keller"],
+        theme: {
+          bg: "#F8EEF0",
+          fg: "#231416",
+          muted: "rgba(35,20,22,0.68)",
+          soft: "rgba(35,20,22,0.34)",
+          border: "rgba(35,20,22,0.12)",
+          panel: "rgba(255,255,255,0.48)"
+        },
+        images: [
+          { label: "Adaptive playback", bg: "linear-gradient(135deg, #e5a3ac 0%, #f8e6ea 100%)" },
+          { label: "System response", bg: "linear-gradient(135deg, #c89090 0%, #efc9d0 100%)" },
+          { label: "Behaviour states", bg: "linear-gradient(135deg, #e2a3b1 0%, #f7e2e8 100%)" },
+          { label: "Listening environment", bg: "linear-gradient(135deg, #d88b99 0%, #f2d4da 100%)" },
+          { label: "Visual output", bg: "linear-gradient(135deg, #f5dfe5 0%, #c89090 100%)" }
+        ]
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("project") || "rememberita";
+    const project = PROJECTS[slug] || PROJECTS["rememberita"];
+
+    document.documentElement.style.setProperty("--bg", project.theme.bg);
+    document.documentElement.style.setProperty("--fg", project.theme.fg);
+    document.documentElement.style.setProperty("--muted", project.theme.muted);
+    document.documentElement.style.setProperty("--soft-muted", project.theme.soft);
+    document.documentElement.style.setProperty("--border", project.theme.border);
+    document.documentElement.style.setProperty("--panel", project.theme.panel);
+
+    document.body.style.background = `
+      radial-gradient(circle at top left, rgba(255, 107, 157, 0.12), transparent 28%),
+      radial-gradient(circle at 80% 15%, rgba(78, 191, 237, 0.14), transparent 24%),
+      ${project.theme.bg}
+    `;
+
+    document.getElementById("detailEyebrow").textContent = project.eyebrow;
+    document.getElementById("detailTitle").textContent = project.title;
+    document.getElementById("detailAbstract").textContent = project.abstract;
+    document.getElementById("detailServices").textContent = project.services.join(" ");
+    document.getElementById("detailCredits").textContent = project.credits.join(", ");
+    document.title = `${project.title} — Project Detail`;
+
+    const gallery = document.getElementById("galleryList");
+    project.images.forEach((image, index) => {
+      const item = document.createElement("article");
+      item.className = `gallery-item${index === 0 ? " primary" : ""}`;
+
+      const frame = document.createElement("div");
+      frame.className = "gallery-frame";
+
+      const visual = document.createElement("div");
+      visual.className = "gallery-visual";
+      visual.style.background = image.bg;
+
+      const caption = document.createElement("p");
+      caption.className = "gallery-caption";
+      caption.textContent = image.label;
+
+      frame.appendChild(visual);
+      frame.appendChild(caption);
+      item.appendChild(frame);
+      gallery.appendChild(item);
+    });
+
+    const handleScroll = () => {
+      document.body.classList.toggle("scrolled-copy", window.scrollY > 24);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+  </script>
+</body>
+</html>
