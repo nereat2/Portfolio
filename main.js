@@ -678,7 +678,7 @@ const SKILLS = [
 ];
 
 // measure text widths before layout
-bctx.font = '400 12px "DM Sans", sans-serif';
+bctx.font = '400 12px "Wix Madefor Text", sans-serif';
 const bubbles = SKILLS.map(text => {
   const tw = bctx.measureText(text).width;
   const pad = 16;
@@ -703,7 +703,7 @@ bc.addEventListener('mouseleave', () => { bmx = -9999; bmy = -9999; });
 
 function drawBubbles() {
   bctx.clearRect(0, 0, BW, BH);
-  bctx.font = '400 12px "DM Sans", sans-serif';
+  bctx.font = '400 12px "Wix Madefor Text", sans-serif';
 
   bubbles.forEach(b => {
     // cursor repulsion

@@ -5,6 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project Detail</title>
   <style>
+    @font-face {
+      font-family: "Wix Madefor Text";
+      src: url("./fonts/WixMadeforText-Regular.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Wix Madefor Text";
+      src: url("./fonts/WixMadeforText-Medium.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Wix Madefor Text";
+      src: url("./fonts/WixMadeforText-SemiBold.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Wix Madefor Text";
+      src: url("./fonts/WixMadeforText-Bold.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Wix Madefor Text";
+      src: url("./fonts/WixMadeforText-ExtraBold.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 800;
+      font-display: swap;
+    }
+
     :root {
       --bg: #f5f1ea;
       --fg: #18180f;
@@ -13,7 +53,7 @@
       --border: rgba(24, 24, 15, 0.12);
       --panel: rgba(255, 255, 255, 0.42);
       --font-display: "Bricolage Grotesque", sans-serif;
-      --font-body: "DM Sans", sans-serif;
+      --font-body: "Wix Madefor Text", sans-serif;
       --ease-out-expo: cubic-bezier(.16,1,.3,1);
     }
 
@@ -67,14 +107,18 @@
       align-items: start;
       padding: 7rem 2rem 3rem;
       position: relative;
+      position: sticky;
+      top: 0;
+      z-index: 1;
     }
 
     .detail-copy {
       grid-column: 2 / 3;
-      width: min(100%, 58rem);
+      width: 100%;
       margin-left: auto;
       position: sticky;
       top: 6rem;
+      z-index: 3;
       transition: color .45s ease, opacity .45s ease;
     }
 
@@ -102,11 +146,19 @@
 
     .abstract {
       margin: 0;
-      max-width: 38rem;
+      max-width: calc(100vw - 4rem);
       font-size: clamp(1.05rem, 1.8vw, 1.28rem);
       line-height: 1.85;
       color: var(--muted);
       transition: color .45s ease;
+    }
+
+    .abstract p {
+      margin: 0;
+    }
+
+    .abstract p + p {
+      margin-top: 1.5rem;
     }
 
     .detail-meta {
@@ -138,7 +190,10 @@
     }
 
     .detail-gallery {
-      padding: 0 0 5rem;
+      position: relative;
+      z-index: 2;
+      margin-top: -100vh;
+      padding: 100vh 0 5rem;
     }
 
     .gallery-list {
@@ -203,6 +258,7 @@
       .detail-hero {
         grid-template-columns: 1fr;
         padding: 6rem 1.5rem 2rem;
+        position: relative;
       }
 
       .detail-copy {
@@ -225,6 +281,11 @@
         min-height: 52vh;
       }
 
+      .detail-gallery {
+        margin-top: 0;
+        padding-top: 0;
+      }
+
       .gallery-item:not(.primary) .gallery-frame {
         width: min(100%, calc(100vw - 3rem));
       }
@@ -243,12 +304,16 @@
       <div class="detail-copy">
         <p class="eyebrow" id="detailEyebrow">Project detail</p>
         <h1 class="detail-title" id="detailTitle">Project</h1>
-        <p class="abstract" id="detailAbstract"></p>
+        <div class="abstract" id="detailAbstract"></div>
 
         <div class="detail-meta">
           <section class="meta-block">
-            <p class="meta-label">Services</p>
+            <p class="meta-label">Project Type</p>
             <p class="meta-value" id="detailServices"></p>
+          </section>
+          <section class="meta-block">
+            <p class="meta-label">System Architecture</p>
+            <p class="meta-value" id="detailSystemArchitecture"></p>
           </section>
           <section class="meta-block">
             <p class="meta-label">Credits</p>
@@ -266,11 +331,12 @@
   <script>
     const PROJECTS = {
       "rememberita": {
-        title: "Rememberita",
+        title: "HUMAN LOCI",
         eyebrow: "Tangible memory ritual",
-        abstract: "Rememberita explores how memory can be held through small physical rituals rather than screens alone. The project turns personal recollection into a tactile interaction, combining gentle sensory cues, form, and pacing so the act of remembering becomes slow, intimate, and embodied.",
-        services: ["#Tangible", "#PhysicalComputing"],
-        credits: ["Nerea Asensio"],
+        abstract: `<p><strong>HUMAN LOCI is a listening object that transforms places into tactile and auditory experiences.</strong> Instead of playing music, it plays environments: each disk gives access to a specific place through recorded soundscapes and a distinct material identity. By placing a disk onto the player, the user activates a simple sequence of physical interactions that brings that environment to life. Through touch, sound, and form, the project proposes a different way of engaging with space, one that shifts listening from passive consumption to an active experience of place.</p>`,
+        services: ["#TangibleInteraction", "#EmbodiedInteraction", "#ConceptualDesign", "#DesignResearch"],
+        systemArchitecture: ["#PhysicalComputing", "#EmbededSystems", "#RFID", "#Microcontroller"],
+        credits: ["Jérémy Martin", "Nicholas Vos"],
         theme: {
           bg: "#F3EDE8",
           fg: "#18180F",
@@ -441,8 +507,9 @@
 
     document.getElementById("detailEyebrow").textContent = project.eyebrow;
     document.getElementById("detailTitle").textContent = project.title;
-    document.getElementById("detailAbstract").textContent = project.abstract;
+    document.getElementById("detailAbstract").innerHTML = project.abstract;
     document.getElementById("detailServices").textContent = project.services.join(" ");
+    document.getElementById("detailSystemArchitecture").textContent = (project.systemArchitecture || []).join(" ");
     document.getElementById("detailCredits").textContent = project.credits.join(", ");
     document.title = `${project.title} — Project Detail`;
 
@@ -469,11 +536,22 @@
     });
 
     const handleScroll = () => {
-      document.body.classList.toggle("scrolled-copy", window.scrollY > 24);
+      const firstImage = gallery.querySelector(".gallery-item.primary");
+      if (!firstImage || window.innerWidth <= 960) {
+        document.body.classList.remove("scrolled-copy");
+        return;
+      }
+
+      const rect = firstImage.getBoundingClientRect();
+      const imageMidpoint = rect.top + (rect.height / 2);
+      const viewportMidpoint = window.innerHeight / 2;
+
+      document.body.classList.toggle("scrolled-copy", imageMidpoint <= viewportMidpoint);
     };
 
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
   </script>
 </body>
 </html>
