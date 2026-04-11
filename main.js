@@ -38,8 +38,20 @@ const intro  = document.getElementById('intro');
 const hword  = document.getElementById('hword');
 const hlang  = document.getElementById('hlang');
 let wi = 0, introActive = true;
+const landingParams = new URLSearchParams(window.location.search);
+const returnProject = landingParams.get('project');
+const skipIntro = sessionStorage.getItem('skipIntroOnce') === '1';
 
-document.body.classList.add('intro-lock');
+if (skipIntro) {
+  sessionStorage.removeItem('skipIntroOnce');
+}
+
+if (skipIntro) {
+  introActive = false;
+  intro.style.display = 'none';
+} else {
+  document.body.classList.add('intro-lock');
+}
 
 function showHello() {
   if (!introActive) return;
@@ -70,8 +82,26 @@ function endIntro() {
   }, 950);
 }
 
-setTimeout(showHello, 350);
-intro.addEventListener('click', endIntro);
+if (!skipIntro) {
+  setTimeout(showHello, 350);
+  intro.addEventListener('click', endIntro);
+}
+
+function focusReturnedProject() {
+  const targetId = returnProject || window.location.hash.replace('#', '');
+  if (!targetId) return;
+
+  const target = document.getElementById(targetId);
+  if (!target) return;
+
+  requestAnimationFrame(() => {
+    target.scrollIntoView({ block: 'start' });
+  });
+}
+
+if (skipIntro) {
+  window.addEventListener('load', focusReturnedProject, { once: true });
+}
 
 // ─── INTRO CANVAS BACKGROUND ─────────────────────
 const iCanvas = document.getElementById('introCanvas');

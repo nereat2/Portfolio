@@ -122,9 +122,59 @@
       transition: color .45s ease, opacity .45s ease;
     }
 
-    body.scrolled-copy .detail-copy,
-    body.scrolled-copy .detail-copy .meta-value,
-    body.scrolled-copy .detail-copy .abstract {
+    .detail-copy-stack {
+      grid-column: 2 / 3;
+      width: 100%;
+      margin-left: auto;
+      position: sticky;
+      top: 6rem;
+      z-index: 3;
+    }
+
+    .detail-copy-stack .detail-copy {
+      grid-column: auto;
+      width: 100%;
+      margin-left: 0;
+      position: absolute;
+      inset: 0;
+      top: 0;
+      pointer-events: none;
+    }
+
+    .detail-copy-stack .detail-copy:first-child {
+      position: relative;
+    }
+
+    .detail-copy-secondary {
+      opacity: 0;
+    }
+
+    body.exhibition-copy-active .detail-copy-primary {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    body.exhibition-copy-active .detail-copy-secondary {
+      opacity: 1;
+      pointer-events: auto;
+      color: #fff;
+    }
+
+    body.exhibition-copy-active .detail-copy-secondary,
+    body.exhibition-copy-active .detail-copy-secondary .meta-value,
+    body.exhibition-copy-active .detail-copy-secondary .abstract {
+      color: #fff;
+    }
+
+    body.exhibition-copy-dimmed .detail-copy-secondary,
+    body.exhibition-copy-dimmed .detail-copy-secondary .meta-value,
+    body.exhibition-copy-dimmed .detail-copy-secondary .abstract {
+      color: var(--soft-muted);
+    }
+
+    body.scrolled-copy .detail-copy-primary,
+    body.scrolled-copy .detail-copy-primary .meta-value,
+    body.scrolled-copy .detail-copy-primary .abstract {
       color: var(--soft-muted);
     }
 
@@ -206,6 +256,15 @@
       width: 100%;
     }
 
+    .gallery-transition-marker {
+      width: 100%;
+      height: 1px;
+    }
+
+    .gallery-transition-marker.chapter-break {
+      height: 100vh;
+    }
+
     .gallery-item.primary {
       width: 100vw;
       margin-left: calc(50% - 50vw);
@@ -240,6 +299,103 @@
       transform: scale(1.01);
     }
 
+    .gallery-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .video-controls {
+      position: absolute;
+      left: 1.35rem;
+      right: 1.35rem;
+      bottom: 1.35rem;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.64);
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .25s ease, transform .25s ease;
+      pointer-events: none;
+    }
+
+    .gallery-frame:hover .video-controls,
+    .gallery-frame:focus-within .video-controls {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .video-btn,
+    .video-range {
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .video-btn {
+      border: 0;
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      font: 500 0.82rem/1 var(--font-body);
+      cursor: pointer;
+      transition: background .2s ease;
+    }
+
+    .video-btn:hover,
+    .video-btn:focus-visible {
+      background: rgba(255, 255, 255, 0.24);
+      outline: none;
+    }
+
+    .video-range {
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.28);
+      cursor: pointer;
+    }
+
+    .video-range.timeline {
+      flex: 1;
+      min-width: 6rem;
+    }
+
+    .video-range.volume {
+      width: 6rem;
+    }
+
+    .video-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      border: 0;
+    }
+
+    .video-range::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      border: 0;
+    }
+
+    .video-range::-moz-range-track {
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.28);
+    }
+
     .gallery-caption {
       position: relative;
       z-index: 1;
@@ -267,6 +423,33 @@
         position: static;
       }
 
+      .detail-copy-stack {
+        grid-column: 1;
+        width: 100%;
+        position: static;
+      }
+
+      .detail-copy-stack .detail-copy {
+        position: static;
+        inset: auto;
+        pointer-events: auto;
+      }
+
+      .detail-copy-secondary {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+        color: var(--fg);
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border);
+      }
+
+      .detail-copy-secondary .abstract,
+      .detail-copy-secondary .meta-value {
+        color: var(--muted);
+      }
+
       body.scrolled-copy .detail-copy,
       body.scrolled-copy .detail-copy .meta-value,
       body.scrolled-copy .detail-copy .abstract {
@@ -286,8 +469,24 @@
         padding-top: 0;
       }
 
+      .gallery-transition-marker.chapter-break {
+        height: 60vh;
+      }
+
       .gallery-item:not(.primary) .gallery-frame {
         width: min(100%, calc(100vw - 3rem));
+      }
+
+      .video-controls {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        gap: 0.7rem;
+        padding: 0.7rem 0.8rem;
+      }
+
+      .video-range.volume {
+        width: 4.5rem;
       }
 
       .back-link {
@@ -297,28 +496,43 @@
   </style>
 </head>
 <body>
-  <a class="back-link" href="./index.html#work">Back to work</a>
+  <a class="back-link" id="backToWorkLink" href="./index.html#work">Back to work</a>
 
   <main class="detail-page">
     <section class="detail-hero">
-      <div class="detail-copy">
-        <p class="eyebrow" id="detailEyebrow">Project detail</p>
-        <h1 class="detail-title" id="detailTitle">Project</h1>
-        <div class="abstract" id="detailAbstract"></div>
+      <div class="detail-copy-stack">
+        <div class="detail-copy detail-copy-primary">
+          <p class="eyebrow" id="detailEyebrow">Project detail</p>
+          <h1 class="detail-title" id="detailTitle">Project</h1>
+          <div class="abstract" id="detailAbstract"></div>
 
-        <div class="detail-meta">
-          <section class="meta-block">
-            <p class="meta-label">Project Type</p>
-            <p class="meta-value" id="detailServices"></p>
-          </section>
-          <section class="meta-block">
-            <p class="meta-label">System Architecture</p>
-            <p class="meta-value" id="detailSystemArchitecture"></p>
-          </section>
-          <section class="meta-block">
-            <p class="meta-label">Credits</p>
-            <p class="meta-value" id="detailCredits"></p>
-          </section>
+          <div class="detail-meta">
+            <section class="meta-block">
+              <p class="meta-label">Project Type</p>
+              <p class="meta-value" id="detailServices"></p>
+            </section>
+            <section class="meta-block">
+              <p class="meta-label">System Architecture</p>
+              <p class="meta-value" id="detailSystemArchitecture"></p>
+            </section>
+            <section class="meta-block">
+              <p class="meta-label">Credits</p>
+              <p class="meta-value" id="detailCredits"></p>
+            </section>
+          </div>
+        </div>
+
+        <div class="detail-copy detail-copy-secondary" id="detailExhibitionCopy" hidden>
+          <p class="eyebrow" id="detailExhibitionEyebrow">Exhibition</p>
+          <h1 class="detail-title" id="detailExhibitionTitle">Exhibition</h1>
+          <div class="abstract" id="detailExhibitionAbstract"></div>
+
+          <div class="detail-meta">
+            <section class="meta-block">
+              <p class="meta-label">Credits</p>
+              <p class="meta-value" id="detailExhibitionCredits"></p>
+            </section>
+          </div>
         </div>
       </div>
     </section>
@@ -332,7 +546,7 @@
     const PROJECTS = {
       "rememberita": {
         title: "HUMAN LOCI",
-        eyebrow: "Tangible memory ritual",
+        eyebrow: "Tangible experience of place",
         abstract: `<p><strong>HUMAN LOCI is a listening object that transforms places into tactile and auditory experiences.</strong> Instead of playing music, it plays environments: each disk gives access to a specific place through recorded soundscapes and a distinct material identity. By placing a disk onto the player, the user activates a simple sequence of physical interactions that brings that environment to life. Through touch, sound, and form, the project proposes a different way of engaging with space, one that shifts listening from passive consumption to an active experience of place.</p>`,
         services: ["#TangibleInteraction", "#EmbodiedInteraction", "#ConceptualDesign", "#DesignResearch"],
         systemArchitecture: ["#PhysicalComputing", "#EmbededSystems", "#RFID", "#Microcontroller"],
@@ -346,19 +560,22 @@
           panel: "rgba(255,255,255,0.4)"
         },
         images: [
-          { label: "Hero still", bg: "linear-gradient(135deg, #d7b59b 0%, #c8c0b0 38%, #f0e6db 100%)" },
-          { label: "Prototype details", bg: "linear-gradient(135deg, #e8d4c4 0%, #cdb09f 100%)" },
-          { label: "Interaction sequence", bg: "linear-gradient(135deg, #efe6dc 0%, #c8c0b0 100%)" },
-          { label: "Material study", bg: "linear-gradient(135deg, #dec4ae 0%, #f5ebe1 100%)" },
-          { label: "Ambient setup", bg: "linear-gradient(135deg, #d5b7a2 0%, #e8ddd2 100%)" }
+          { label: "Product", bg: 'center / cover no-repeat url("assets/projects/human loci/jpeg/humanloci-main.jpg")' },
+          { label: "General view 1", bg: 'center / cover no-repeat url("assets/projects/human loci/jpeg/humanloci-generalview1.jpg")' },
+          { label: "General view 2", bg: 'center / cover no-repeat url("assets/projects/human loci/jpeg/humanloci-generalview2.jpg")' },
+          { label: "General view 3", bg: 'center / cover no-repeat url("assets/projects/human loci/jpeg/humanloci-generalview3.jpg")' },
+          { label: "Detail", bg: 'center / cover no-repeat url("assets/projects/human loci/jpeg/humanloci-detail1.jpg")' },
+          { label: "Interaction 1", bg: 'center / cover no-repeat url("assets/projects/human loci/jpeg/humanloci-interaction1.jpg")' },
+          { label: "Interaction 2", bg: 'center / cover no-repeat url("assets/projects/human loci/jpeg/humanloci-interaction2.jpg")' }
         ]
       },
       "meeting-pond": {
         title: "Meeting Pond",
         eyebrow: "Connected presence system",
-        abstract: "Meeting Pond imagines remote connection as a calm shared atmosphere rather than a constant stream of notifications. The project uses connected objects and subtle behaviours to create a sense of presence across distance, translating attention and absence into a poetic, low-friction relational interface.",
-        services: ["#ConnectedObjects", "#PresenceAndDistance"],
-        credits: ["Nerea Asensio", "Alice Bernard", "Matteo Riva"],
+        abstract: `<p><strong>Meeting Pond</strong> is a pair of connected light objects designed to let two distant people feel each other’s presence without words, notifications, or screens.</p><p>Each device displays a minimal pond of light in a calm idle state. When one user performs a tapping gesture, a digital drop falls into the surface, generating ripples that radiate outward and appear in real time on the other user’s device.</p><p>The project explores disturbance as a form of presence: a subtle gesture that travels, carries energy, and temporarily alters a shared environment. Rather than transmitting messages, Meeting Pond creates a quiet, ephemeral connection where presence is perceived as movement, influence, and resonance across distance.</p>`,
+        services: ["#HumanComputerInteraction", "#PhysicalComputing", "#ExperienceDesign"],
+        systemArchitecture: ["#LEDMatrix", "#GestureRecognition", "#RealTimeSystem", "#IoT"],
+        credits: ["Jérémy Martin"],
         theme: {
           bg: "#EEF6F2",
           fg: "#121915",
@@ -368,19 +585,21 @@
           panel: "rgba(255,255,255,0.48)"
         },
         images: [
-          { label: "System overview", bg: "linear-gradient(135deg, #8cbcab 0%, #d8ebe4 100%)" },
-          { label: "Object pair", bg: "linear-gradient(135deg, #b7d5c8 0%, #8ebaa7 100%)" },
-          { label: "Presence cue", bg: "linear-gradient(135deg, #dcefe7 0%, #9bb5a4 100%)" },
-          { label: "Spatial placement", bg: "linear-gradient(135deg, #aac7b8 0%, #edf7f3 100%)" },
-          { label: "Behaviour mapping", bg: "linear-gradient(135deg, #89afa0 0%, #d6ebe3 100%)" }
+          { label: "System overview", type: "video", src: "assets/projects/meeting pond/video/meetingpond_HR.mp4" },
+          { label: "Interaction 1", bg: 'center / cover no-repeat url("assets/projects/meeting pond/jpeg/meetingpond-interaction1.jpg")' },
+          { label: "General view 2", bg: 'center / cover no-repeat url("assets/projects/meeting pond/jpeg/meetingpond-general2.jpg")' },
+          { label: "General view 3", bg: 'center / cover no-repeat url("assets/projects/meeting pond/jpeg/meetingpond-general3.jpg")' },
+          { label: "General view 4", bg: 'center / cover no-repeat url("assets/projects/meeting pond/jpeg/meetingpond-general4.jpg")' },
+          { label: "Components", bg: 'center / cover no-repeat url("assets/projects/meeting pond/jpeg/meetingpond-components.jpg")' }
         ]
       },
       "financial-planning-hub": {
         title: "Financial Planning Hub",
         eyebrow: "Service platform",
-        abstract: "Financial Planning Hub reframes complex banking tasks into a more legible and supportive product experience. The work focused on clarifying hierarchy, surfacing key decisions at the right moment, and designing an interface that feels guided and trustworthy without becoming rigid or over-explained.",
-        services: ["#UIProduct", "#Banking"],
-        credits: ["Nerea Asensio", "Luca Ferretti"],
+        abstract: `<p>This UX/UI project investigates how financial planning can be redesigned as an intuitive and evolving experience. Combining user research, interaction design, and visual storytelling, it proposes a system that integrates planning tools, scenario simulations, and contextual guidance. A dynamic visual metaphor reflects the user's financial evolution over time, making abstract data more understandable and engaging.</p>`,
+        services: ["#UX", "#UI", "#DesignInterface"],
+        systemArchitecture: ["#Figma", "#DigitalPrototyping"],
+        credits: ["Walter de Nicola", "Roberta Valli", "Riccardo Assirelli", "Isabel Parini"],
         theme: {
           bg: "#F2F0FA",
           fg: "#161420",
@@ -390,12 +609,12 @@
           panel: "rgba(255,255,255,0.46)"
         },
         images: [
-          { label: "Dashboard overview", bg: "linear-gradient(135deg, #7d7ac7 0%, #d8d5f0 100%)" },
-          { label: "Journey mapping", bg: "linear-gradient(135deg, #bbb7e5 0%, #8a86cf 100%)" },
-          { label: "Component system", bg: "linear-gradient(135deg, #eceafb 0%, #a8a0c8 100%)" },
-          { label: "Key flow", bg: "linear-gradient(135deg, #958ed8 0%, #dddaf5 100%)" },
-          { label: "Mobile behaviour", bg: "linear-gradient(135deg, #cfcaf1 0%, #867ecc 100%)" },
-          { label: "Visual language", bg: "linear-gradient(135deg, #f3f0fe 0%, #aaa3d8 100%)" }
+          { label: "Overview", type: "video", src: "assets/projects/financial planning hub/video/video_ubs_low.mp4" },
+          { label: "Home screen", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/jpeg/home_screen_1_HR.png")' },
+          { label: "Main screen", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/jpeg/main_screen_HR.png")' },
+          { label: "Dashboard", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/jpeg/mock_dashboard_HR.png")' },
+          { label: "Onboarding", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/jpeg/onboarding_1_HR.png")' },
+          { label: "Onboarding ready", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/jpeg/onboarding_ready_HR.png")' }
         ]
       },
       "human-loci": {
@@ -420,12 +639,45 @@
           { label: "Exhibition still", bg: "linear-gradient(135deg, #bda9bc 0%, #ebe2ea 100%)" }
         ]
       },
+      "rememberita-device": {
+        title: "RemembeRita",
+        eyebrow: "Interactive reminder device",
+        abstract: `<p>RemembeRita is an interactive reminder device designed to support everyday memory at the threshold of the home. Placed near the entrance, it transforms digital reminders into a physical and visual presence using light and tangible interaction. Users send items to Rememberita via their phone, making each reminder persist until it is consciously resolved. Through simple gestures, users confirm completed tasks, allowing the device to update its state. RemembeRita shifts remembering from mental effort to spatial awareness, offering a calm, non-intrusive way to leave home with confidence.</p>`,
+        services: ["#ProductDesign", "#Prototyping"],
+        systemArchitecture: ["#ESP32", "#Arduino", "#TelegramBot", "#NeoPixel"],
+        credits: ["Ayse Ceren Seckin", "A. M. Luz Vanella"],
+        theme: {
+          bg: "#F4F0EC",
+          fg: "#1A1714",
+          muted: "rgba(26,23,20,0.68)",
+          soft: "rgba(26,23,20,0.34)",
+          border: "rgba(26,23,20,0.12)",
+          panel: "rgba(255,255,255,0.46)"
+        },
+        images: [
+          { label: "View 1", bg: 'center / cover no-repeat url("assets/projects/rememberita/jpeg/rememberita-1.jpg")' },
+          { label: "View 2", bg: 'center / cover no-repeat url("assets/projects/rememberita/jpeg/rememberita-2.jpg")' },
+          { label: "View 3", bg: 'center / cover no-repeat url("assets/projects/rememberita/jpeg/rememberita-3.jpg")' },
+          { label: "View 4", bg: 'center / cover no-repeat url("assets/projects/rememberita/jpeg/rememberita-4.jpg")' },
+          { label: "View 5", bg: 'center / cover no-repeat url("assets/projects/rememberita/jpeg/rememberita-5.jpg")' },
+          { label: "View 6", bg: 'center / cover no-repeat url("assets/projects/rememberita/jpeg/rememberita-6.jpg")' },
+          { label: "View 7", bg: 'center / cover no-repeat url("assets/projects/rememberita/jpeg/rememberita-7.jpg")' },
+          { label: "Demo", type: "video", src: "assets/projects/rememberita/video/RemembeRita_Demo_LR.mp4" }
+        ]
+      },
       "elen": {
         title: "ELEN",
         eyebrow: "Speculative identity system",
-        abstract: "ELEN is a speculative exploration of identity, autonomy, and the systems that classify us. The project frames data as something lived and political, creating a visual and narrative world where interfaces shape not just access to information, but also the way identity becomes negotiated, performed, and controlled.",
-        services: ["#Speculative", "#DataAndIdentity"],
-        credits: ["Nerea Asensio"],
+        abstract: `<p>ELEN is a speculative photographic instrument that treats wireless data as contemporary haunting.</p><p>If spirit photography once revealed traces of presence without bodies, today’s ghosts are bodies without presence: residual selves continuously leaking into Wi-Fi, Bluetooth, and machine-to-machine signals. The device captures personal network activity and translates it into spectral forms layered onto a real photograph of the site. These apparitions are not illustrations but condensations of signal, duration, and repetition, where glitches and density become ectoplasm. From fragments of personal metadata that fall from us constantly, gathered silently and without spectacle, the machine conjures figures that hover between dehumanized infrastructure and intimate trace. A ritual apparatus and surveillance oracle, it reframes behavioral data as a new species of shadow creature.</p>`,
+        services: ["#SpeculativeDesign", "#InteractionDesign", "#ProductDesign"],
+        systemArchitecture: ["#RaspberryPi", "#Kismet", "#PhysicalComputing", "#WifiSignal", "#RealTimeVisualization"],
+        credits: ["Jérémy Martin", "Nicholas Vos"],
+        exhibition: {
+          eyebrow: "Exhibition",
+          title: "ELEN Exhibition",
+          abstract: `<p>ELEN was presented as an immersive installation that extended the device into space. Displayed on a custom rotating platform, the object was accompanied by its packaging and brochure, forming a cohesive product narrative. A large-scale projection translated live wireless signals from the exhibition environment into evolving entities, allowing visitors to see their own presence emerge in real time. The setup transformed the space into a responsive field, where the invisible activity of the audience became part of the work itself.</p>`,
+          credits: ["SACEBA - Morbio Inferiore", "Leonardo Angelucci"]
+        },
         theme: {
           bg: "#161217",
           fg: "#F0EAF5",
@@ -435,19 +687,29 @@
           panel: "rgba(255,255,255,0.06)"
         },
         images: [
-          { label: "World building", bg: "linear-gradient(135deg, #4a4250 0%, #1b181d 100%)" },
-          { label: "Identity artifact", bg: "linear-gradient(135deg, #2e2830 0%, #574d59 100%)" },
-          { label: "Narrative frame", bg: "linear-gradient(135deg, #211d23 0%, #463d49 100%)" },
-          { label: "Speculative scenario", bg: "linear-gradient(135deg, #5d5161 0%, #2b252d 100%)" },
-          { label: "Interface fragments", bg: "linear-gradient(135deg, #3b333e 0%, #1e1a20 100%)" }
+          { label: "Front", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-front.jpg")' },
+          { label: "Detail", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-detail.jpg")' },
+          { label: "Box", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-box.jpg")' },
+          { label: "View", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-view.jpg")' },
+          { label: "Interaction 1", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-interaction1.jpg")' },
+          { label: "Interaction 2", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-interaction2.jpg")' },
+          { label: "Interaction 3", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-interaction3.jpg")' },
+          { label: "ELEN video", type: "video", src: "assets/projects/elen/video/ELEN_HR_video.mp4" },
+          { type: "section-break", key: "exhibition" },
+          { label: "Exhibition 1", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-expo1.jpg")' },
+          { label: "Exhibition 2", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-expo2.jpg")' },
+          { label: "Exhibition 3", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-expo3.jpg")' },
+          { label: "Exhibition 4", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-expo4.jpg")' },
+          { label: "Exhibition 5", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-expo5.jpg")' }
         ]
       },
       "lynx-2-0": {
         title: "Lynx 2.0",
-        eyebrow: "Interactive web system",
-        abstract: "Lynx 2.0 focuses on interaction at the level of systems, orchestration, and connected services. The work brings technical integrations into a more expressive and usable interface, translating backend complexity into a front-end experience that feels fast, responsive, and confidently structured.",
-        services: ["#WebInteractive", "#APIIntegration"],
-        credits: ["Nerea Asensio", "Davide Rossi"],
+        eyebrow: "Browser-based interactive game",
+        abstract: `<p>The Lynx Game 2.0 is a browser-based interactive matching game that expands a previous prototype through the integration of external web APIs. Players must identify a specific cat image within a timed grid while managing score and lives. The game dynamically fetches cat images and facts from online APIs, incorporates audiovisual feedback, and features a responsive interface with a simple navigation system. The project explores real-time data usage, user interaction design, and multimedia integration in a playful and replayable web experience.</p>`,
+        services: ["#Coding", "#Game", "#UI"],
+        systemArchitecture: ["#HTML", "#CSS", "#JS", "#API"],
+        credits: [],
         theme: {
           bg: "#F7F2DA",
           fg: "#1F1A0B",
@@ -457,19 +719,21 @@
           panel: "rgba(255,255,255,0.44)"
         },
         images: [
-          { label: "Platform overview", bg: "linear-gradient(135deg, #d8c776 0%, #f5edd0 100%)" },
-          { label: "Interaction model", bg: "linear-gradient(135deg, #c8b870 0%, #ebdfac 100%)" },
-          { label: "API orchestration", bg: "linear-gradient(135deg, #e7daa0 0%, #c2ae55 100%)" },
-          { label: "Flow architecture", bg: "linear-gradient(135deg, #f8efc7 0%, #c8b870 100%)" },
-          { label: "Responsive system", bg: "linear-gradient(135deg, #dcc667 0%, #efe3b3 100%)" }
+          { label: "PC interaction", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/jpeg/pc interaction_HR.png")' },
+          { label: "PC studio mockup", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/jpeg/pc studio_mockup_HR.png")' },
+          { label: "PC studio desk", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/jpeg/pc_studio desk_HR.png")' },
+          { label: "Phone mockup", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/jpeg/phone_triplemockup_HR.png")' },
+          { label: "Tablet desk", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/jpeg/tablet_scene desk_HR.png")' },
+          { label: "Demo", type: "video", src: "assets/projects/lynx 2.0/video/LYNX2.0_demo_LR.mov" }
         ]
       },
       "adaptune": {
         title: "Adaptune",
-        eyebrow: "Adaptive music intelligence",
-        abstract: "Adaptune explores how AI can shape musical systems that respond in real time to context, mood, and behaviour. The project looks at adaptation not as a novelty layer but as a core experiential quality, building a system where responsiveness becomes emotional, ambient, and compositionally meaningful.",
-        services: ["#AIMusic", "#AdaptiveSystems"],
-        credits: ["Nerea Asensio", "Tommaso De Luca", "Ines Keller"],
+        eyebrow: "Adaptive music companion",
+        abstract: `<p>Adaptune is a compact, portable music companion that turns everyday contexts into an adaptive soundtrack. Built as a rapid workshop proof-of-concept, the device leverages a smartphone embedded inside a small enclosure: the front-facing camera observes the user's activity, while audio is delivered through the phone's speaker.</p><p>Instead of presenting a conventional interface, the phone's display is mostly concealed and only shows two expressive eyes that reflect the detected context and the current musical mood. The system estimates high-level states such as focused work versus short breaks and other contexts like gym activity by extracting on-device cues from the camera stream and mapping them to a small set of interpretable "mood" variables. These variables drive an adaptive music engine based on AI-generated tracks: distinct songs are generated for different moods and contexts, and Adaptune transitions between them using smooth crossfades triggered on musically meaningful boundaries.</p><p>In practice, this approach proved more effective than stem-based vertical mixing for conveying emotion, since each track can be composed and produced with a clear affective intent while the crossfade preserves continuity and avoids abrupt changes.</p>`,
+        services: ["#Prototyping", "#MachineLearning", "#InteractionDesign", "#ConceptualDesign"],
+        systemArchitecture: ["#TensorFlowJS", "#OpenAI", "#FaceAPI", "#WebRTC", "#ComputerVision"],
+        credits: ["Nicholas Vos", "Dajana Seefluth"],
         theme: {
           bg: "#F8EEF0",
           fg: "#231416",
@@ -479,11 +743,11 @@
           panel: "rgba(255,255,255,0.48)"
         },
         images: [
-          { label: "Adaptive playback", bg: "linear-gradient(135deg, #e5a3ac 0%, #f8e6ea 100%)" },
-          { label: "System response", bg: "linear-gradient(135deg, #c89090 0%, #efc9d0 100%)" },
-          { label: "Behaviour states", bg: "linear-gradient(135deg, #e2a3b1 0%, #f7e2e8 100%)" },
-          { label: "Listening environment", bg: "linear-gradient(135deg, #d88b99 0%, #f2d4da 100%)" },
-          { label: "Visual output", bg: "linear-gradient(135deg, #f5dfe5 0%, #c89090 100%)" }
+          { label: "View 1", bg: 'center / cover no-repeat url("assets/projects/adaptune/jpeg/adaptune-1.jpg")' },
+          { label: "View 2", bg: 'center / cover no-repeat url("assets/projects/adaptune/jpeg/adaptune-2.jpg")' },
+          { label: "View 3", bg: 'center / cover no-repeat url("assets/projects/adaptune/jpeg/adaptune-3.jpg")' },
+          { label: "View 4", bg: 'center / cover no-repeat url("assets/projects/adaptune/jpeg/adaptune-4.jpg")' },
+          { label: "View 5", bg: 'center / cover no-repeat url("assets/projects/adaptune/jpeg/adaptune-5.jpg")' }
         ]
       }
     };
@@ -511,19 +775,127 @@
     document.getElementById("detailServices").textContent = project.services.join(" ");
     document.getElementById("detailSystemArchitecture").textContent = (project.systemArchitecture || []).join(" ");
     document.getElementById("detailCredits").textContent = project.credits.join(", ");
+    const exhibitionCopy = document.getElementById("detailExhibitionCopy");
+    if (project.exhibition) {
+      exhibitionCopy.hidden = false;
+      document.getElementById("detailExhibitionEyebrow").textContent = project.exhibition.eyebrow || "Exhibition";
+      document.getElementById("detailExhibitionTitle").textContent = project.exhibition.title || "Exhibition";
+      document.getElementById("detailExhibitionAbstract").innerHTML = project.exhibition.abstract || "";
+      document.getElementById("detailExhibitionCredits").textContent = (project.exhibition.credits || []).join(", ");
+    } else {
+      exhibitionCopy.hidden = true;
+    }
+    const backToWorkLink = document.getElementById("backToWorkLink");
+    backToWorkLink.href = `./index.html?project=${encodeURIComponent(slug)}#${encodeURIComponent(slug)}`;
+    backToWorkLink.addEventListener("click", () => {
+      sessionStorage.setItem("skipIntroOnce", "1");
+    });
     document.title = `${project.title} — Project Detail`;
 
     const gallery = document.getElementById("galleryList");
+    let exhibitionMarker = null;
+    let exhibitionFirstItem = null;
+    let afterExhibitionBreak = false;
     project.images.forEach((image, index) => {
+      if (image.type === "section-break") {
+        const marker = document.createElement("div");
+        marker.className = "gallery-transition-marker chapter-break";
+        marker.dataset.key = image.key || "";
+        gallery.appendChild(marker);
+        if (image.key === "exhibition") {
+          exhibitionMarker = marker;
+          afterExhibitionBreak = true;
+        }
+        return;
+      }
+
       const item = document.createElement("article");
       item.className = `gallery-item${index === 0 ? " primary" : ""}`;
+
+      if (afterExhibitionBreak && !exhibitionFirstItem) {
+        exhibitionFirstItem = item;
+      }
 
       const frame = document.createElement("div");
       frame.className = "gallery-frame";
 
-      const visual = document.createElement("div");
-      visual.className = "gallery-visual";
-      visual.style.background = image.bg;
+      let visual;
+      if (image.type === "video") {
+        visual = document.createElement("video");
+        visual.className = "gallery-video";
+        visual.src = image.src;
+        visual.autoplay = true;
+        visual.muted = true;
+        visual.loop = true;
+        visual.playsInline = true;
+      } else {
+        visual = document.createElement("div");
+        visual.className = "gallery-visual";
+        visual.style.background = image.bg;
+      }
+
+      if (image.type === "video") {
+        const controls = document.createElement("div");
+        controls.className = "video-controls";
+
+        const playButton = document.createElement("button");
+        playButton.className = "video-btn";
+        playButton.type = "button";
+        playButton.textContent = "Pause";
+
+        const timeline = document.createElement("input");
+        timeline.className = "video-range timeline";
+        timeline.type = "range";
+        timeline.min = "0";
+        timeline.max = "100";
+        timeline.step = "0.1";
+        timeline.value = "0";
+
+        const volume = document.createElement("input");
+        volume.className = "video-range volume";
+        volume.type = "range";
+        volume.min = "0";
+        volume.max = "1";
+        volume.step = "0.01";
+        volume.value = "0";
+
+        const syncTimeline = () => {
+          if (!visual.duration) return;
+          timeline.value = (visual.currentTime / visual.duration) * 100;
+        };
+
+        const syncPlayState = () => {
+          playButton.textContent = visual.paused ? "Play" : "Pause";
+        };
+
+        playButton.addEventListener("click", () => {
+          if (visual.paused) {
+            visual.play();
+          } else {
+            visual.pause();
+          }
+        });
+
+        timeline.addEventListener("input", () => {
+          if (!visual.duration) return;
+          visual.currentTime = (Number(timeline.value) / 100) * visual.duration;
+        });
+
+        volume.addEventListener("input", () => {
+          visual.muted = false;
+          visual.volume = Number(volume.value);
+        });
+
+        visual.addEventListener("timeupdate", syncTimeline);
+        visual.addEventListener("play", syncPlayState);
+        visual.addEventListener("pause", syncPlayState);
+        visual.addEventListener("loadedmetadata", syncTimeline);
+
+        controls.appendChild(playButton);
+        controls.appendChild(timeline);
+        controls.appendChild(volume);
+        frame.appendChild(controls);
+      }
 
       const caption = document.createElement("p");
       caption.className = "gallery-caption";
@@ -539,6 +911,8 @@
       const firstImage = gallery.querySelector(".gallery-item.primary");
       if (!firstImage || window.innerWidth <= 960) {
         document.body.classList.remove("scrolled-copy");
+        document.body.classList.remove("exhibition-copy-active");
+        document.body.classList.remove("exhibition-copy-dimmed");
         return;
       }
 
@@ -547,6 +921,22 @@
       const viewportMidpoint = window.innerHeight / 2;
 
       document.body.classList.toggle("scrolled-copy", imageMidpoint <= viewportMidpoint);
+
+      if (project.exhibition && exhibitionMarker) {
+        const markerRect = exhibitionMarker.getBoundingClientRect();
+        const exhibitionActive = markerRect.top <= viewportMidpoint;
+        document.body.classList.toggle("exhibition-copy-active", exhibitionActive);
+
+        if (exhibitionActive && exhibitionFirstItem) {
+          const exhibitionFirstRect = exhibitionFirstItem.getBoundingClientRect();
+          document.body.classList.toggle("exhibition-copy-dimmed", exhibitionFirstRect.top <= viewportMidpoint);
+        } else {
+          document.body.classList.remove("exhibition-copy-dimmed");
+        }
+      } else {
+        document.body.classList.remove("exhibition-copy-active");
+        document.body.classList.remove("exhibition-copy-dimmed");
+      }
     };
 
     handleScroll();
