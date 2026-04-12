@@ -311,12 +311,16 @@
       object-fit: contain;
       background: #000;
     }
+    .gallery-vimeo {
+      border: 0;
+      object-fit: unset;
+    }
 
     .video-controls {
       position: absolute;
       left: 1.35rem;
       right: 1.35rem;
-      bottom: 1.35rem;
+      top: 1.35rem;
       z-index: 2;
       display: flex;
       align-items: center;
@@ -631,7 +635,7 @@
           panel: "rgba(255,255,255,0.48)"
         },
         images: [
-          { label: "System overview", type: "video", src: "assets/projects/meeting pond/video/meetingpond_HR.mp4" },
+          { label: "System overview", type: "vimeo", src: "1182421737" },
           { label: "Interaction 1", bg: 'center / cover no-repeat url("assets/projects/meeting pond/jpeg/meetingpond-interaction1.jpg")' },
           { label: "General view 2", bg: 'center / cover no-repeat url("assets/projects/meeting pond/jpeg/meetingpond-general2.jpg")' },
           { label: "General view 3", bg: 'center / cover no-repeat url("assets/projects/meeting pond/jpeg/meetingpond-general3.jpg")' },
@@ -655,7 +659,7 @@
           panel: "rgba(255,255,255,0.46)"
         },
         images: [
-          { label: "Overview", type: "video", src: "assets/projects/financial planning hub/video/video_ubs_low.mp4" },
+          { label: "Overview", type: "vimeo", src: "1182424082" },
           { label: "Home screen", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/jpeg/home_screen_1_HR.png")' },
           { label: "Main screen", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/jpeg/main_screen_HR.png")' },
           { label: "Dashboard", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/jpeg/mock_dashboard_HR.png")' },
@@ -708,7 +712,7 @@
           { label: "View 5", bg: 'center / cover no-repeat url("assets/projects/rememberita/jpeg/rememberita-5.jpg")' },
           { label: "View 6", bg: 'center / cover no-repeat url("assets/projects/rememberita/jpeg/rememberita-6.jpg")' },
           { label: "View 7", bg: 'center / cover no-repeat url("assets/projects/rememberita/jpeg/rememberita-7.jpg")' },
-          { label: "Demo", type: "video", src: "assets/projects/rememberita/video/RemembeRita_Demo_LR.mp4" }
+          { label: "Demo", type: "vimeo", src: "1182424276" }
         ]
       },
       "elen": {
@@ -740,7 +744,7 @@
           { label: "Interaction 1", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-interaction1.jpg")' },
           { label: "Interaction 2", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-interaction2.jpg")' },
           { label: "Interaction 3", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-interaction3.jpg")' },
-          { label: "ELEN video", type: "video", src: "assets/projects/elen/video/ELEN_HR_video.mp4" },
+          { label: "ELEN video", type: "vimeo", src: "1182423777" },
           { type: "section-break", key: "exhibition" },
           { label: "Exhibition 1", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-expo1.jpg")' },
           { label: "Exhibition 2", bg: 'center / cover no-repeat url("assets/projects/elen/jpeg/elen-expo2.jpg")' },
@@ -770,7 +774,7 @@
           { label: "PC studio desk", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/jpeg/pc_studio desk_HR.png")' },
           { label: "Phone mockup", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/jpeg/phone_triplemockup_HR.png")' },
           { label: "Tablet desk", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/jpeg/tablet_scene desk_HR.png")' },
-          { label: "Demo", type: "video", src: "assets/projects/lynx 2.0/video/LYNX2.0_demo_LR.mov" }
+          { label: "Demo", type: "vimeo", src: "1182424435" }
         ]
       },
       "adaptune": {
@@ -907,7 +911,16 @@
       frame.className = "gallery-frame";
 
       let visual;
-      if (image.type === "video") {
+      if (image.type === "vimeo") {
+        const playerId = `vimeo-player-${index}`;
+        visual = document.createElement("iframe");
+        visual.className = "gallery-video gallery-vimeo";
+        visual.src = `https://player.vimeo.com/video/${image.src}?autoplay=1&loop=1&muted=1&autopause=0&controls=0&background=0&title=0&byline=0&portrait=0&api=1&player_id=${playerId}`;
+        visual.id = playerId;
+        visual.allow = "autoplay; fullscreen; picture-in-picture";
+        visual.setAttribute("frameborder", "0");
+        visual.setAttribute("allowfullscreen", "");
+      } else if (image.type === "video") {
         visual = document.createElement("video");
         visual.className = "gallery-video";
         visual.src = image.src;
@@ -921,7 +934,7 @@
         visual.style.background = image.bg;
       }
 
-      if (image.type === "video") {
+      if (image.type === "video" || image.type === "vimeo") {
         const controls = document.createElement("div");
         controls.className = "video-controls";
 
@@ -946,37 +959,118 @@
         volume.step = "0.01";
         volume.value = "0";
 
-        const syncTimeline = () => {
-          if (!visual.duration) return;
-          timeline.value = (visual.currentTime / visual.duration) * 100;
-        };
+        if (image.type === "vimeo") {
+          let isPaused = false;
+          let duration = 0;
+          let isSeeking = false;
+          const sendToVimeo = payload => {
+            visual.contentWindow?.postMessage(payload, "https://player.vimeo.com");
+          };
 
-        const syncPlayState = () => {
-          playButton.textContent = visual.paused ? "Play" : "Pause";
-        };
+          const handleVimeoMessage = event => {
+            if (event.origin !== "https://player.vimeo.com") return;
+            if (event.source !== visual.contentWindow) return;
 
-        playButton.addEventListener("click", () => {
-          if (visual.paused) {
-            visual.play();
-          } else {
-            visual.pause();
-          }
-        });
+            let payload = event.data;
+            if (typeof payload === "string") {
+              try {
+                payload = JSON.parse(payload);
+              } catch {
+                return;
+              }
+            }
 
-        timeline.addEventListener("input", () => {
-          if (!visual.duration) return;
-          visual.currentTime = (Number(timeline.value) / 100) * visual.duration;
-        });
+            if (!payload) return;
 
-        volume.addEventListener("input", () => {
-          visual.muted = false;
-          visual.volume = Number(volume.value);
-        });
+            if (payload.event === "play") {
+              isPaused = false;
+              playButton.textContent = "Pause";
+            }
 
-        visual.addEventListener("timeupdate", syncTimeline);
-        visual.addEventListener("play", syncPlayState);
-        visual.addEventListener("pause", syncPlayState);
-        visual.addEventListener("loadedmetadata", syncTimeline);
+            if (payload.event === "pause") {
+              isPaused = true;
+              playButton.textContent = "Play";
+            }
+
+            if (payload.event === "timeupdate" && payload.data && !isSeeking) {
+              duration = payload.data.duration || duration;
+              if (payload.data.percent != null) {
+                timeline.value = payload.data.percent * 100;
+              } else if (duration > 0 && payload.data.seconds != null) {
+                timeline.value = (payload.data.seconds / duration) * 100;
+              }
+            }
+
+            if (payload.event === "loaded" && payload.data && payload.data.duration) {
+              duration = payload.data.duration;
+            }
+          };
+
+          window.addEventListener("message", handleVimeoMessage);
+
+          visual.addEventListener("load", () => {
+            sendToVimeo({ method: "addEventListener", value: "play" });
+            sendToVimeo({ method: "addEventListener", value: "pause" });
+            sendToVimeo({ method: "addEventListener", value: "timeupdate" });
+            sendToVimeo({ method: "addEventListener", value: "loaded" });
+            sendToVimeo({ method: "setVolume", value: 0 });
+            sendToVimeo({ method: "play" });
+          });
+
+          playButton.addEventListener("click", () => {
+            isPaused = !isPaused;
+            playButton.textContent = isPaused ? "Play" : "Pause";
+            sendToVimeo({ method: isPaused ? "pause" : "play" });
+          });
+
+          volume.addEventListener("input", () => {
+            const level = Number(volume.value);
+            sendToVimeo({ method: "setMuted", value: level === 0 });
+            sendToVimeo({ method: "setVolume", value: level });
+          });
+
+          timeline.addEventListener("input", () => {
+            if (!duration) return;
+            isSeeking = true;
+            sendToVimeo({ method: "setCurrentTime", value: (Number(timeline.value) / 100) * duration });
+          });
+
+          timeline.addEventListener("change", () => {
+            isSeeking = false;
+          });
+        } else {
+          const syncTimeline = () => {
+            if (!visual.duration) return;
+            timeline.value = (visual.currentTime / visual.duration) * 100;
+          };
+
+          const syncPlayState = () => {
+            playButton.textContent = visual.paused ? "Play" : "Pause";
+          };
+
+          playButton.addEventListener("click", () => {
+            if (visual.paused) {
+              visual.play();
+            } else {
+              visual.pause();
+            }
+          });
+
+          timeline.addEventListener("input", () => {
+            if (!visual.duration) return;
+            visual.currentTime = (Number(timeline.value) / 100) * visual.duration;
+          });
+
+          volume.addEventListener("input", () => {
+            visual.muted = false;
+            visual.volume = Number(volume.value);
+          });
+
+          visual.addEventListener("timeupdate", syncTimeline);
+          visual.addEventListener("play", syncPlayState);
+          visual.addEventListener("pause", syncPlayState);
+          visual.addEventListener("loadedmetadata", syncTimeline);
+        }
 
         controls.appendChild(playButton);
         controls.appendChild(timeline);
