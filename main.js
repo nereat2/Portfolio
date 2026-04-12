@@ -42,7 +42,7 @@ const landingParams = new URLSearchParams(window.location.search);
 const returnProject = landingParams.get('project');
 const skipIntro = sessionStorage.getItem('skipIntroOnce') === '1';
 
-if (skipIntro) {
+if (sessionStorage.getItem('skipIntroOnce') === '1') {
   sessionStorage.removeItem('skipIntroOnce');
 }
 
@@ -86,6 +86,28 @@ if (!skipIntro) {
   setTimeout(showHello, 350);
   intro.addEventListener('click', endIntro);
 }
+
+function goHomeFromLogo(event) {
+  event.preventDefault();
+  const hero = document.getElementById('home');
+  if (!hero) return;
+
+  if (introActive) {
+    endIntro();
+    setTimeout(() => {
+      history.replaceState(null, '', '#home');
+      hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 980);
+    return;
+  }
+
+  history.replaceState(null, '', '#home');
+  hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+document.querySelectorAll('.nav-logo-link[href="#home"]').forEach(link => {
+  link.addEventListener('click', goHomeFromLogo);
+});
 
 function focusReturnedProject() {
   const targetId = returnProject || window.location.hash.replace('#', '');
@@ -198,70 +220,12 @@ drawIntroBG();
 const ilInitials = document.getElementById('il-initials');
 const ilFullname  = document.getElementById('il-fullname');
 
-// Build fullname char spans
-'Nerea Asensio'.split('').forEach(ch => {
-  const s = document.createElement('span');
-  s.className   = 'il-char';
-  s.textContent = ch === ' ' ? '\u00A0' : ch;
-  ilFullname.appendChild(s);
-});
-
 // Show initials shortly after page load
 setTimeout(() => { ilInitials.classList.add('visible'); }, 180);
-
-// Hover: expand initials → full name / collapse on leave
-const ilLogo = document.getElementById('intro-logo');
-let ilExpanded = false;
-
-ilLogo.addEventListener('mouseenter', () => {
-  if (ilExpanded) return;
-  ilExpanded = true;
-  ilInitials.classList.remove('visible');
-  ilInitials.classList.add('out');
-  ilFullname.querySelectorAll('.il-char').forEach((c, i) => {
-    setTimeout(() => c.classList.add('in'), i * 45);
-  });
-});
-
-ilLogo.addEventListener('mouseleave', () => {
-  if (!ilExpanded) return;
-  ilExpanded = false;
-  ilFullname.querySelectorAll('.il-char').forEach(c => c.classList.remove('in'));
-  setTimeout(() => {
-    ilInitials.classList.remove('out');
-    ilInitials.classList.add('visible');
-  }, 220);
-});
 
 // ─── NAV LOGO (same hover-expand as intro) ────────
 const nlInitials = document.getElementById('nl-initials');
 const nlFullname  = document.getElementById('nl-fullname');
-
-'Nerea Asensio'.split('').forEach(ch => {
-  const s = document.createElement('span');
-  s.className   = 'nl-char';
-  s.textContent = ch === ' ' ? '\u00A0' : ch;
-  nlFullname.appendChild(s);
-});
-
-const navLogo = document.getElementById('nav-logo');
-let nlExpanded = false;
-
-navLogo.addEventListener('mouseenter', () => {
-  if (nlExpanded) return;
-  nlExpanded = true;
-  nlInitials.classList.add('out');
-  nlFullname.querySelectorAll('.nl-char').forEach((c, i) => {
-    setTimeout(() => c.classList.add('in'), i * 40);
-  });
-});
-
-navLogo.addEventListener('mouseleave', () => {
-  if (!nlExpanded) return;
-  nlExpanded = false;
-  nlFullname.querySelectorAll('.nl-char').forEach(c => c.classList.remove('in'));
-  setTimeout(() => { nlInitials.classList.remove('out'); }, 200);
-});
 
 document.querySelectorAll('.nav-links a').forEach(link => {
   const label = link.textContent;
@@ -277,40 +241,6 @@ document.querySelectorAll('.nav-links a').forEach(link => {
   });
   link.appendChild(word);
 });
-
-// ─── WHO OVERLAY ──────────────────────────────
-(function initWho() {
-  const whoSection = document.getElementById('who');
-  const navWho     = document.getElementById('nav-who');
-  const closeBtn   = whoSection?.querySelector('.who-close');
-  if (!whoSection || !navWho) return;
-
-  function openWho(e) {
-    e.preventDefault();
-    whoSection.classList.add('who-open');
-    whoSection.scrollTop = 0;
-  }
-  function closeWho() {
-    whoSection.classList.remove('who-open');
-  }
-
-  navWho.addEventListener('click', openWho);
-  closeBtn?.addEventListener('click', closeWho);
-
-  // Close on Escape
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && whoSection.classList.contains('who-open')) closeWho();
-  });
-
-  // Close on backdrop click (outside the grid content)
-  whoSection.addEventListener('click', e => {
-    if (e.target === whoSection) closeWho();
-  });
-
-  // Cursor hover for close button
-  closeBtn?.addEventListener('mouseenter', () => document.body.classList.add('hov'));
-  closeBtn?.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
-})();
 
 document.querySelectorAll('.learn-more').forEach(link => {
   const labelText = link.childNodes[0]?.textContent?.trim() || 'LEARN MORE';
@@ -396,8 +326,8 @@ document.querySelectorAll('.learn-more').forEach(link => {
   };
 
   const bgIsLight = relativeLuminance(bgRgb) > 0.72;
-  const textColor = bgIsLight ? '#18180F' : '#F7E6DA';
-  const mutedColor = bgIsLight ? '#565246' : '#D5A18C';
+  const textColor = bgIsLight ? '#18180F' : '#FFFFFF';
+  const mutedColor = bgIsLight ? 'rgba(24,24,15,0.78)' : 'rgba(255,255,255,0.82)';
   const borderColor = bgIsLight ? 'rgba(24,24,15,0.12)' : 'rgba(255,164,120,0.14)';
   const lightPanel = bgIsLight ? '#F3EFE8' : '#221015';
 
@@ -422,14 +352,6 @@ document.querySelectorAll('.learn-more').forEach(link => {
   document.querySelectorAll('.nav-links a').forEach(a => a.style.color = textColor);
   const nlInitialsEl = document.getElementById('nl-initials');
   if (nlInitialsEl) nlInitialsEl.style.color = textColor;
-
-  // Who section — same black/white constraint, no intermediate colours.
-  const whoSection = document.getElementById('who');
-  if (whoSection) {
-    whoSection.querySelectorAll('.who-q, .who-body, .who-cta, .sec-label').forEach(el => {
-      el.style.color = textColor;
-    });
-  }
 
   // CTA section — adapt text to canvas background
   const ctaSection = document.getElementById('cta');

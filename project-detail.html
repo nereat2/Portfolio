@@ -149,6 +149,10 @@
       opacity: 0;
     }
 
+    .detail-copy-secondary[hidden] {
+      display: none !important;
+    }
+
     body.exhibition-copy-active .detail-copy-primary {
       opacity: 0;
       pointer-events: none;
@@ -396,53 +400,84 @@
       background: rgba(255, 255, 255, 0.28);
     }
 
-    .gallery-caption {
-      position: relative;
-      z-index: 1;
-      margin: 1.35rem;
-      padding: 0.7rem 0.9rem;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.62);
-      backdrop-filter: blur(14px);
-      font-size: 0.78rem;
+    .detail-footer-actions {
+      position: fixed;
+      left: 2rem;
+      right: 2rem;
+      bottom: 2rem;
+      z-index: 30;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .footer-action {
+      pointer-events: auto;
+      background: none;
+      border: none;
+      padding: 0;
+      font: 400 11px/1 var(--font-body);
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(24, 24, 15, 0.7);
+      color: var(--muted);
+      cursor: pointer;
+      transition: color .2s ease, transform .25s ease;
+    }
+
+    .footer-action:hover,
+    .footer-action:focus-visible {
+      color: var(--fg);
+      transform: scale(1.14);
+      outline: none;
+    }
+
+    #detailBackTop {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(6px) scale(1);
+      transition: opacity .35s ease, transform .35s ease, color .2s;
+    }
+
+    #detailBackTop.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    #detailBackTop.visible:hover,
+    #detailBackTop.visible:focus-visible {
+      transform: translateY(0) scale(1.14);
+    }
+
+    #nextProjectLink {
+      font-size: 33px;
+      line-height: 1;
+      letter-spacing: 0.04em;
     }
 
     @media (max-width: 960px) {
       .detail-hero {
         grid-template-columns: 1fr;
         padding: 6rem 1.5rem 2rem;
-        position: relative;
       }
 
       .detail-copy {
         grid-column: 1;
         width: 100%;
-        position: static;
       }
 
       .detail-copy-stack {
         grid-column: 1;
         width: 100%;
-        position: static;
       }
 
       .detail-copy-stack .detail-copy {
-        position: static;
-        inset: auto;
-        pointer-events: auto;
+        inset: 0;
       }
 
       .detail-copy-secondary {
-        display: block;
-        opacity: 1;
-        pointer-events: auto;
-        color: var(--fg);
-        margin-top: 3rem;
-        padding-top: 2rem;
-        border-top: 1px solid var(--border);
+        opacity: 0;
       }
 
       .detail-copy-secondary .abstract,
@@ -465,8 +500,8 @@
       }
 
       .detail-gallery {
-        margin-top: 0;
-        padding-top: 0;
+        margin-top: -100vh;
+        padding-top: 100vh;
       }
 
       .gallery-transition-marker.chapter-break {
@@ -491,6 +526,12 @@
 
       .back-link {
         left: 1.5rem;
+      }
+
+      .detail-footer-actions {
+        left: 1.5rem;
+        right: 1.5rem;
+        bottom: 1.5rem;
       }
     }
   </style>
@@ -541,6 +582,11 @@
       <div class="gallery-list" id="galleryList"></div>
     </section>
   </main>
+
+  <div class="detail-footer-actions">
+    <button class="footer-action" id="detailBackTop" type="button">Nowhere to go but up ↑↑</button>
+    <a class="footer-action" id="nextProjectLink" href="./index.html#work">Next project</a>
+  </div>
 
   <script>
     const PROJECTS = {
@@ -755,11 +801,39 @@
     const params = new URLSearchParams(window.location.search);
     const slug = params.get("project") || "rememberita";
     const project = PROJECTS[slug] || PROJECTS["rememberita"];
+    const PROJECT_ORDER = [
+      "rememberita",
+      "meeting-pond",
+      "elen",
+      "rememberita-device",
+      "adaptune",
+      "financial-planning-hub",
+      "lynx-2-0"
+    ];
+    const currentIndex = PROJECT_ORDER.indexOf(slug);
+    const nextSlug = PROJECT_ORDER[(currentIndex + 1 + PROJECT_ORDER.length) % PROJECT_ORDER.length];
+
+    const hexToRgb = hex => {
+      const clean = hex.replace("#", "");
+      const value = clean.length === 3
+        ? clean.split("").map(ch => ch + ch).join("")
+        : clean;
+      return [
+        parseInt(value.slice(0, 2), 16),
+        parseInt(value.slice(2, 4), 16),
+        parseInt(value.slice(4, 6), 16)
+      ];
+    };
+
+    const [fgR, fgG, fgB] = hexToRgb(project.theme.fg);
+    const fgIsDark = (fgR * 0.2126 + fgG * 0.7152 + fgB * 0.0722) < 180;
+    const neutralMuted = fgIsDark ? "rgba(24,24,15,0.72)" : "rgba(255,255,255,0.82)";
+    const neutralSoft = fgIsDark ? "rgba(24,24,15,0.38)" : "rgba(255,255,255,0.42)";
 
     document.documentElement.style.setProperty("--bg", project.theme.bg);
     document.documentElement.style.setProperty("--fg", project.theme.fg);
-    document.documentElement.style.setProperty("--muted", project.theme.muted);
-    document.documentElement.style.setProperty("--soft-muted", project.theme.soft);
+    document.documentElement.style.setProperty("--muted", neutralMuted);
+    document.documentElement.style.setProperty("--soft-muted", neutralSoft);
     document.documentElement.style.setProperty("--border", project.theme.border);
     document.documentElement.style.setProperty("--panel", project.theme.panel);
 
@@ -790,6 +864,19 @@
     backToWorkLink.addEventListener("click", () => {
       sessionStorage.setItem("skipIntroOnce", "1");
     });
+    const nextProjectLink = document.getElementById("nextProjectLink");
+    nextProjectLink.href = `./project-detail.html?project=${encodeURIComponent(nextSlug)}`;
+    const backTopButton = document.getElementById("detailBackTop");
+    const toggleBackTop = () => {
+      const nearBottom =
+        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 300;
+      backTopButton.classList.toggle("visible", nearBottom);
+    };
+    backTopButton.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    toggleBackTop();
+    window.addEventListener("scroll", toggleBackTop, { passive: true });
     document.title = `${project.title} — Project Detail`;
 
     const gallery = document.getElementById("galleryList");
@@ -897,12 +984,7 @@
         frame.appendChild(controls);
       }
 
-      const caption = document.createElement("p");
-      caption.className = "gallery-caption";
-      caption.textContent = image.label;
-
       frame.appendChild(visual);
-      frame.appendChild(caption);
       item.appendChild(frame);
       gallery.appendChild(item);
     });
