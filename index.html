@@ -35,6 +35,11 @@
   <div id="cur" aria-hidden="true"></div>
 
   <!-- ══════════════════════════════════════
+       BACK TO TOP
+  ══════════════════════════════════════ -->
+  <button id="back-top" aria-label="Back to top">Nowhere to go but up ↑↑</button>
+
+  <!-- ══════════════════════════════════════
        FLUID BACKGROUND
   ══════════════════════════════════════ -->
   <canvas id="fluidCanvas" aria-hidden="true"></canvas>
@@ -49,7 +54,7 @@
     </div>
     <ul class="nav-links">
       <li><a href="#work">Work</a></li>
-      <li><a href="#who">Who?</a></li>
+      <li><a href="#" id="nav-who">Who?</a></li>
       <li><a href="#contact">Say Hi :)</a></li>
     </ul>
   </nav>
@@ -266,91 +271,108 @@
   </section>
 
   <!-- ══════════════════════════════════════
-       PERSONAL NOTE / QUOTE
-       TODO: rewrite this text with Nerea
+       PHILOSOPHY
   ══════════════════════════════════════ -->
-  <section id="note" aria-label="A personal note">
-    <p class="sec-label">A note</p>
-    <div class="note-inner">
-      <div class="note-body">
-        <p>Why can't design just be <em>felt</em>?</p>
-        <p>I used to arrange rooms for a living. Now I arrange interactions.
-        The tools changed — the obsession with how things <em>feel</em>
-        to inhabit never did.</p>
-        <p>I moved from the Pyrenees to Milan, then to Switzerland.
-        Each place taught me something different about how people
-        relate to their environments.
-        That's still what I design: <em>environments</em>.
-        Just smaller ones now.</p>
+  <section id="philosophy" aria-label="Design philosophy">
+
+    <!-- Sticky stage: stays pinned to viewport top while section scrolls -->
+    <div class="phil-stage">
+
+      <!-- All phrases stacked in the same position — only one visible at a time -->
+      <div class="phil-text-wrap">
+
+        <div class="phil-phrase" data-phrase="0" data-side="right">
+          <p class="phil-text">I learn by doing.</p>
+        </div>
+
+        <div class="phil-phrase" data-phrase="1" data-side="left">
+          <p class="phil-text">I grow by trying.</p>
+        </div>
+
+        <!-- Stack: single container, JS controls which lines are visible -->
+        <div class="phil-phrase phil-phrase--stack" data-phrase="2" data-side="right">
+          <div class="phil-text phil-text--stack">
+            <p class="phil-stack-line" data-line="0">Some things work.</p>
+            <p class="phil-stack-line" data-line="1">Some things don't.</p>
+            <p class="phil-stack-line" data-line="2">All of them teach.</p>
+          </div>
+        </div>
+
+        <div class="phil-phrase" data-phrase="3" data-side="left">
+          <p class="phil-text">I get better by staying curious.</p>
+        </div>
+
       </div>
+
     </div>
-    <!-- Replace ✦ with an SVG doodle or illustration later -->
-    <div class="note-doodle" aria-hidden="true">✦</div>
+
+    <!-- Mascot: position:fixed, JS moves it left/right and swaps pose -->
+    <div class="phil-mascot" aria-hidden="true">
+      <img class="phil-pose" data-pose="0" src="assets/doodles/doodle1.png" alt="" />
+      <img class="phil-pose" data-pose="1" src="assets/doodles/doodle2.png" alt="" />
+      <img class="phil-pose" data-pose="2" src="assets/doodles/doodle3a.png" alt="" />
+      <img class="phil-pose" data-pose="3" src="assets/doodles/doodle3b.png" alt="" />
+      <img class="phil-pose" data-pose="4" src="assets/doodles/doodle3c.png" alt="" />
+      <img class="phil-pose" data-pose="5" src="assets/doodles/doodle4.png" alt="" />
+    </div>
+
+    <!-- Invisible scroll triggers — create scroll distance, detected by JS -->
+    <div class="phil-trigger" data-phrase="0" data-side="right" data-pose="0"></div>
+    <div class="phil-trigger" data-phrase="1" data-side="left"  data-pose="1"></div>
+    <div class="phil-trigger" data-phrase="2" data-side="right" data-pose="2" data-stack-pos="0"></div>
+    <div class="phil-trigger" data-phrase="2" data-side="right" data-pose="3" data-stack-pos="1"></div>
+    <div class="phil-trigger" data-phrase="2" data-side="right" data-pose="4" data-stack-pos="2"></div>
+    <div class="phil-trigger" data-phrase="3" data-side="left"  data-pose="5"></div>
+
   </section>
 
   <!-- ══════════════════════════════════════
-       SKILLS BUBBLES
+       CTA
   ══════════════════════════════════════ -->
-  <section id="skills" aria-label="Capabilities and tools">
-    <p class="sec-label">Capabilities & tools</p>
-    <canvas id="bubblesCanvas" aria-label="Interactive floating skill tags — hover to push them"></canvas>
+  <section id="cta" aria-label="Call to action">
+    <div class="cta-inner">
+      <p class="cta-line1">Want to work together?</p>
+      <p class="cta-line2">
+        Drop me an
+        <a href="mailto:nerea.asensio@example.com" class="cta-link">email</a>
+        or find me on
+        <a href="https://linkedin.com/in/nerea-asensio" class="cta-link" target="_blank" rel="noopener">LinkedIn</a>.
+      </p>
+    </div>
   </section>
 
   <!-- ══════════════════════════════════════
        WHO?
   ══════════════════════════════════════ -->
-  <section id="who" aria-label="About Nerea">
+  <section id="who" role="dialog" aria-modal="true" aria-label="About Nerea">
+    <button class="who-close" aria-label="Close">✕</button>
     <div class="who-left">
       <p class="sec-label">Who?</p>
       <h2 class="who-q" id="whoQ">
-        <span class="r-break">Nerea.</span>
-        <span class="r-break">Born near the Pyrenees.</span>
-        <span class="r-break">Designing in Switzerland.</span>
+        <span class="r-break">Designer.</span>
+        <span class="r-break">Student.</span>
+        <span class="r-break">Work in progress.</span>
       </h2>
       <p class="who-body">
-        I came to interaction design through interior and exhibition design —
-        years of thinking about how people inhabit space, move through it,
-        feel it before they understand it. That spatial intuition is still
-        at the core of everything I make.
+       Master's student in Interaction Design at SUPSI, Switzerland. I came from interior and exhibition design which taught me that design is something you inhabit, not just use.
       </p>
       <p class="who-body">
-        Completing my Master's in Interaction Design at SUPSI, Mendrisio.
-        Looking for internship opportunities with established studios and
-        companies in Switzerland — and beyond.
+        I care about things that connect people, create feelings, and leave a real impact on the people using them and the world around them.
       </p>
-      <p class="who-lang">Italian · Spanish · English · Catalan</p>
+      <p class="who-body">
+        Curious, adaptable, and with a soft spot for the details that make all the difference.
+      </p>
+      <p class="who-body">
+        Currently looking for internship opportunities in Switzerland, and open to wherever an interesting experience takes me.
+      </p>
+      <a href="mailto:" class="who-cta">Let's get to work! <span class="who-cta-arr" aria-hidden="true">→</span></a>
     </div>
     <div class="who-right">
       <div class="photo-frame">
-        <!-- Replace contents with: <img src="assets/images/nerea.jpg" alt="Nerea Asensio" /> -->
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1" aria-hidden="true">
-          <circle cx="12" cy="8" r="4"/>
-          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-        </svg>
-        <span>Your photo here</span>
+        <img src="assets/who/jpeg/0EE6CC74-15D5-4511-9AD6-750D167FF077.jpeg" alt="Nerea Asensio" />
       </div>
     </div>
   </section>
-
-  <!-- ══════════════════════════════════════
-       NEXT BAND
-  ══════════════════════════════════════ -->
-  <div id="next-band">
-    <span class="next-hint">Next up</span>
-    <a href="#contact" class="next-link">
-      Say hello <span class="next-arr" aria-hidden="true">→</span>
-    </a>
-  </div>
-
-  <!-- ══════════════════════════════════════
-       FOOTER / CONTACT
-  ══════════════════════════════════════ -->
-  <footer id="contact" role="contentinfo">
-    <span>Nerea Asensio — Interaction Designer</span>
-    <a href="mailto:hello@nerea.design" class="fmail">hello@nerea.design</a>
-    <span>Mendrisio · Switzerland</span>
-  </footer>
-
 
   <!-- ══════════════════════════════════════
        JAVASCRIPT

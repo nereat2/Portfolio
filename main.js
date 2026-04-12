@@ -278,6 +278,40 @@ document.querySelectorAll('.nav-links a').forEach(link => {
   link.appendChild(word);
 });
 
+// ─── WHO OVERLAY ──────────────────────────────
+(function initWho() {
+  const whoSection = document.getElementById('who');
+  const navWho     = document.getElementById('nav-who');
+  const closeBtn   = whoSection?.querySelector('.who-close');
+  if (!whoSection || !navWho) return;
+
+  function openWho(e) {
+    e.preventDefault();
+    whoSection.classList.add('who-open');
+    whoSection.scrollTop = 0;
+  }
+  function closeWho() {
+    whoSection.classList.remove('who-open');
+  }
+
+  navWho.addEventListener('click', openWho);
+  closeBtn?.addEventListener('click', closeWho);
+
+  // Close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && whoSection.classList.contains('who-open')) closeWho();
+  });
+
+  // Close on backdrop click (outside the grid content)
+  whoSection.addEventListener('click', e => {
+    if (e.target === whoSection) closeWho();
+  });
+
+  // Cursor hover for close button
+  closeBtn?.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+  closeBtn?.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+})();
+
 document.querySelectorAll('.learn-more').forEach(link => {
   const labelText = link.childNodes[0]?.textContent?.trim() || 'LEARN MORE';
   link.innerHTML = '';
@@ -367,6 +401,10 @@ document.querySelectorAll('.learn-more').forEach(link => {
   const borderColor = bgIsLight ? 'rgba(24,24,15,0.12)' : 'rgba(255,164,120,0.14)';
   const lightPanel = bgIsLight ? '#F3EFE8' : '#221015';
 
+  // Expose for other sections (philosophy background, etc.)
+  window._FPALETTE  = { bgHue, hA, hB, bgRgb, useLightBackground };
+  window._hslToRgb  = hslToRgb;
+
   // Shift the main canvas and page tokens to match the active background.
   document.body.style.background = PAL.bg;
   document.documentElement.style.setProperty('--cream',  PAL.bg);
@@ -384,6 +422,26 @@ document.querySelectorAll('.learn-more').forEach(link => {
   document.querySelectorAll('.nav-links a').forEach(a => a.style.color = textColor);
   const nlInitialsEl = document.getElementById('nl-initials');
   if (nlInitialsEl) nlInitialsEl.style.color = textColor;
+
+  // Who section — same black/white constraint, no intermediate colours.
+  const whoSection = document.getElementById('who');
+  if (whoSection) {
+    whoSection.querySelectorAll('.who-q, .who-body, .who-cta, .sec-label').forEach(el => {
+      el.style.color = textColor;
+    });
+  }
+
+  // CTA section — adapt text to canvas background
+  const ctaSection = document.getElementById('cta');
+  if (ctaSection) {
+    ctaSection.querySelectorAll('.cta-line1, .cta-line2').forEach(el => {
+      el.style.color = textColor;
+    });
+    ctaSection.querySelectorAll('.cta-link').forEach(el => {
+      el.style.color = textColor;
+      el.style.borderBottomColor = textColor;
+    });
+  }
 
   function lerpColor(c1, c2, t) {
     return [
@@ -687,96 +745,25 @@ document.querySelectorAll('.prow').forEach(row => {
   });
 });
 
-// ─── SKILL BUBBLES ────────────────────────────────
-const bc   = document.getElementById('bubblesCanvas');
-const bctx = bc.getContext('2d');
-let BW, BH;
+// ─── BACK TO TOP ──────────────────────────────
+(function initBackTop() {
+  const btn = document.getElementById('back-top');
+  if (!btn) return;
 
-function resizeBubbles() {
-  BW = bc.width  = bc.offsetWidth;
-  BH = bc.height = bc.offsetHeight;
-}
-resizeBubbles();
-window.addEventListener('resize', resizeBubbles, { passive: true });
+  // Only show when within ~300px of the page bottom
+  window.addEventListener('scroll', () => {
+    const nearBottom =
+      window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 300;
+    btn.classList.toggle('visible', nearBottom);
+  }, { passive: true });
 
-const SKILLS = [
-  'Interaction design', 'Tangible interfaces', 'Prototyping',
-  'Physical computing', 'Figma', 'HTML · CSS · JS',
-  'Arduino', 'UX research', 'Spatial thinking',
-  'Speculative design', 'Italian 🤌', 'Spanish',
-  'English', 'Catalan',
-];
-
-// measure text widths before layout
-bctx.font = '400 12px "Wix Madefor Text", sans-serif';
-const bubbles = SKILLS.map(text => {
-  const tw = bctx.measureText(text).width;
-  const pad = 16;
-  const r   = tw / 2 + pad;
-  const angle = Math.random() * Math.PI * 2;
-  return {
-    x:   r + Math.random() * Math.max(BW - r * 2, 10),
-    y:   r + Math.random() * Math.max(BH - r * 2, 10),
-    vx:  Math.cos(angle) * (.15 + Math.random() * .2),
-    vy:  Math.sin(angle) * (.15 + Math.random() * .2),
-    r, text,
-  };
-});
-
-let bmx = -9999, bmy = -9999;
-bc.addEventListener('mousemove', e => {
-  const rect = bc.getBoundingClientRect();
-  bmx = e.clientX - rect.left;
-  bmy = e.clientY - rect.top;
-});
-bc.addEventListener('mouseleave', () => { bmx = -9999; bmy = -9999; });
-
-function drawBubbles() {
-  bctx.clearRect(0, 0, BW, BH);
-  bctx.font = '400 12px "Wix Madefor Text", sans-serif';
-
-  bubbles.forEach(b => {
-    // cursor repulsion
-    const dx   = bmx - b.x;
-    const dy   = bmy - b.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < b.r + 60 && dist > 0) {
-      const f = ((b.r + 60 - dist) / (b.r + 60)) * .55;
-      b.vx -= (dx / dist) * f;
-      b.vy -= (dy / dist) * f;
-    }
-
-    b.vx *= .975;
-    b.vy *= .975;
-    b.x  += b.vx;
-    b.y  += b.vy;
-
-    // bounce off walls
-    if (b.x - b.r < 0)  { b.x = b.r;      b.vx =  Math.abs(b.vx); }
-    if (b.x + b.r > BW) { b.x = BW - b.r; b.vx = -Math.abs(b.vx); }
-    if (b.y - b.r < 0)  { b.y = b.r;      b.vy =  Math.abs(b.vy); }
-    if (b.y + b.r > BH) { b.y = BH - b.r; b.vy = -Math.abs(b.vy); }
-
-    // draw pill
-    const h = 28;
-    bctx.beginPath();
-    bctx.roundRect(b.x - b.r, b.y - h / 2, b.r * 2, h, h / 2);
-    bctx.fillStyle   = 'rgba(24,24,15,0.06)';
-    bctx.fill();
-    bctx.strokeStyle = 'rgba(24,24,15,0.18)';
-    bctx.lineWidth   = .5;
-    bctx.stroke();
-
-    // label
-    bctx.fillStyle    = 'rgba(24,24,15,0.72)';
-    bctx.textAlign    = 'center';
-    bctx.textBaseline = 'middle';
-    bctx.fillText(b.text, b.x, b.y);
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  requestAnimationFrame(drawBubbles);
-}
-drawBubbles();
+  btn.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+  btn.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+})();
 // ─────────────────────────────────────────────
 // IMMERSIVE WORK SECTION LOGIC
 // ─────────────────────────────────────────────
@@ -874,3 +861,192 @@ function initWork() {
 }
 
 initWork();
+
+// ─── PHILOSOPHY ───────────────────────────────
+(function initPhilosophy() {
+  const section  = document.getElementById('philosophy');
+  if (!section) return;
+
+  const mascot   = section.querySelector('.phil-mascot');
+  const poses    = Array.from(section.querySelectorAll('.phil-pose'));
+  const phrases  = Array.from(section.querySelectorAll('.phil-phrase'));
+  const triggers = Array.from(section.querySelectorAll('.phil-trigger'));
+  const isMobile = window.matchMedia('(max-width: 720px)').matches;
+
+  // ── Dark background from palette hue ──────────────────────
+  const fp = window._FPALETTE;
+  if (fp && window._hslToRgb) {
+    const [r, g, b] = window._hslToRgb(fp.bgHue, 28, 13);
+    const philBg = `rgb(${r},${g},${b})`;
+    section.style.background = philBg;
+    document.documentElement.style.setProperty('--phil-bg', philBg);
+  }
+
+  // ── State ─────────────────────────────────────────────────
+  let activePoseIdx   = -1;
+  let activePhraseIdx = -1;
+  let activeStackPos  = -1;
+  let currentTrigIdx  = -1;
+
+  // ── Helpers ───────────────────────────────────────────────
+  function swapPose(idx) {
+    if (idx === activePoseIdx || !poses[idx]) return;
+    poses.forEach((img, i) => img.classList.toggle('active', i === idx));
+    activePoseIdx = idx;
+  }
+
+  function moveMascot(side) {
+    if (!mascot || isMobile) return;
+    mascot.classList.toggle('side-left',  side === 'left');
+    mascot.classList.toggle('side-right', side === 'right');
+  }
+
+  function showPhrase(phraseIdx) {
+    phrases.forEach((p, i) => p.classList.toggle('active', i === phraseIdx));
+    activePhraseIdx = phraseIdx;
+  }
+
+  function setStackPos(pos) {
+    if (pos === activeStackPos) return;
+    activeStackPos = pos;
+    const stackEl = section.querySelector('.phil-phrase--stack');
+    if (!stackEl) return;
+    stackEl.querySelectorAll('.phil-stack-line').forEach((line, i) => {
+      line.classList.remove('stack-current', 'stack-faded1', 'stack-faded2');
+      if (i === pos)          line.classList.add('stack-current');
+      else if (i === pos - 1) line.classList.add('stack-faded1');
+      else if (i < pos - 1)   line.classList.add('stack-faded2');
+    });
+  }
+
+  function activateTrigger(idx) {
+    if (idx === currentTrigIdx) return;
+    currentTrigIdx = idx;
+    const t          = triggers[idx];
+    const phraseIdx  = parseInt(t.dataset.phrase, 10);
+    const poseIdx    = parseInt(t.dataset.pose, 10);
+    const side       = t.dataset.side;
+    const stackPosS  = t.dataset.stackPos;
+    const stackPos   = stackPosS !== undefined ? parseInt(stackPosS, 10) : null;
+
+    showPhrase(phraseIdx);
+    moveMascot(side);
+    setTimeout(() => swapPose(poseIdx), isMobile ? 0 : 120);
+    if (stackPos !== null) setStackPos(stackPos);
+  }
+
+  // ── Mascot visibility ─────────────────────────────────────
+  const cta = document.getElementById('cta');
+
+  function checkMascotVisibility() {
+    if (!mascot) return;
+    const philRect = section.getBoundingClientRect();
+    const ctaRect  = cta ? cta.getBoundingClientRect() : null;
+    const philShowThreshold = window.innerHeight * 0.18;
+    const philInView = philRect.top < philShowThreshold && philRect.bottom > 0;
+    const ctaApproaching = ctaRect && ctaRect.top < window.innerHeight * 0.85;
+    if (!philInView || ctaApproaching) {
+      mascot.classList.remove('visible');
+    } else {
+      mascot.classList.add('visible');
+    }
+  }
+
+  // ── Scroll-based trigger detection ────────────────────────
+  // Cache absolute document positions of each trigger once, recompute on resize.
+  // On each scroll, find which trigger the viewport "reading line" falls within.
+  let triggerTops = [];
+
+  function cacheTriggerPositions() {
+    const scrollY = window.scrollY;
+    triggerTops = triggers.map(t => {
+      const r = t.getBoundingClientRect();
+      return r.top + scrollY;
+    });
+  }
+
+  function updateActivePhrase() {
+    // "Reading line" = 50% down the viewport. When this line crosses a trigger,
+    // that trigger becomes active.
+    const readingY = window.scrollY + window.innerHeight * 0.5;
+
+    let newIdx = 0;
+    for (let i = triggerTops.length - 1; i >= 0; i--) {
+      if (readingY >= triggerTops[i]) { newIdx = i; break; }
+    }
+
+    // Only change phrase when section is in view
+    const philRect = section.getBoundingClientRect();
+    if (philRect.top < window.innerHeight && philRect.bottom > 0) {
+      activateTrigger(newIdx);
+    }
+
+    checkMascotVisibility();
+  }
+
+  window.addEventListener('scroll', updateActivePhrase, { passive: true });
+  window.addEventListener('resize', () => {
+    cacheTriggerPositions();
+    updateActivePhrase();
+  }, { passive: true });
+
+  // Wait one frame for layout, then cache positions and set initial state
+  requestAnimationFrame(() => {
+    cacheTriggerPositions();
+    // Pre-activate trigger 0 so first phrase + pose are ready before scrolling
+    activateTrigger(0);
+  });
+
+  // ── Cursor parallax (desktop only) ────────────────────────
+  if (!mascot || isMobile) return;
+
+  let tx = 0, ty = 0, px = 0, py = 0;
+  let rafId = null;
+  let sectionActive = false;
+
+  function loopParallax() {
+    px += (tx - px) * 0.055;
+    py += (ty - py) * 0.055;
+    mascot.style.setProperty('--px', `${px}px`);
+    mascot.style.setProperty('--py', `${py}px`);
+    rafId = requestAnimationFrame(loopParallax);
+  }
+
+  document.addEventListener('mousemove', e => {
+    if (!sectionActive) return;
+    tx = (e.clientX / window.innerWidth  - 0.5) * 22;
+    ty = (e.clientY / window.innerHeight - 0.5) * 14;
+  });
+
+  const parallaxObs = new IntersectionObserver(([e]) => {
+    sectionActive = e.isIntersecting;
+    if (sectionActive && !rafId) {
+      rafId = requestAnimationFrame(loopParallax);
+    } else if (!sectionActive) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+      tx = ty = px = py = 0;
+      mascot.style.setProperty('--px', '0px');
+      mascot.style.setProperty('--py', '0px');
+    }
+  }, { threshold: 0.01 });
+  parallaxObs.observe(section);
+})();
+
+// ─── CTA REVEAL ───────────────────────────────
+(function initCta() {
+  const cta = document.getElementById('cta');
+  if (!cta) return;
+
+  // Cursor hover for links
+  cta.querySelectorAll('.cta-link').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+  });
+
+  const obs = new IntersectionObserver(
+    ([e]) => { if (e.isIntersecting) { cta.classList.add('cta-revealed'); obs.disconnect(); } },
+    { threshold: 0.25 }
+  );
+  obs.observe(cta);
+})();
