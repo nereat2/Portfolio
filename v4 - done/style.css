@@ -44,13 +44,13 @@
 }
 
 :root {
-  --cream:   #EAEAEA;
-  --cream2:  #EAEAEA;
-  --ink:     #000000;
-  --ink2:    rgba(0, 0, 0, 0.78);
-  --muted:   rgba(0, 0, 0, 0.72);
-  --border:  rgba(0, 0, 0, 0.12);
-  --light:   #EAEAEA;
+  --cream:   #F4F1EA;
+  --cream2:  #EDE9DF;
+  --ink:     #18180F;
+  --ink2:    #3A3A2E;
+  --muted:   #8A8878;
+  --border:  #DEDAD0;
+  --light:   #E8E4D8;
 
   /* one accent per project — swapped in via JS */
   --accent:  #18180F;
@@ -352,7 +352,12 @@ nav.scrolled { border-bottom-color: transparent; }
 }
 
 #fluidCanvas {
-  display: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
 }
 
 
@@ -548,19 +553,15 @@ section { padding: 5.5rem 2.4rem; }
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 4px;
   box-shadow: 0 30px 60px rgba(0,0,0,0.1);
   position: relative;
-  transition:
-    transform 0.1s linear,
-    box-shadow .45s var(--ease-out-expo),
-    border-radius .45s var(--ease-out-expo);
+  transition: transform 0.1s linear, box-shadow .45s var(--ease-out-expo);
   will-change: transform;
 }
 .project-img-container:hover,
 .project-img-container:focus-visible {
-  box-shadow: 0 24px 58px rgba(0,0,0,0.14);
-  border-radius: 28px;
+  box-shadow: 0 32px 70px rgba(0,0,0,0.18);
 }
 
 .project-img-placeholder {
@@ -570,19 +571,13 @@ section { padding: 5.5rem 2.4rem; }
   background-position: center;
   opacity: 0.8;
   filter: brightness(0.95);
-  border-radius: inherit;
-  transition:
-    filter .55s var(--ease-out-expo),
-    transform .65s var(--ease-out-expo),
-    opacity .45s ease,
-    border-radius .45s var(--ease-out-expo);
+  transition: filter .55s var(--ease-out-expo), transform .65s var(--ease-out-expo), opacity .45s ease;
 }
 .project-img-container:hover .project-img-placeholder,
 .project-img-container:focus-visible .project-img-placeholder {
-  filter: blur(24px) brightness(0.88) saturate(1.02) contrast(1.04);
-  transform: scale(1.05);
-  opacity: 0.96;
-  border-radius: 28px;
+  filter: blur(14px) brightness(0.58) saturate(0.85);
+  transform: scale(1.04);
+  opacity: 0.82;
 }
 
 .project-overlay {
@@ -835,27 +830,25 @@ section { padding: 5.5rem 2.4rem; }
 @media (max-width: 720px) {
   .phil-text-wrap {
     padding: 0 1.4rem;
-    align-items: center;
+    /* push text down below the fixed mascot */
+    padding-top: clamp(200px, 32vh, 300px);
+    align-items: start;
   }
 
   .phil-phrase[data-side="right"] .phil-text,
   .phil-phrase[data-side="left"]  .phil-text {
-    max-width: 58%;
+    margin: 0;
     text-align: center;
   }
-  .phil-phrase[data-side="right"] .phil-text { margin-right: 42%; }
-  .phil-phrase[data-side="left"]  .phil-text { margin-left: 42%; }
 
   .phil-mascot {
-    top: 50%;
-    left: 72%;
-    transform: translate(-50%, -50%) translate(var(--px), var(--py));
-    width: clamp(170px, 30vh, 260px);
-    height: clamp(170px, 30vh, 260px);
-    transition: opacity .5s ease, left .55s var(--ease-out-expo);
+    top: clamp(80px, 12vh, 140px);
+    left: 50% !important;
+    transform: translate(-50%, 0) translate(var(--px), var(--py));
+    width: clamp(160px, 28vh, 260px);
+    height: clamp(160px, 28vh, 260px);
+    transition: opacity .5s ease;
   }
-  .phil-mascot.side-right { left: 72%; }
-  .phil-mascot.side-left  { left: 28%; }
 
   .phil-text {
     font-size: clamp(1.8rem, 7vw, 2.8rem);
@@ -979,8 +972,8 @@ section { padding: 5.5rem 2.4rem; }
    MOBILE
 ───────────────────────────────────────────── */
 @media (max-width: 720px) {
-  body { cursor: none; }
-  #cur { display: block; }
+  body { cursor: auto; }
+  #cur { display: none; }
 
   nav { padding: 1rem 1.2rem; justify-content: space-between; gap: 0.5rem; }
   .nav-logo { flex-shrink: 0; }
@@ -1227,10 +1220,7 @@ section { padding: 5.5rem 2.4rem; }
     gap: 2rem;
     min-height: unset;
   }
-  .about-photo {
-    display: block;
-    height: clamp(320px, 56vh, 520px);
-  }
+  .about-photo { display: none; }
   .pit-tabs-bar { gap: 1rem; padding: .85rem 1.2rem; justify-content: flex-start; }
   .pit-tab { font-size: .95rem; }
   .tag-bubble { font-size: 16px; padding: .8rem 1.6rem; }

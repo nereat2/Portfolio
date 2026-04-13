@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nerea Asensio — About</title>
+  <meta name="description" content="About Nerea Asensio, interaction designer and Master's student in Interaction Design at SUPSI, Switzerland." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="fluidCanvas" aria-hidden="true"></canvas>
+  <div id="cur" aria-hidden="true"></div>
+
+  <nav id="nav" role="navigation" aria-label="Main navigation">
+    <a href="index.html#home" class="nav-logo-link">
+      <div class="nav-logo" id="nav-logo" aria-label="Nerea Asensio">
+        <span id="nl-initials" aria-hidden="true">N·A</span>
+        <span id="nl-fullname" aria-hidden="true"></span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html" class="is-current" aria-current="page">Who?</a></li>
+      <li><a href="mailto:nere.at.2@gmail.com">Say Hi :)</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section class="about-grid" aria-label="About Nerea">
+      <div class="about-copy">
+        <h1 class="about-q">
+          <span class="r-break">Designer.</span>
+          <span class="r-break">Student.</span>
+          <span class="r-break">Work in progress.</span>
+        </h1>
+        <p class="about-body">Master's student in Interaction Design at SUPSI, Switzerland. I came from interior and exhibition design field, where I worked for 5 years after my degree and which taught me that design is something you inhabit, not just use.</p>
+        <p class="about-body">I care about things that connect people, create feelings, and leave a real impact on the people using them and the world around them.</p>
+        <p class="about-body">Curious, adaptable, and with a soft spot for the details that make all the difference.</p>
+        <p class="about-body">Currently looking for internship opportunities in Switzerland, and open to wherever an interesting experience takes me.</p>
+        <div class="about-cta-row">
+          <a href="mailto:nere.at.2@gmail.com" class="about-cta">Let's get to work!</a>
+          <a href="assets/cv/nerea_asensio_designer_cv.pdf" download class="about-cta about-cta--cv">CV</a>
+        </div>
+      </div>
+
+      <div class="about-photo">
+        <img src="assets/who/jpeg/0EE6CC74-15D5-4511-9AD6-750D167FF077.jpeg" alt="Nerea Asensio" />
+      </div>
+    </section>
+
+    <section class="pit-tabs-section" aria-label="More about Nerea">
+      <div class="pit-tabs-bar">
+        <button class="pit-tab active" data-target="pit-skills" type="button">The Toolkit</button>
+        <button class="pit-tab" data-target="pit-traits" type="button">The Person</button>
+        <button class="pit-tab" data-target="pit-life" type="button">The Life</button>
+      </div>
+
+      <div class="pit-panels">
+        <div class="pit-panel active" id="pit-skills">
+          <div class="pit-inner">
+            <div class="tag-bubble" data-pit="skills">Interaction Design</div>
+            <div class="tag-bubble" data-pit="skills">UX Research</div>
+            <div class="tag-bubble" data-pit="skills">Prototyping</div>
+            <div class="tag-bubble" data-pit="skills">Figma</div>
+            <div class="tag-bubble" data-pit="skills">HTML · CSS · JS</div>
+            <div class="tag-bubble" data-pit="skills">Arduino</div>
+            <div class="tag-bubble" data-pit="skills">Physical Computing</div>
+            <div class="tag-bubble" data-pit="skills">Tangible Interfaces</div>
+            <div class="tag-bubble" data-pit="skills">Spatial Thinking</div>
+            <div class="tag-bubble" data-pit="skills">Speculative Design</div>
+            <div class="tag-bubble" data-pit="skills">Exhibition Design</div>
+            <div class="tag-bubble" data-pit="skills">Adobe CC</div>
+            <div class="tag-bubble" data-pit="skills">Blender</div>
+            <div class="tag-bubble" data-pit="skills">Fusion 360</div>
+            <div class="tag-bubble" data-pit="skills">V-Ray</div>
+            <div class="tag-bubble" data-pit="skills">GitHub</div>
+            <div class="tag-bubble" data-pit="skills">Notion</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="skills">✏️</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="skills">🖥️</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="skills">🔧</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="skills">📐</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="skills">🎛️</div>
+          </div>
+        </div>
+
+        <div class="pit-panel" id="pit-traits">
+          <div class="pit-inner">
+            <div class="tag-bubble" data-pit="traits">Italian 🤌</div>
+            <div class="tag-bubble" data-pit="traits">Spanish</div>
+            <div class="tag-bubble" data-pit="traits">English</div>
+            <div class="tag-bubble" data-pit="traits">Catalan</div>
+            <div class="tag-bubble" data-pit="traits">Learning German!</div>
+            <div class="tag-bubble" data-pit="traits">Curious</div>
+            <div class="tag-bubble" data-pit="traits">Detail-oriented</div>
+            <div class="tag-bubble" data-pit="traits">Empathetic</div>
+            <div class="tag-bubble" data-pit="traits">Collaborative</div>
+            <div class="tag-bubble" data-pit="traits">Creative</div>
+            <div class="tag-bubble" data-pit="traits">Adaptable</div>
+            <div class="tag-bubble" data-pit="traits">Systems thinker</div>
+            <div class="tag-bubble" data-pit="traits">Storyteller</div>
+            <div class="tag-bubble" data-pit="traits">Organized</div>
+            <div class="tag-bubble" data-pit="traits">Perfectionist</div>
+            <div class="tag-bubble" data-pit="traits">Enthusiastic</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="traits">💬</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="traits">🌍</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="traits">✨</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="traits">🤝</div>
+          </div>
+        </div>
+
+        <div class="pit-panel" id="pit-life">
+          <div class="pit-inner">
+            <div class="tag-bubble" data-pit="life">Diving</div>
+            <div class="tag-bubble" data-pit="life">Mountains</div>
+            <div class="tag-bubble" data-pit="life">Skiing</div>
+            <div class="tag-bubble" data-pit="life">Running</div>
+            <div class="tag-bubble" data-pit="life">Dog mum</div>
+            <div class="tag-bubble" data-pit="life">Nature</div>
+            <div class="tag-bubble" data-pit="life">Travel</div>
+            <div class="tag-bubble" data-pit="life">Art</div>
+            <div class="tag-bubble" data-pit="life">Baking</div>
+            <div class="tag-bubble" data-pit="life">Yoga</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="life">🌊</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="life">🏔️</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="life">⛷️</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="life">🏃</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="life">🐕</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="life">🌿</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="life">✈️</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="life">🎨</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="life">🍞</div>
+            <div class="tag-bubble tag-bubble--emoji" data-pit="life">🧘</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cta" aria-label="Call to action">
+      <div class="cta-inner">
+        <p class="cta-line1">Want to work together?</p>
+        <p class="cta-line2">
+          Drop me an
+          <a href="mailto:nere.at.2@gmail.com" class="cta-link">email</a>
+          or find me on
+          <a href="https://www.linkedin.com/in/nerea-a-777526192/" class="cta-link" target="_blank" rel="noopener">LinkedIn</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <button id="back-top" aria-label="Back to top">Nowhere to go but up ↑↑</button>
+
+  <script src="about.js"></script>
+</body>
+</html>
