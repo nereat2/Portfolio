@@ -214,6 +214,15 @@ nav {
 }
 nav.scrolled { border-bottom-color: transparent; }
 
+/* Nav turns white when over a dark-background section (e.g. philosophy) */
+nav.on-dark .nav-links a,
+nav.on-dark ~ #siteHomeLink .label-nav {
+  color: rgba(255,255,255,0.88) !important;
+}
+nav.on-dark .nav-links a::after {
+  background: rgba(255,255,255,0.88);
+}
+
 @keyframes logoWobble {
   0% { transform: scale(1); }
   20% { transform: scale(1.12) rotate(-2deg); }
@@ -293,6 +302,11 @@ nav.scrolled { border-bottom-color: transparent; }
 
 #siteHomeLink .label-nav {
   font-size: 24px;
+  transition:
+    color .25s ease,
+    opacity .38s ease,
+    transform .35s var(--ease-out-expo),
+    text-shadow .35s ease;
 }
 
 #siteHomeLink .label-hero {
@@ -301,8 +315,11 @@ nav.scrolled { border-bottom-color: transparent; }
 }
 
 /* Hero state: big label visible, nav label hidden */
+#siteHomeLink.is-hero {
+  mix-blend-mode: difference;
+}
 #siteHomeLink.is-hero .label-hero {
-  color: var(--ink);
+  color: white;
   opacity: 1;
   transform: translateY(0);
 }
@@ -324,11 +341,27 @@ nav.scrolled { border-bottom-color: transparent; }
   transform: translateY(0);
 }
 
-/* Wobble on hover (nav state only) */
-#siteHomeLink.is-nav:hover {
-  animation: logoWobble .7s ease-in-out;
-  transform: scale(1.12);
-  transform-origin: left center;
+/* Hover: same lift + underline as the other nav links */
+#siteHomeLink.is-nav:hover .label-nav {
+  opacity: 1;
+  transform: translateY(-2px);
+  text-shadow: 0 0 18px rgba(0, 0, 0, 0.18);
+}
+#siteHomeLink.is-nav .label-nav::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.22em;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .35s var(--ease-out-expo);
+}
+#siteHomeLink.is-nav:hover .label-nav::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 /* ─────────────────────────────────────────────
@@ -657,7 +690,8 @@ section { padding: 5.5rem 2.4rem; }
 #back-top {
   position: fixed;
   bottom: 2rem;
-  left: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
   z-index: 400;
   background: none;
   border: none;
@@ -670,18 +704,18 @@ section { padding: 5.5rem 2.4rem; }
   color: var(--muted);
   cursor: none;
   opacity: 0;
-  transform: translateY(6px) scale(1);
   transition: opacity .35s ease, transform .35s ease, color .2s;
   pointer-events: none;
+  white-space: nowrap;
 }
 #back-top.visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateX(-50%) translateY(0);
   pointer-events: all;
 }
 #back-top:hover {
   color: var(--ink);
-  transform: translateY(0) scale(1.14);
+  transform: translateX(-50%) translateY(0) scale(1.14);
 }
 
 @media (max-width: 720px) {
@@ -1030,6 +1064,20 @@ section { padding: 5.5rem 2.4rem; }
   /* hidden but clickable */
 }
 
+/* ── Face bottom gradient — improves label readability ── */
+.face::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 52%;
+  background: linear-gradient(to top, rgba(0,0,0,0.62), transparent);
+  pointer-events: none;
+  z-index: 11;
+  border-radius: 0 0 4px 4px;
+}
+
 /* ── Face label ── */
 .face-label {
   position: absolute;
@@ -1037,19 +1085,23 @@ section { padding: 5.5rem 2.4rem; }
   left: 14px;
   right: 14px;
   font-family: var(--font-body);
-  font-size: clamp(0.85rem, 2vmin, 1.1rem);
+  font-size: clamp(1rem, 2.8vmin, 1.45rem);
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.95);
-  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  color: rgba(255,255,255,0.97);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.65);
+  opacity: 1;
+  transform: translateY(0);
   pointer-events: none;
   z-index: 12;
 }
-.face:hover .face-label {
-  opacity: 1;
-  transform: translateY(0);
+
+/* ── Sticker grid: blur only on hover so label stands out ── */
+.face:hover .sticker-grid {
+  filter: blur(1.5px);
+  transition: filter 0.2s ease;
+}
+.sticker-grid {
+  transition: filter 0.2s ease;
 }

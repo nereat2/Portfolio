@@ -336,6 +336,7 @@ if (skipIntro) {
 // ─── HERO LIQUID TEXT ─────────────────────────────
 (function initLiquidText() {
   const heroH1 = document.getElementById('heroH1');
+  if (!heroH1) return;
 
   heroH1.querySelectorAll('.r-break').forEach(line => {
     const nodes = [...line.childNodes];
@@ -527,41 +528,26 @@ function hexToHsl(hex) {
   const poses    = Array.from(section.querySelectorAll('.phil-pose'));
   const phrases  = Array.from(section.querySelectorAll('.phil-phrase'));
   const triggers = Array.from(section.querySelectorAll('.phil-trigger'));
+  const cta      = document.getElementById('cta');
+  const homeLink = document.getElementById('siteHomeLink');
+  const navEl    = document.getElementById('nav');
   const isMobile = window.matchMedia('(max-width: 720px)').matches;
 
-  // ── Random dark background on each refresh ────────────────
   if (window._hslToRgb) {
-    const hue = Math.random() * 360;
-    const sat = 18 + Math.random() * 18;
-    const light = 8 + Math.random() * 8;
-    const [r, g, b] = window._hslToRgb(hue, sat, light);
-    const philBg = `rgb(${r},${g},${b})`;
-    section.style.background = philBg;
-    document.documentElement.style.setProperty('--phil-bg', philBg);
+    const [r, g, b] = window._hslToRgb(Math.random() * 360, 18 + Math.random() * 18, 8 + Math.random() * 8);
+    const bg = `rgb(${r},${g},${b})`;
+    section.style.background = bg;
+    document.documentElement.style.setProperty('--phil-bg', bg);
   }
 
-  // ── State ─────────────────────────────────────────────────
-  let activePoseIdx   = -1;
-  let activePhraseIdx = -1;
-  let activeStackPos  = -1;
-  let currentTrigIdx  = -1;
-
-  // ── Helpers ───────────────────────────────────────────────
-  function swapPose(idx) {
-    if (idx === activePoseIdx || !poses[idx]) return;
-    poses.forEach((img, i) => img.classList.toggle('active', i === idx));
-    activePoseIdx = idx;
-  }
-
-  function moveMascot(side) {
-    if (!mascot) return;
-    mascot.classList.toggle('side-left',  side === 'left');
-    mascot.classList.toggle('side-right', side === 'right');
-  }
+  let activeStackPos = -1;
 
   function showPhrase(phraseIdx) {
     phrases.forEach((p, i) => p.classList.toggle('active', i === phraseIdx));
-    activePhraseIdx = phraseIdx;
+  }
+
+  function swapPose(poseIdx) {
+    poses.forEach((img, i) => img.classList.toggle('active', i === poseIdx));
   }
 
   function setStackPos(pos) {
@@ -573,104 +559,71 @@ function hexToHsl(hex) {
       line.classList.remove('stack-current', 'stack-faded1', 'stack-faded2');
       if (i === pos)          line.classList.add('stack-current');
       else if (i === pos - 1) line.classList.add('stack-faded1');
-      else if (i < pos - 1)   line.classList.add('stack-faded2');
+      else if (i < pos - 1)  line.classList.add('stack-faded2');
     });
   }
 
-  function activateTrigger(idx) {
-    if (idx === currentTrigIdx) return;
-    currentTrigIdx = idx;
-    const t          = triggers[idx];
-    const phraseIdx  = parseInt(t.dataset.phrase, 10);
-    const poseIdx    = parseInt(t.dataset.pose, 10);
-    const side       = t.dataset.side;
-    const stackPosS  = t.dataset.stackPos;
-    const stackPos   = stackPosS !== undefined ? parseInt(stackPosS, 10) : null;
+  function activateFromTrigger(t) {
+    const phraseIdx = parseInt(t.dataset.phrase, 10);
+    const poseIdx   = parseInt(t.dataset.pose,   10);
+    const side      = t.dataset.side;
+    const stackPos  = t.dataset.stackPos !== undefined ? parseInt(t.dataset.stackPos, 10) : null;
 
     showPhrase(phraseIdx);
-    moveMascot(side);
-    setTimeout(() => swapPose(poseIdx), isMobile ? 0 : 120);
+    swapPose(poseIdx);
+    if (mascot) {
+      mascot.classList.toggle('side-left',  side === 'left');
+      mascot.classList.toggle('side-right', side === 'right');
+    }
     if (stackPos !== null) setStackPos(stackPos);
   }
 
-  // ── Mascot visibility ─────────────────────────────────────
-  const cta = document.getElementById('cta');
-
-  function checkMascotVisibility() {
-    if (!mascot) return;
+  // Recompute trigger positions live on every scroll (avoids stale cache from intro-lock)
+  function update() {
+    const scrollY  = window.scrollY;
+    const vH       = window.innerHeight;
     const philRect = section.getBoundingClientRect();
-    const ctaRect  = cta ? cta.getBoundingClientRect() : null;
-    const philShowThreshold = window.innerHeight * 0.18;
-    const philInView = philRect.top < philShowThreshold && philRect.bottom > 0;
-    const ctaApproaching = ctaRect && ctaRect.top < window.innerHeight * 0.85;
-    if (!philInView || ctaApproaching) {
-      mascot.classList.remove('visible');
-    } else {
-      mascot.classList.add('visible');
-    }
-  }
 
-  const homeLink = document.getElementById('siteHomeLink');
-  function syncPhilosophyNavColor() {
-    if (!homeLink) return;
-    const philRect = section.getBoundingClientRect();
-    const inView = philRect.top < window.innerHeight && philRect.bottom > 0;
-    homeLink.style.color = inView ? '#FFFFFF' : '';
-  }
-
-  // ── Scroll-based trigger detection ────────────────────────
-  // Cache absolute document positions of each trigger once, recompute on resize.
-  // On each scroll, find which trigger the viewport "reading line" falls within.
-  let triggerTops = [];
-
-  function cacheTriggerPositions() {
-    const scrollY = window.scrollY;
-    triggerTops = triggers.map(t => {
-      const r = t.getBoundingClientRect();
-      return r.top + scrollY;
-    });
-  }
-
-  function updateActivePhrase() {
-    // "Reading line" = 50% down the viewport. When this line crosses a trigger,
-    // that trigger becomes active.
-    const readingY = window.scrollY + window.innerHeight * 0.5;
-
-    let newIdx = 0;
-    for (let i = triggerTops.length - 1; i >= 0; i--) {
-      if (readingY >= triggerTops[i]) { newIdx = i; break; }
+    if (philRect.top >= vH || philRect.bottom <= 0) {
+      if (mascot) mascot.classList.remove('visible');
+      if (homeLink) homeLink.style.color = '';
+      if (navEl) navEl.classList.remove('on-dark');
+      return;
     }
 
-    // Only change phrase when section is in view
-    const philRect = section.getBoundingClientRect();
-    if (philRect.top < window.innerHeight && philRect.bottom > 0) {
-      activateTrigger(newIdx);
+    // Reading line at 50% of viewport
+    const readingY = scrollY + vH * 0.5;
+    let bestIdx = 0;
+    for (let i = triggers.length - 1; i >= 0; i--) {
+      const top = triggers[i].getBoundingClientRect().top + scrollY;
+      if (readingY >= top) { bestIdx = i; break; }
+    }
+    activateFromTrigger(triggers[bestIdx]);
+
+    // Mascot: show once scrolled at least 30% into section, hide near CTA
+    if (mascot) {
+      const ctaRect = cta ? cta.getBoundingClientRect() : null;
+      const deepEnough   = philRect.top < vH * 0.3;
+      const ctaFar       = !ctaRect || ctaRect.top > vH * 0.85;
+      mascot.classList.toggle('visible', deepEnough && ctaFar);
     }
 
-    checkMascotVisibility();
-    syncPhilosophyNavColor();
+    if (homeLink) homeLink.style.color = '#FFFFFF';
+    if (navEl) navEl.classList.add('on-dark');
   }
 
-  window.addEventListener('scroll', updateActivePhrase, { passive: true });
-  window.addEventListener('resize', () => {
-    cacheTriggerPositions();
-    updateActivePhrase();
-  }, { passive: true });
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update, { passive: true });
 
-  // Wait one frame for layout, then cache positions and set initial state
-  requestAnimationFrame(() => {
-    cacheTriggerPositions();
-    // Pre-activate trigger 0 so first phrase + pose are ready before scrolling
-    activateTrigger(0);
-    syncPhilosophyNavColor();
-  });
+  // Activate as soon as the section enters the viewport (handles intro dismissal timing)
+  new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) update();
+  }, { threshold: 0 }).observe(section);
 
   // ── Cursor parallax (desktop only) ────────────────────────
   if (!mascot || isMobile) return;
 
-  let tx = 0, ty = 0, px = 0, py = 0;
-  let rafId = null;
-  let sectionActive = false;
+  let tx = 0, ty = 0, px = 0, py = 0, rafId = null, sectionActive = false;
 
   function loopParallax() {
     px += (tx - px) * 0.055;
@@ -686,7 +639,7 @@ function hexToHsl(hex) {
     ty = (e.clientY / window.innerHeight - 0.5) * 14;
   });
 
-  const parallaxObs = new IntersectionObserver(([e]) => {
+  new IntersectionObserver(([e]) => {
     sectionActive = e.isIntersecting;
     if (sectionActive && !rafId) {
       rafId = requestAnimationFrame(loopParallax);
@@ -697,8 +650,7 @@ function hexToHsl(hex) {
       mascot.style.setProperty('--px', '0px');
       mascot.style.setProperty('--py', '0px');
     }
-  }, { threshold: 0.01 });
-  parallaxObs.observe(section);
+  }, { threshold: 0.01 }).observe(section);
 })();
 
 // ─── CTA REVEAL ───────────────────────────────
@@ -707,178 +659,6 @@ function hexToHsl(hex) {
   if (!cta) return;
 
   // Cursor hover for links
-  cta.querySelectorAll('.cta-link').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
-  });
-
-  const obs = new IntersectionObserver(
-    ([e]) => { if (e.isIntersecting) { cta.classList.add('cta-revealed'); obs.disconnect(); } },
-    { threshold: 0.25 }
-  );
-  obs.observe(cta);
-})();
-
-(function initPhilosophy() {
-  const section  = document.getElementById('philosophy');
-  if (!section) return;
-
-  const mascot   = section.querySelector('.phil-mascot');
-  const poses    = Array.from(section.querySelectorAll('.phil-pose'));
-  const phrases  = Array.from(section.querySelectorAll('.phil-phrase'));
-  const triggers = Array.from(section.querySelectorAll('.phil-trigger'));
-  const isMobile = window.matchMedia('(max-width: 720px)').matches;
-
-  if (window._hslToRgb) {
-    const hue = Math.random() * 360;
-    const sat = 18 + Math.random() * 18;
-    const light = 8 + Math.random() * 8;
-    const [r, g, b] = window._hslToRgb(hue, sat, light);
-    const philBg = `rgb(${r},${g},${b})`;
-    section.style.background = philBg;
-    document.documentElement.style.setProperty('--phil-bg', philBg);
-  }
-
-  let activePoseIdx   = -1;
-  let activePhraseIdx = -1;
-  let activeStackPos  = -1;
-  let currentTrigIdx  = -1;
-
-  function swapPose(idx) {
-    if (idx === activePoseIdx || !poses[idx]) return;
-    poses.forEach((img, i) => img.classList.toggle('active', i === idx));
-    activePoseIdx = idx;
-  }
-
-  function moveMascot(side) {
-    if (!mascot) return;
-    mascot.classList.toggle('side-left',  side === 'left');
-    mascot.classList.toggle('side-right', side === 'right');
-  }
-
-  function showPhrase(phraseIdx) {
-    phrases.forEach((p, i) => p.classList.toggle('active', i === phraseIdx));
-    activePhraseIdx = phraseIdx;
-  }
-
-  function setStackPos(pos) {
-    if (pos === activeStackPos) return;
-    activeStackPos = pos;
-    const stackEl = section.querySelector('.phil-phrase--stack');
-    if (!stackEl) return;
-    stackEl.querySelectorAll('.phil-stack-line').forEach((line, i) => {
-      line.classList.remove('stack-current', 'stack-faded1', 'stack-faded2');
-      if (i === pos)          line.classList.add('stack-current');
-      else if (i === pos - 1) line.classList.add('stack-faded1');
-      else if (i < pos - 1)   line.classList.add('stack-faded2');
-    });
-  }
-
-  function activateTrigger(idx) {
-    if (idx === currentTrigIdx) return;
-    currentTrigIdx = idx;
-    const t         = triggers[idx];
-    const phraseIdx = parseInt(t.dataset.phrase, 10);
-    const poseIdx   = parseInt(t.dataset.pose, 10);
-    const side      = t.dataset.side;
-    const stackPosS = t.dataset.stackPos;
-    const stackPos  = stackPosS !== undefined ? parseInt(stackPosS, 10) : null;
-
-    showPhrase(phraseIdx);
-    moveMascot(side);
-    setTimeout(() => swapPose(poseIdx), isMobile ? 0 : 120);
-    if (stackPos !== null) setStackPos(stackPos);
-  }
-
-  const cta = document.getElementById('cta');
-
-  function checkMascotVisibility() {
-    if (!mascot) return;
-    const philRect = section.getBoundingClientRect();
-    const ctaRect  = cta ? cta.getBoundingClientRect() : null;
-    const philInView = philRect.top < window.innerHeight * 0.18 && philRect.bottom > 0;
-    const ctaApproaching = ctaRect && ctaRect.top < window.innerHeight * 0.85;
-    if (!philInView || ctaApproaching) {
-      mascot.classList.remove('visible');
-    } else {
-      mascot.classList.add('visible');
-    }
-  }
-
-  let triggerTops = [];
-
-  function cacheTriggerPositions() {
-    const scrollY = window.scrollY;
-    triggerTops = triggers.map(t => {
-      const r = t.getBoundingClientRect();
-      return r.top + scrollY;
-    });
-  }
-
-  function updateActivePhrase() {
-    const readingY = window.scrollY + window.innerHeight * 0.5;
-    let newIdx = 0;
-    for (let i = triggerTops.length - 1; i >= 0; i--) {
-      if (readingY >= triggerTops[i]) { newIdx = i; break; }
-    }
-    const philRect = section.getBoundingClientRect();
-    if (philRect.top < window.innerHeight && philRect.bottom > 0) {
-      activateTrigger(newIdx);
-    }
-    checkMascotVisibility();
-  }
-
-  window.addEventListener('scroll', updateActivePhrase, { passive: true });
-  window.addEventListener('resize', () => {
-    cacheTriggerPositions();
-    updateActivePhrase();
-  }, { passive: true });
-
-  requestAnimationFrame(() => {
-    cacheTriggerPositions();
-    activateTrigger(0);
-  });
-
-  if (!mascot || isMobile) return;
-
-  let tx = 0, ty = 0, px = 0, py = 0;
-  let rafId = null;
-  let sectionActive = false;
-
-  function loopParallax() {
-    px += (tx - px) * 0.055;
-    py += (ty - py) * 0.055;
-    mascot.style.setProperty('--px', `${px}px`);
-    mascot.style.setProperty('--py', `${py}px`);
-    rafId = requestAnimationFrame(loopParallax);
-  }
-
-  document.addEventListener('mousemove', e => {
-    if (!sectionActive) return;
-    tx = (e.clientX / window.innerWidth  - 0.5) * 22;
-    ty = (e.clientY / window.innerHeight - 0.5) * 14;
-  });
-
-  const parallaxObs = new IntersectionObserver(([e]) => {
-    sectionActive = e.isIntersecting;
-    if (sectionActive && !rafId) {
-      rafId = requestAnimationFrame(loopParallax);
-    } else if (!sectionActive) {
-      cancelAnimationFrame(rafId);
-      rafId = null;
-      tx = ty = px = py = 0;
-      mascot.style.setProperty('--px', '0px');
-      mascot.style.setProperty('--py', '0px');
-    }
-  }, { threshold: 0.01 });
-  parallaxObs.observe(section);
-})();
-
-// ─── CTA REVEAL ───────────────────────────────────
-(function initCta() {
-  const cta = document.getElementById('cta');
-  if (!cta) return;
-
   cta.querySelectorAll('.cta-link').forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
