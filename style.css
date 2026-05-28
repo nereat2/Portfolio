@@ -297,7 +297,7 @@ nav.scrolled { border-bottom-color: transparent; }
 
 #siteHomeLink .label-hero {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(4rem, 8vw, 6rem);
 }
 
 /* Hero state: big label visible, nav label hidden */

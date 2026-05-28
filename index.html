@@ -171,15 +171,9 @@
     </p>
   </section>
 
-  <!-- ══════════════════════════════════════
-       PHILOSOPHY
-  ══════════════════════════════════════ -->
   <section id="philosophy" aria-label="Design philosophy">
 
-    <!-- Sticky stage: stays pinned to viewport top while section scrolls -->
     <div class="phil-stage">
-
-      <!-- All phrases stacked in the same position — only one visible at a time -->
       <div class="phil-text-wrap">
 
         <div class="phil-phrase" data-phrase="0" data-side="right">
@@ -190,7 +184,6 @@
           <p class="phil-text">I grow by trying.</p>
         </div>
 
-        <!-- Stack: single container, JS controls which lines are visible -->
         <div class="phil-phrase phil-phrase--stack" data-phrase="2" data-side="right">
           <div class="phil-text phil-text--stack">
             <p class="phil-stack-line" data-line="0">Some things work.</p>
@@ -204,10 +197,8 @@
         </div>
 
       </div>
-
     </div>
 
-    <!-- Mascot: position:fixed, JS moves it left/right and swaps pose -->
     <div class="phil-mascot" aria-hidden="true">
       <img class="phil-pose" data-pose="0" src="assets/doodles/doodle1.png" alt="" />
       <img class="phil-pose" data-pose="1" src="assets/doodles/doodle2.png" alt="" />
@@ -217,7 +208,6 @@
       <img class="phil-pose" data-pose="5" src="assets/doodles/doodle4.png" alt="" />
     </div>
 
-    <!-- Invisible scroll triggers — create scroll distance, detected by JS -->
     <div class="phil-trigger" data-phrase="0" data-side="right" data-pose="0"></div>
     <div class="phil-trigger" data-phrase="1" data-side="left"  data-pose="1"></div>
     <div class="phil-trigger" data-phrase="2" data-side="right" data-pose="2" data-stack-pos="0"></div>
@@ -227,9 +217,6 @@
 
   </section>
 
-  <!-- ══════════════════════════════════════
-       CTA
-  ══════════════════════════════════════ -->
   <section id="cta" aria-label="Call to action">
     <div class="cta-inner">
       <p class="cta-line1">Want to work together?</p>
@@ -237,7 +224,8 @@
         Drop me an
         <a href="mailto:nere.at.2@gmail.com" class="cta-link">email</a>
         or find me on
-        <a href="https://www.linkedin.com/in/nerea-a-777526192/" class="cta-link" target="_blank" rel="noopener">LinkedIn</a>.
+        <a href="https://www.linkedin.com/in/nerea-a-777526192/" class="cta-link" 
+           target="_blank" rel="noopener">LinkedIn</a>.
       </p>
     </div>
   </section>
