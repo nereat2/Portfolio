@@ -558,6 +558,21 @@
           <h1 class="detail-title" id="detailTitle">Project</h1>
           <div class="abstract" id="detailAbstract"></div>
 
+          <div class="detail-meta" id="detailProcessMeta" style="margin-top: 2rem;" hidden>
+            <section class="meta-block" id="detailChallengeBlock">
+              <p class="meta-label">Challenge</p>
+              <p class="meta-value" id="detailChallenge"></p>
+            </section>
+            <section class="meta-block" id="detailApproachBlock">
+              <p class="meta-label">Approach</p>
+              <p class="meta-value" id="detailApproach"></p>
+            </section>
+            <section class="meta-block" id="detailRoleBlock">
+              <p class="meta-label">My Role</p>
+              <p class="meta-value" id="detailRole"></p>
+            </section>
+          </div>
+
           <div class="detail-meta">
             <section class="meta-block">
               <p class="meta-label">Project Type</p>
@@ -604,7 +619,10 @@
       "rememberita": {
         title: "HUMAN LOCI",
         eyebrow: "Tangible experience of place",
-        abstract: `<p><strong>HUMAN LOCI is a listening object that transforms places into tactile and auditory experiences.</strong> Instead of playing music, it plays environments: each disk gives access to a specific place through recorded soundscapes and a distinct material identity. By placing a disk onto the player, the user activates a simple sequence of physical interactions that brings that environment to life. Through touch, sound, and form, the project proposes a different way of engaging with space, one that shifts listening from passive consumption to an active experience of place.</p>`,
+        abstract: `<p>A listening object that transforms places into tactile and auditory experiences. Each disk is a place, activated by touch.</p>`,
+        challenge: "We didn't know how plexiglass would behave. Finding the right thickness and cut dimensions for clean curves took many attempts. The tonearm mechanism was especially precise: it had to trigger a small switch reliably, so I modelled and printed several versions until the tolerances were right.",
+        approach: "Continuous iteration. Test, adjust, reprint, repeat. Each version told us exactly what the next one needed to fix.",
+        role: "Concept and storytelling · Tonearm mechanism design and prototyping · Object aesthetics · Project communication and documentation",
         services: ["#TangibleInteraction", "#EmbodiedInteraction", "#ConceptualDesign", "#DesignResearch"],
         systemArchitecture: ["#PhysicalComputing", "#EmbededSystems", "#RFID", "#Microcontroller"],
         credits: ["Jérémy Martin", "Nicholas Vos"],
@@ -848,6 +866,15 @@
     document.getElementById("detailEyebrow").textContent = project.eyebrow;
     document.getElementById("detailTitle").textContent = project.title;
     document.getElementById("detailAbstract").innerHTML = project.abstract;
+    const processMeta = document.getElementById("detailProcessMeta");
+    if (project.challenge || project.approach || project.role) {
+      document.getElementById("detailChallenge").textContent = project.challenge || "";
+      document.getElementById("detailApproach").textContent = project.approach || "";
+      document.getElementById("detailRole").textContent = project.role || "";
+      processMeta.hidden = false;
+    } else {
+      processMeta.hidden = true;
+    }
     document.getElementById("detailServices").textContent = project.services.join(" ");
     document.getElementById("detailSystemArchitecture").textContent = (project.systemArchitecture || []).join(" ");
     document.getElementById("detailCredits").textContent = project.credits.join(", ");

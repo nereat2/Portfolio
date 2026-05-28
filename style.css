@@ -1060,8 +1060,8 @@ section { padding: 5.5rem 2.4rem; }
 .face-tap-zone {
   position: absolute;
   inset: 0;
-  z-index: 10;
-  /* hidden but clickable */
+  z-index: 13;
+  /* hidden but clickable — must sit above ::after (11) and face-label (12) */
 }
 
 /* ── Face bottom gradient — improves label readability ── */

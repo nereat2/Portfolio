@@ -96,15 +96,15 @@ document.querySelectorAll('a, button, .prow, .ftag').forEach(el => {
   }
 
   scene.addEventListener('pointerdown', e => {
-    isDragging   = true;
-    autoRotate   = false;
+    isDragging    = true;
+    autoRotate    = false;
     clearTimeout(autoTimer);
-    dragDist     = 0;
+    dragDist      = 0;
     startPointerX = lastPointerX = e.clientX;
     startPointerY = lastPointerY = e.clientY;
     vRotX = vRotY = vPosX = vPosY = 0;
     scene.setPointerCapture(e.pointerId);
-    e.preventDefault();
+    // Do NOT preventDefault here — allows native click to fire on short taps
   });
 
   scene.addEventListener('pointermove', e => {
@@ -112,6 +112,9 @@ document.querySelectorAll('a, button, .prow, .ftag').forEach(el => {
     const dx = e.clientX - lastPointerX;
     const dy = e.clientY - lastPointerY;
     dragDist += Math.abs(dx) + Math.abs(dy);
+
+    // Only suppress scroll/default behaviour once we know it's a real drag
+    if (dragDist > 10) e.preventDefault();
 
     // Rotate
     vRotY = dx * 0.55;
@@ -129,20 +132,21 @@ document.querySelectorAll('a, button, .prow, .ftag').forEach(el => {
 
     lastPointerX = e.clientX;
     lastPointerY = e.clientY;
-    e.preventDefault();
   });
 
   scene.addEventListener('pointerup', e => {
     isDragging = false;
     resumeAuto();
-    // Block tap-zone clicks if it was a real drag
+    // If it was a real drag, briefly block tap-zone clicks so the
+    // browser's synthetic click (if any) doesn't accidentally navigate
     if (dragDist > 10) {
       const links = scene.querySelectorAll('.face-tap-zone');
       links.forEach(l => { l.style.pointerEvents = 'none'; });
       setTimeout(() => {
         links.forEach(l => { l.style.pointerEvents = ''; });
-      }, 100);
+      }, 200);
     }
+    // Taps: native click on <a class="face-tap-zone"> fires naturally
   });
 
   scene.addEventListener('pointercancel', () => {
