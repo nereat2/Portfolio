@@ -548,7 +548,7 @@
   </style>
 </head>
 <body>
-  <a class="back-link" id="backToWorkLink" href="./index.html#work">Back to work</a>
+  <a class="back-link" id="backToWorkLink" href="./index.html">Home</a>
 
   <main class="detail-page">
     <section class="detail-hero">
@@ -862,7 +862,7 @@
       exhibitionCopy.hidden = true;
     }
     const backToWorkLink = document.getElementById("backToWorkLink");
-    backToWorkLink.href = `./index.html?project=${encodeURIComponent(slug)}#${encodeURIComponent(slug)}`;
+    backToWorkLink.href = "./index.html";
     backToWorkLink.addEventListener("click", () => {
       sessionStorage.setItem("skipIntroOnce", "1");
     });

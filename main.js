@@ -11,9 +11,168 @@ document.addEventListener('pointerdown', e => { mx = e.clientX; my = e.clientY; 
   cur.style.top  = cy + 'px';
   requestAnimationFrame(animCur);
 })();
-document.querySelectorAll('a, button, .prow, .nav-logo, .ftag').forEach(el => {
+document.querySelectorAll('a, button, .prow, .ftag').forEach(el => {
   el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
   el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+});
+
+// ─── CUBE: INTERACTION (rotate + move) ───────────────
+(function initCube() {
+  const scene  = document.getElementById('cubeScene');
+  const cube   = document.getElementById('cube');
+  const hero   = document.querySelector('.hero');
+  if (!scene || !cube || !hero) return;
+
+  // Rotation state
+  let rotX = -18, rotY = 28;
+  let vRotX = 0, vRotY = 0;
+
+  // Position state (offset from hero center, in px)
+  let posX = 0, posY = 0;
+  let vPosX = 0, vPosY = 0;
+
+  // Drag state
+  let isDragging = false;
+  let startPointerX = 0, startPointerY = 0;
+  let lastPointerX = 0, lastPointerY = 0;
+  let dragDist = 0;
+
+  // Auto-rotate when idle
+  let autoRotate = true;
+  let autoTimer = null;
+
+  function applyTransform() {
+    // Scene handles translation, cube handles rotation
+    const heroRect = hero.getBoundingClientRect();
+    const cx = heroRect.width  / 2 + posX;
+    const cy = heroRect.height / 2 + posY;
+    scene.style.left      = cx + 'px';
+    scene.style.top       = cy + 'px';
+    scene.style.transform = 'translate(-50%, -50%)';
+    cube.style.transform  = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+  }
+
+  function clampPos() {
+    // Keep cube within hero bounds (with padding)
+    const heroRect = hero.getBoundingClientRect();
+    const pad = 120;
+    const maxX = heroRect.width  / 2 - pad;
+    const maxY = heroRect.height / 2 - pad;
+    if (posX >  maxX) { posX =  maxX; vPosX *= -0.4; }
+    if (posX < -maxX) { posX = -maxX; vPosX *= -0.4; }
+    if (posY >  maxY) { posY =  maxY; vPosY *= -0.4; }
+    if (posY < -maxY) { posY = -maxY; vPosY *= -0.4; }
+  }
+
+  // Animation loop
+  (function tick() {
+    if (!isDragging) {
+      // Auto-rotate
+      if (autoRotate) {
+        rotY += 0.15;
+      }
+      // Apply inertia from throw
+      rotY  += vRotY;
+      rotX  += vRotX;
+      posX  += vPosX;
+      posY  += vPosY;
+      // Damping
+      vRotY  *= 0.96;
+      vRotX  *= 0.96;
+      vPosX  *= 0.94;
+      vPosY  *= 0.94;
+      // Clamp rotation X so cube never flips upside down
+      rotX = Math.max(-75, Math.min(75, rotX));
+      clampPos();
+    }
+    applyTransform();
+    requestAnimationFrame(tick);
+  })();
+
+  function resumeAuto() {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(() => { autoRotate = true; }, 4000);
+  }
+
+  scene.addEventListener('pointerdown', e => {
+    isDragging   = true;
+    autoRotate   = false;
+    clearTimeout(autoTimer);
+    dragDist     = 0;
+    startPointerX = lastPointerX = e.clientX;
+    startPointerY = lastPointerY = e.clientY;
+    vRotX = vRotY = vPosX = vPosY = 0;
+    scene.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+
+  scene.addEventListener('pointermove', e => {
+    if (!isDragging) return;
+    const dx = e.clientX - lastPointerX;
+    const dy = e.clientY - lastPointerY;
+    dragDist += Math.abs(dx) + Math.abs(dy);
+
+    // Rotate
+    vRotY = dx * 0.55;
+    vRotX = -dy * 0.55;
+    rotY += vRotY;
+    rotX += vRotX;
+    rotX = Math.max(-75, Math.min(75, rotX));
+
+    // Translate
+    vPosX = dx * 0.8;
+    vPosY = dy * 0.8;
+    posX += vPosX;
+    posY += vPosY;
+    clampPos();
+
+    lastPointerX = e.clientX;
+    lastPointerY = e.clientY;
+    e.preventDefault();
+  });
+
+  scene.addEventListener('pointerup', e => {
+    isDragging = false;
+    resumeAuto();
+    // Block tap-zone clicks if it was a real drag
+    if (dragDist > 10) {
+      const links = scene.querySelectorAll('.face-tap-zone');
+      links.forEach(l => { l.style.pointerEvents = 'none'; });
+      setTimeout(() => {
+        links.forEach(l => { l.style.pointerEvents = ''; });
+      }, 100);
+    }
+  });
+
+  scene.addEventListener('pointercancel', () => {
+    isDragging = false;
+    resumeAuto();
+  });
+})();
+
+// ─── CUBE: STICKER CROPS FROM GRID PNG ───────────
+const FACE_IMAGES = {
+  'face-front':  "assets/projects/human loci/jpeg/humanloci-grid.png",
+  'face-back':   "assets/projects/elen/jpeg/elen-grid.png",
+  'face-right':  "assets/projects/adaptune/jpeg/adaptune-grid.png",
+  'face-left':   "assets/projects/meeting pond/jpeg/meetingpond-grid.png",
+  'face-top':    "assets/projects/rememberita/jpeg/rememberita-grid.png",
+  'face-bottom': "assets/projects/financial planning hub/financialhub-grid.png"
+};
+
+const POS = ['0% 0%','50% 0%','100% 0%',
+             '0% 50%','50% 50%','100% 50%',
+             '0% 100%','50% 100%','100% 100%'];
+
+document.querySelectorAll('.face').forEach(face => {
+  const key = Array.from(face.classList).find(c => c.startsWith('face-') && c !== 'face');
+  const img = FACE_IMAGES[key];
+  if (!img) return;
+  face.querySelectorAll('.sticker').forEach((sticker, i) => {
+    sticker.style.backgroundImage    = `url('${img}')`;
+    sticker.style.backgroundPosition = POS[i];
+    sticker.style.backgroundSize     = '300% 300%';
+  });
 });
 
 // ─── NAV SCROLL BORDER ────────────────────────────
@@ -21,6 +180,24 @@ const navEl = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   navEl.classList.toggle('scrolled', window.scrollY > 40);
 }, { passive: true });
+
+// ─── HOME LINK: hero ↔ nav transition ─────────────
+(function initHomeLink() {
+  const link = document.getElementById('siteHomeLink');
+  const hero = document.getElementById('home');
+  if (!link || !hero) return;
+
+  function update() {
+    const heroBottom = hero.getBoundingClientRect().bottom;
+    const threshold  = window.innerHeight * 0.35;
+    const isHero     = heroBottom > threshold;
+    link.classList.toggle('is-hero', isHero);
+    link.classList.toggle('is-nav',  !isHero);
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update(); // run once on load
+})();
 
 // ─── INTRO ────────────────────────────────────────
 const WORDS = [
@@ -80,7 +257,6 @@ function endIntro() {
   setTimeout(() => {
     intro.style.display = 'none';
     document.body.classList.remove('intro-lock');
-    cancelAnimationFrame(iRaf);
   }, 950);
 }
 
@@ -88,28 +264,6 @@ if (!skipIntro) {
   setTimeout(showHello, 350);
   intro.addEventListener('click', endIntro);
 }
-
-function goHomeFromLogo(event) {
-  event.preventDefault();
-  const hero = document.getElementById('home');
-  if (!hero) return;
-
-  if (introActive) {
-    endIntro();
-    setTimeout(() => {
-      history.replaceState(null, '', '#home');
-      hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 980);
-    return;
-  }
-
-  history.replaceState(null, '', '#home');
-  hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-document.querySelectorAll('.nav-logo-link[href="#home"]').forEach(link => {
-  link.addEventListener('click', goHomeFromLogo);
-});
 
 function focusReturnedProject() {
   const targetId = returnProject || window.location.hash.replace('#', '');
@@ -126,142 +280,6 @@ function focusReturnedProject() {
 if (skipIntro) {
   window.addEventListener('load', focusReturnedProject, { once: true });
 }
-
-// ─── INTRO CANVAS BACKGROUND ─────────────────────
-const iCanvas = document.getElementById('introCanvas');
-const ictx    = iCanvas.getContext('2d');
-let IW, IH;
-
-function resizeIC() {
-  IW = iCanvas.width  = iCanvas.offsetWidth;
-  IH = iCanvas.height = iCanvas.offsetHeight;
-}
-resizeIC();
-window.addEventListener('resize', resizeIC, { passive: true });
-
-const BLOB_PALETTE = [
-  '#FF4500', // orange-red
-  '#FF6B35', // vivid orange
-  '#FF9A3C', // warm amber
-  '#FFD166', // golden yellow
-  '#FF3E8A', // hot pink
-  '#FF6F91', // soft pink
-  '#E8333C', // crimson red
-  '#FFA500', // pure orange
-  '#FF1493', // deep pink
-  '#FFAE42', // yellow-orange
-];
-
-const iBlobs = Array.from({ length: 10 }, (_, i) => ({
-  x:     (IW || window.innerWidth)  * (0.1 + Math.random() * 0.8),
-  y:     (IH || window.innerHeight) * (0.1 + Math.random() * 0.8),
-  vx:    (Math.random() - 0.5) * 0.5,
-  vy:    (Math.random() - 0.5) * 0.5,
-  baseR: 350 + Math.random() * 300,   // large enough to overlap, eliminating gaps
-  col:   BLOB_PALETTE[i],
-  phase: Math.random() * Math.PI * 2,
-  speed: 0.4 + Math.random() * 0.55,
-}));
-
-let ipmx = window.innerWidth  / 2;
-let ipmy = window.innerHeight / 2;
-let it   = 0;
-let iRaf = null;
-
-function drawIntroBG() {
-  it += 0.006;
-
-  // Clear to transparent — CSS background (#0D0025) shows through gaps
-  ictx.clearRect(0, 0, IW, IH);
-
-  // Smooth cursor lag
-  ipmx += (mx - ipmx) * 0.06;
-  ipmy += (my - ipmy) * 0.06;
-
-  iBlobs.forEach(b => {
-    // Cursor repulsion — colour clouds push away from pointer
-    const dx   = b.x - ipmx;
-    const dy   = b.y - ipmy;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const pr   = b.baseR * 0.7 + 80;
-    if (dist < pr && dist > 1) {
-      const p = (pr - dist) / pr;
-      const f = p * p * 12; // Increased force and squared for smoothness
-      b.vx += (dx / dist) * f * 0.5;
-      b.vy += (dy / dist) * f * 0.5;
-    }
-
-    // No idle drift — purely reactive.
-    // High damping for a "heavy/liquid" feel that stops quickly.
-    b.vx *= 0.88;
-    b.vy *= 0.88;
-    b.x  += b.vx;
-    b.y  += b.vy;
-
-    // Soft wrap — blobs re-enter from opposite side
-    const pad = b.baseR;
-    if (b.x < -pad)     b.x = IW + pad;
-    if (b.x > IW + pad) b.x = -pad;
-    if (b.y < -pad)     b.y = IH + pad;
-    if (b.y > IH + pad) b.y = -pad;
-
-    // 3. Rendering (Soft Radial Gradients)
-    const gr = ictx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.baseR);
-    gr.addColorStop(0,    b.col + 'D9'); // More opaque core for 70% coverage
-    gr.addColorStop(0.5,  b.col + '59'); // Broad mid
-    gr.addColorStop(1,    b.col + '00'); // Blurred edge
-    ictx.fillStyle = gr;
-    ictx.fillRect(0, 0, IW, IH);
-  });
-
-  iRaf = requestAnimationFrame(drawIntroBG);
-}
-drawIntroBG();
-
-// ─── INTRO LOGO ───────────────────────────────────
-const ilInitials = document.getElementById('il-initials');
-const ilFullname  = document.getElementById('il-fullname');
-
-// Show initials shortly after page load
-setTimeout(() => { ilInitials.classList.add('visible'); }, 180);
-
-// ─── NAV LOGO (same hover-expand as intro) ────────
-const nlInitials = document.getElementById('nl-initials');
-const nlFullname  = document.getElementById('nl-fullname');
-
-document.querySelectorAll('.nav-links a').forEach(link => {
-  const label = link.textContent;
-  link.textContent = '';
-  const word = document.createElement('span');
-  word.className = 'nav-label';
-  Array.from(label).forEach((ch, i) => {
-    const span = document.createElement('span');
-    span.className = 'nav-char';
-    span.style.setProperty('--i', i);
-    span.textContent = ch === ' ' ? '\u00A0' : ch;
-    word.appendChild(span);
-  });
-  link.appendChild(word);
-});
-
-document.querySelectorAll('.learn-more').forEach(link => {
-  const labelText = link.childNodes[0]?.textContent?.trim() || 'LEARN MORE';
-  link.innerHTML = '';
-  const label = document.createElement('span');
-  label.className = 'learn-more-label';
-  Array.from(labelText).forEach((ch, i) => {
-    const span = document.createElement('span');
-    span.className = 'learn-char';
-    span.style.setProperty('--i', i);
-    span.textContent = ch === ' ' ? '\u00A0' : ch;
-    label.appendChild(span);
-  });
-  const arrow = document.createElement('span');
-  arrow.className = 'arrow';
-  arrow.textContent = '→';
-  link.appendChild(label);
-  link.appendChild(arrow);
-});
 
 // ─── PAGE SURFACE ────────────────────────────────
 (function initPageSurface() {
@@ -286,8 +304,6 @@ document.querySelectorAll('.learn-more').forEach(link => {
   document.querySelectorAll('.cta-link').forEach(el => {
     el.style.borderBottomColor = BLACK;
   });
-  const nlInitialsEl = document.getElementById('nl-initials');
-  if (nlInitialsEl) nlInitialsEl.style.color = BLACK;
 
   function hslToRgb(h, s, l) {
     const hue = ((h % 360) + 360) % 360;
@@ -501,80 +517,6 @@ function hexToHsl(hex) {
   return [h * 360, s * 100, l * 100];
 }
 
-function initWork() {
-  const pList = document.getElementById('pList');
-  const timeline = document.getElementById('workTimeline');
-  const projects = document.querySelectorAll('.project-section');
-  
-  // Generate timeline lines
-  projects.forEach((_, i) => {
-    const line = document.createElement('div');
-    line.className = 'timeline-line';
-    timeline.appendChild(line);
-  });
-
-  const lines = document.querySelectorAll('.timeline-line');
-
-  // Intersection Observer for scroll tracking (Viewport root)
-  const observerOptions = {
-    root: null, // Viewport
-    threshold: 0.5
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const idx = parseInt(entry.target.getAttribute('data-index')) - 1;
-        
-        // Show timeline only in work section
-        timeline.style.opacity = '1';
-        
-        // Update timeline lines
-        lines.forEach((l, i) => l.classList.toggle('active', i === idx));
-        
-        // Update background color based on project data-color
-      }
-    });
-  }, observerOptions);
-
-  projects.forEach(p => observer.observe(p));
-
-  // Hide timeline when not in work section
-  const workSection = document.getElementById('work');
-  const workObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) {
-        timeline.style.opacity = '0';
-      }
-    });
-  }, { threshold: 0.1 });
-  workObserver.observe(workSection);
-
-
-  // Image displacement (Reactive)
-  document.querySelectorAll('.project-section').forEach(sec => {
-    const container = sec.querySelector('.project-img-container');
-    const inner = sec.querySelector('.project-inner');
-    
-    sec.addEventListener('mousemove', (e) => {
-      const rect = container.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      
-      const dx = x * 0.05;
-      const dy = y * 0.05;
-      
-      container.style.transform = `translate(${dx}px, ${dy}px) rotateX(${-dy * 0.1}deg) rotateY(${dx * 0.1}deg)`;
-    });
-
-    sec.addEventListener('mouseleave', () => {
-      container.style.transform = `translate(0, 0) rotateX(0) rotateY(0)`;
-    });
-  });
-}
-
-initWork();
-
 // ─── PHILOSOPHY ───────────────────────────────
 (function initPhilosophy() {
   const section  = document.getElementById('philosophy');
@@ -667,12 +609,12 @@ initWork();
     }
   }
 
-  const navInitialsEl = document.getElementById('nl-initials');
+  const homeLink = document.getElementById('siteHomeLink');
   function syncPhilosophyNavColor() {
-    if (!navInitialsEl) return;
+    if (!homeLink) return;
     const philRect = section.getBoundingClientRect();
     const inView = philRect.top < window.innerHeight && philRect.bottom > 0;
-    navInitialsEl.style.color = inView ? '#FFFFFF' : '#000000';
+    homeLink.style.color = inView ? '#FFFFFF' : '';
   }
 
   // ── Scroll-based trigger detection ────────────────────────
