@@ -44,13 +44,13 @@
 }
 
 :root {
-  --cream:   #EAEAEA;
-  --cream2:  #EAEAEA;
+  --cream:   #F5F5F0;
+  --cream2:  #F5F5F0;
   --ink:     #000000;
   --ink2:    rgba(0, 0, 0, 0.78);
   --muted:   rgba(0, 0, 0, 0.72);
   --border:  rgba(0, 0, 0, 0.12);
-  --light:   #EAEAEA;
+  --light:   #F5F5F0;
 
   /* one accent per project — swapped in via JS */
   --accent:  #18180F;
@@ -238,7 +238,7 @@ nav.on-dark .nav-links a::after {
 }
 .nav-links a {
   font-size: 24px;
-  color: var(--muted);
+  color: var(--ink);
   text-decoration: none;
   letter-spacing: .05em;
   transition:
@@ -1005,6 +1005,7 @@ section { padding: 5.5rem 2.4rem; }
   transform: translate(-50%, -50%);
   cursor: grab;
   z-index: 2;
+  touch-action: none;
 }
 .cube-scene:active { cursor: grabbing; }
 

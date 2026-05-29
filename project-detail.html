@@ -46,7 +46,7 @@
     }
 
     :root {
-      --bg: #EAEAEA;
+      --bg: #F5F5F0;
       --fg: #000000;
       --muted: rgba(0, 0, 0, 0.72);
       --soft-muted: rgba(0, 0, 0, 0.38);
@@ -98,29 +98,20 @@
     }
 
     .detail-hero {
+      height: 100vh;
       min-height: 100vh;
       display: grid;
       grid-template-columns: 1fr 2fr;
       align-items: start;
-      padding: 7rem 2rem 3rem;
-      position: relative;
+      padding: 7rem 2rem 0;
       position: sticky;
       top: 0;
       z-index: 1;
-    }
-
-    .detail-copy {
-      grid-column: 2 / 3;
-      width: 100%;
-      margin-left: auto;
-      position: sticky;
-      top: 6rem;
-      z-index: 3;
-      transition: color .45s ease, opacity .45s ease;
+      overflow: hidden;
     }
 
     .detail-copy-stack {
-      grid-column: 2 / 3;
+      grid-column: 1 / 3;
       width: 100%;
       margin-left: auto;
       position: sticky;
@@ -128,18 +119,51 @@
       z-index: 3;
     }
 
-    .detail-copy-stack .detail-copy {
-      grid-column: auto;
+    .detail-copy {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
       width: 100%;
-      margin-left: 0;
+    }
+
+    .detail-side-meta {
+      grid-column: 1 / 2;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .detail-main-body {
+      grid-column: 2 / 3;
+      width: 100%;
+    }
+
+    /* Primary copy is relative by default, secondary is absolute */
+    .detail-copy-stack .detail-copy-primary {
+      position: relative;
+      transition: color .45s ease, opacity .45s ease;
+    }
+
+    .detail-copy-stack .detail-copy-secondary {
+      position: absolute;
+      inset: 0;
+      top: 0;
+      pointer-events: none;
+      transition: color .45s ease, opacity .45s ease;
+    }
+
+    /* Swap relative/absolute positions when exhibition copy is active */
+    body.exhibition-copy-active .detail-copy-stack .detail-copy-primary {
       position: absolute;
       inset: 0;
       top: 0;
       pointer-events: none;
     }
 
-    .detail-copy-stack .detail-copy:first-child {
+    body.exhibition-copy-active .detail-copy-stack .detail-copy-secondary {
       position: relative;
+      pointer-events: auto;
     }
 
     .detail-copy-secondary {
@@ -202,6 +226,21 @@
       line-height: 1.85;
       color: var(--muted);
       transition: color .45s ease;
+    }
+
+    .detail-featured {
+      margin-bottom: 1.2rem;
+      padding: 0.7rem 1rem;
+      border-left: 2px solid currentColor;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      opacity: 0.75;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .detail-featured a {
+      text-decoration: underline;
     }
 
     .abstract p {
@@ -281,6 +320,8 @@
       display: grid;
       place-items: end start;
       isolation: isolate;
+      opacity: 1;
+      transition: opacity 0.35s ease, transform 0.35s var(--ease-out-expo);
     }
 
     .gallery-item:not(.primary) .gallery-frame {
@@ -462,29 +503,85 @@
     }
 
     #nextProjectLink {
-      font-size: 33px;
+      font-size: 24px;
       line-height: 1;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
+      text-transform: none;
+      font-family: var(--font-body);
+      font-weight: 400;
+      color: var(--muted);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      transform-origin: center;
+      transition:
+        color .25s ease,
+        opacity .25s ease,
+        transform .35s var(--ease-out-expo),
+        text-shadow .35s ease;
+    }
+
+    #nextProjectLink::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -0.22em;
+      height: 1px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform .35s var(--ease-out-expo);
+    }
+
+    #nextProjectLink:hover,
+    #nextProjectLink:focus-visible {
+      color: var(--fg);
+      opacity: 1;
+      transform: translateY(-2px);
+      text-shadow: 0 0 18px rgba(0, 0, 0, 0.08);
+      outline: none;
+    }
+
+    #nextProjectLink:hover::after,
+    #nextProjectLink:focus-visible::after {
+      transform: scaleX(1);
+      transform-origin: left;
     }
 
     @media (max-width: 960px) {
       .detail-hero {
         grid-template-columns: 1fr;
-        padding: 6rem 1.5rem 2rem;
-      }
-
-      .detail-copy {
-        grid-column: 1;
-        width: 100%;
+        padding: 6rem 1.5rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1;
       }
 
       .detail-copy-stack {
         grid-column: 1;
         width: 100%;
+        position: sticky;
+        top: 5rem;
+        z-index: 3;
       }
 
-      .detail-copy-stack .detail-copy {
-        inset: 0;
+      .detail-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+        width: 100%;
+      }
+
+      .detail-main-body {
+        order: 1;
+        width: 100%;
+      }
+
+      .detail-side-meta {
+        order: 2;
+        width: 100%;
+        gap: 1.5rem;
       }
 
       .detail-copy-secondary {
@@ -544,6 +641,10 @@
         right: 1.5rem;
         bottom: 1.5rem;
       }
+
+      #nextProjectLink {
+        font-size: 13px;
+      }
     }
   </style>
 </head>
@@ -554,26 +655,7 @@
     <section class="detail-hero">
       <div class="detail-copy-stack">
         <div class="detail-copy detail-copy-primary">
-          <p class="eyebrow" id="detailEyebrow">Project detail</p>
-          <h1 class="detail-title" id="detailTitle">Project</h1>
-          <div class="abstract" id="detailAbstract"></div>
-
-          <div class="detail-meta" id="detailProcessMeta" style="margin-top: 2rem;" hidden>
-            <section class="meta-block" id="detailChallengeBlock">
-              <p class="meta-label">Challenge</p>
-              <p class="meta-value" id="detailChallenge"></p>
-            </section>
-            <section class="meta-block" id="detailApproachBlock">
-              <p class="meta-label">Approach</p>
-              <p class="meta-value" id="detailApproach"></p>
-            </section>
-            <section class="meta-block" id="detailRoleBlock">
-              <p class="meta-label">My Role</p>
-              <p class="meta-value" id="detailRole"></p>
-            </section>
-          </div>
-
-          <div class="detail-meta">
+          <div class="detail-side-meta">
             <section class="meta-block">
               <p class="meta-label">Project Type</p>
               <p class="meta-value" id="detailServices"></p>
@@ -587,18 +669,42 @@
               <p class="meta-value" id="detailCredits"></p>
             </section>
           </div>
+
+          <div class="detail-main-body">
+            <p class="eyebrow" id="detailEyebrow">Project detail</p>
+            <h1 class="detail-title" id="detailTitle">Project</h1>
+            <div id="detailFeatured" class="detail-featured" hidden></div>
+            <div class="abstract" id="detailAbstract"></div>
+
+            <div class="detail-meta" id="detailProcessMeta" style="margin-top: 2.8rem;" hidden>
+              <section class="meta-block" id="detailChallengeBlock">
+                <p class="meta-label">Challenge</p>
+                <p class="meta-value" id="detailChallenge"></p>
+              </section>
+              <section class="meta-block" id="detailApproachBlock">
+                <p class="meta-label">Approach</p>
+                <p class="meta-value" id="detailApproach"></p>
+              </section>
+              <section class="meta-block" id="detailRoleBlock">
+                <p class="meta-label">My Role</p>
+                <p class="meta-value" id="detailRole"></p>
+              </section>
+            </div>
+          </div>
         </div>
 
         <div class="detail-copy detail-copy-secondary" id="detailExhibitionCopy" hidden>
-          <p class="eyebrow" id="detailExhibitionEyebrow">Exhibition</p>
-          <h1 class="detail-title" id="detailExhibitionTitle">Exhibition</h1>
-          <div class="abstract" id="detailExhibitionAbstract"></div>
-
-          <div class="detail-meta">
+          <div class="detail-side-meta">
             <section class="meta-block">
               <p class="meta-label">Credits</p>
               <p class="meta-value" id="detailExhibitionCredits"></p>
             </section>
+          </div>
+
+          <div class="detail-main-body">
+            <p class="eyebrow" id="detailExhibitionEyebrow">Exhibition</p>
+            <h1 class="detail-title" id="detailExhibitionTitle">Exhibition</h1>
+            <div class="abstract" id="detailExhibitionAbstract"></div>
           </div>
         </div>
       </div>
@@ -616,13 +722,13 @@
 
   <script>
     const PROJECTS = {
-      "rememberita": {
-        title: "HUMAN LOCI",
+      "human-loci": {
+        title: "Human Loci",
         eyebrow: "Tangible experience of place",
-        abstract: `<p>A listening object that transforms places into tactile and auditory experiences. Each disk is a place, activated by touch.</p>`,
-        challenge: "We didn't know how plexiglass would behave. Finding the right thickness and cut dimensions for clean curves took many attempts. The tonearm mechanism was especially precise: it had to trigger a small switch reliably, so I modelled and printed several versions until the tolerances were right.",
-        approach: "Continuous iteration. Test, adjust, reprint, repeat. Each version told us exactly what the next one needed to fix.",
-        role: "Concept and storytelling · Tonearm mechanism design and prototyping · Object aesthetics · Project communication and documentation",
+        abstract: `<p>A listening object that transforms places into tactile and auditory experiences. Each disk encodes a specific location through recorded soundscapes and a distinct material identity. Place a disk on the player and the environment comes to life through touch, sound, and form.</p>`,
+        challenge: "We didn't know how plexiglass would behave structurally or aesthetically until we started cutting it. Finding the right thickness and slot dimensions to achieve clean curves without cracking took many iterations. The tonearm was the trickiest part: it needed to trigger a small on/off switch with enough precision that any slight misalignment would break the interaction. I modelled and 3D printed several versions, each one refining the tolerances a little more, until it worked consistently.",
+        approach: "We kept testing and iterating on every component in parallel rather than waiting for one to be perfect before moving to the next. Each version of a part taught us something specific about what had to change, which made the process faster and more grounded than trying to solve things on paper first.",
+        role: "Concept development and project storytelling · Tonearm mechanism design and 3D prototyping · Object aesthetics and formal decisions · Presentation structure and project documentation",
         services: ["#TangibleInteraction", "#EmbodiedInteraction", "#ConceptualDesign", "#DesignResearch"],
         systemArchitecture: ["#PhysicalComputing", "#EmbededSystems", "#RFID", "#Microcontroller"],
         credits: ["Jérémy Martin", "Nicholas Vos"],
@@ -647,7 +753,10 @@
       "meeting-pond": {
         title: "Meeting Pond",
         eyebrow: "Connected presence system",
-        abstract: `<p><strong>Meeting Pond</strong> is a pair of connected light objects designed to let two distant people feel each other’s presence without words, notifications, or screens.</p><p>Each device displays a minimal pond of light in a calm idle state. When one user performs a tapping gesture, a digital drop falls into the surface, generating ripples that radiate outward and appear in real time on the other user’s device.</p><p>The project explores disturbance as a form of presence: a subtle gesture that travels, carries energy, and temporarily alters a shared environment. Rather than transmitting messages, Meeting Pond creates a quiet, ephemeral connection where presence is perceived as movement, influence, and resonance across distance.</p>`,
+        abstract: `<p>A pair of connected light objects that let two distant people feel each other's presence without words or screens. Each device sits in a calm idle state showing a minimal surface of light. When one person taps, a ripple travels across distance and arrives in real time on the other device, turning a small physical gesture into a shared moment.</p>`,
+        challenge: "Working with an LED matrix gives you very few pixels, which makes it genuinely hard to create visuals that feel both meaningful and beautiful. The constraint pushes you toward abstraction immediately, and it is easy to end up with something that looks technically functional but emotionally empty.",
+        approach: "We decided to lead with concept rather than visuals. Once we had a strong emotional idea around the feeling of distant presence, the right visual followed naturally. Water was an obvious and poetic fit: it moves, it responds to touch, and it conveys connection without needing to represent anything literally. The constraint became an advantage.",
+        role: "Concept and emotional framing · Water ripple visual design on the LED matrix · Project communication and documentation",
         services: ["#HumanComputerInteraction", "#PhysicalComputing", "#ExperienceDesign"],
         systemArchitecture: ["#LEDMatrix", "#GestureRecognition", "#RealTimeSystem", "#IoT"],
         credits: ["Jérémy Martin"],
@@ -692,32 +801,13 @@
           { label: "Onboarding ready", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/jpeg/onboarding_ready_HR.png")' }
         ]
       },
-      "human-loci": {
-        title: "Human Loci",
-        eyebrow: "Sound artifact",
-        abstract: "Human Loci investigates how place can be remembered, reactivated, and felt through sound. The project combines a physical artifact with spatial listening cues to translate atmosphere into an intimate encounter, positioning memory, territory, and emotion as something inhabited rather than merely represented.",
-        services: ["#SoundAndPlace", "#PhysicalArtifact"],
-        credits: ["Nerea Asensio", "Giulia Romano"],
-        theme: {
-          bg: "#F5F1F5",
-          fg: "#1C171C",
-          muted: "rgba(28,23,28,0.68)",
-          soft: "rgba(28,23,28,0.34)",
-          border: "rgba(28,23,28,0.12)",
-          panel: "rgba(255,255,255,0.44)"
-        },
-        images: [
-          { label: "Artifact view", bg: "linear-gradient(135deg, #ceb9ca 0%, #f0e8ef 100%)" },
-          { label: "Material close-up", bg: "linear-gradient(135deg, #e7d8e5 0%, #c0b0be 100%)" },
-          { label: "Listening setup", bg: "linear-gradient(135deg, #d8c6d5 0%, #f5eff4 100%)" },
-          { label: "Spatial relation", bg: "linear-gradient(135deg, #cbb9cb 0%, #ede3eb 100%)" },
-          { label: "Exhibition still", bg: "linear-gradient(135deg, #bda9bc 0%, #ebe2ea 100%)" }
-        ]
-      },
-      "rememberita-device": {
+      "rememberita": {
         title: "RemembeRita",
         eyebrow: "Interactive reminder device",
-        abstract: `<p>RemembeRita is an interactive reminder device designed to support everyday memory at the threshold of the home. Placed near the entrance, it transforms digital reminders into a physical and visual presence using light and tangible interaction. Users send items to Rememberita via their phone, making each reminder persist until it is consciously resolved. Through simple gestures, users confirm completed tasks, allowing the device to update its state. RemembeRita shifts remembering from mental effort to spatial awareness, offering a calm, non-intrusive way to leave home with confidence.</p>`,
+        abstract: `<p>RemembeRita is a reminder device that lives at the threshold of the home. Send it a task from your phone and it holds it as a physical, light-based presence until you consciously resolve it with a gesture. It shifts remembering from mental effort to spatial awareness.</p>`,
+        challenge: "The brief constrained the prototype to a 20x20cm cube, which immediately limited what the object could contain and how it could communicate. Our concept depended on clear, readable feedback between the device and the user through light and interaction, and designing that communication to feel intuitive rather than technical within such a compact form was genuinely hard.",
+        approach: "I was drawn to the expressive potential of light and wanted to make it the main communication channel. The solution was to use a Telegram chatbot as the intermediary between the device and the user, which kept the physical object simple while still enabling real two-way interaction. Building the chatbot and the Arduino code from scratch was new territory for me and I genuinely enjoyed learning both.",
+        role: "Concept definition and interaction modalities · Arduino firmware and device logic · Telegram chatbot development · Object form and light behavior",
         services: ["#ProductDesign", "#Prototyping"],
         systemArchitecture: ["#ESP32", "#Arduino", "#TelegramBot", "#NeoPixel"],
         credits: ["Ayse Ceren Seckin", "A. M. Luz Vanella"],
@@ -742,8 +832,15 @@
       },
       "elen": {
         title: "ELEN",
+        featured: [
+          { label: "Displayed at Digital Design Week 2026, Milan · Porta Venezia district" },
+          { label: "Mentioned in niwwrd magazine", url: "https://www.niwwrd.com/post/digital-design-week-2026-what-stood-out-as-it-closes" }
+        ],
         eyebrow: "Speculative identity system",
-        abstract: `<p>ELEN is a speculative photographic instrument that treats wireless data as contemporary haunting.</p><p>If spirit photography once revealed traces of presence without bodies, today’s ghosts are bodies without presence: residual selves continuously leaking into Wi-Fi, Bluetooth, and machine-to-machine signals. The device captures personal network activity and translates it into spectral forms layered onto a real photograph of the site. These apparitions are not illustrations but condensations of signal, duration, and repetition, where glitches and density become ectoplasm. From fragments of personal metadata that fall from us constantly, gathered silently and without spectacle, the machine conjures figures that hover between dehumanized infrastructure and intimate trace. A ritual apparatus and surveillance oracle, it reframes behavioral data as a new species of shadow creature.</p>`,
+        abstract: `<p>ELEN is a speculative photographic instrument that treats wireless data as contemporary haunting. It captures the personal network signals leaking invisibly from people in a space and translates them into spectral forms layered onto a real photograph of the site. Ghost figures made entirely from behavioral data.</p>`,
+        challenge: "The brief asked us to make the invisible visible, but finding a concept strong enough to actually build was harder than it sounds. The visual ghosts had to feel organic and fluid while being generated entirely through code, which meant developing a visual language from scratch. Getting the device to reliably detect and interpret wireless signal data added another layer of complexity, since some of that data is inherently unstable and difficult to handle cleanly.",
+        approach: "We committed to perfecting every single part rather than cutting corners anywhere. That meant being willing to dig into unfamiliar technologies and spend real time on the technical side until each component performed the way the concept demanded. The quality of the result comes directly from not settling for \"good enough\" at any stage.",
+        role: "Concept development · Visual ghost language design and code · Packaging and brochure design · Project communication and documentation",
         services: ["#SpeculativeDesign", "#InteractionDesign", "#ProductDesign"],
         systemArchitecture: ["#RaspberryPi", "#Kismet", "#PhysicalComputing", "#WifiSignal", "#RealTimeVisualization"],
         credits: ["Jérémy Martin", "Nicholas Vos"],
@@ -805,7 +902,10 @@
       "adaptune": {
         title: "Adaptune",
         eyebrow: "Adaptive music companion",
-        abstract: `<p>Adaptune is a compact, portable music companion that turns everyday contexts into an adaptive soundtrack. Built as a rapid workshop proof-of-concept, the device leverages a smartphone embedded inside a small enclosure: the front-facing camera observes the user's activity, while audio is delivered through the phone's speaker.</p><p>Instead of presenting a conventional interface, the phone's display is mostly concealed and only shows two expressive eyes that reflect the detected context and the current musical mood. The system estimates high-level states such as focused work versus short breaks and other contexts like gym activity by extracting on-device cues from the camera stream and mapping them to a small set of interpretable "mood" variables. These variables drive an adaptive music engine based on AI-generated tracks: distinct songs are generated for different moods and contexts, and Adaptune transitions between them using smooth crossfades triggered on musically meaningful boundaries.</p><p>In practice, this approach proved more effective than stem-based vertical mixing for conveying emotion, since each track can be composed and produced with a clear affective intent while the crossfade preserves continuity and avoids abrupt changes.</p>`,
+        abstract: `<p>Adaptune is a compact music companion that reads your context and plays music accordingly. A phone embedded in a small enclosure watches your activity through its camera and translates what it sees into a continuously adapting soundtrack. Two expressive eyes on the screen reflect its current mood.</p>`,
+        challenge: "The brief asked for an AI companion that would integrate naturally into everyday life, which sounds simple but is genuinely hard to get right. Teaching the system to reliably recognise different states — focused work, a gym session, a short break — and map them to the right musical mood required a lot of calibration. Generating the music itself with AI added another layer of complexity, since each track needed to carry a clear emotional intent while still feeling like part of a coherent listening experience.",
+        approach: "We focused obsessively on smoothness. Every transition between states and between songs had to feel soft and considered, never abrupt. We defined a clear set of states so the companion could shift between them with intention, and spent a lot of time tuning the crossfades until the whole system felt alive rather than mechanical. The aesthetic of the little buddy mattered as much as the technical performance.",
+        role: "Interface design and full UI code · Deployment on Netlify · Concept definition and state system · Little companion character and visual personality",
         services: ["#Prototyping", "#MachineLearning", "#InteractionDesign", "#ConceptualDesign"],
         systemArchitecture: ["#TensorFlowJS", "#OpenAI", "#FaceAPI", "#WebRTC", "#ComputerVision"],
         credits: ["Nicholas Vos", "Dajana Seefluth"],
@@ -828,13 +928,13 @@
     };
 
     const params = new URLSearchParams(window.location.search);
-    const slug = params.get("project") || "rememberita";
-    const project = PROJECTS[slug] || PROJECTS["rememberita"];
+    const slug = params.get("project") || "human-loci";
+    const project = PROJECTS[slug] || PROJECTS["human-loci"];
     const PROJECT_ORDER = [
-      "rememberita",
+      "human-loci",
       "meeting-pond",
       "elen",
-      "rememberita-device",
+      "rememberita",
       "adaptune",
       "financial-planning-hub",
       "lynx-2-0"
@@ -854,18 +954,30 @@
       ];
     };
 
-    document.documentElement.style.setProperty("--bg", "#EAEAEA");
+    document.documentElement.style.setProperty("--bg", "#F5F5F0");
     document.documentElement.style.setProperty("--fg", "#000000");
     document.documentElement.style.setProperty("--muted", "rgba(0,0,0,0.72)");
     document.documentElement.style.setProperty("--soft-muted", "rgba(0,0,0,0.38)");
     document.documentElement.style.setProperty("--border", "rgba(0,0,0,0.12)");
     document.documentElement.style.setProperty("--panel", "rgba(255,255,255,0.42)");
 
-    document.body.style.background = "#EAEAEA";
+    document.body.style.background = "#F5F5F0";
 
     document.getElementById("detailEyebrow").textContent = project.eyebrow;
     document.getElementById("detailTitle").textContent = project.title;
     document.getElementById("detailAbstract").innerHTML = project.abstract;
+    
+    const featuredEl = document.getElementById('detailFeatured');
+    if (project.featured && project.featured.length) {
+      featuredEl.innerHTML = project.featured.map(f =>
+        f.url
+          ? `<span>★ <a href="${f.url}" target="_blank" rel="noopener">${f.label}</a></span>`
+          : `<span>★ ${f.label}</span>`
+      ).join('');
+      featuredEl.hidden = false;
+    } else {
+      featuredEl.hidden = true;
+    }
     const processMeta = document.getElementById("detailProcessMeta");
     if (project.challenge || project.approach || project.role) {
       document.getElementById("detailChallenge").textContent = project.challenge || "";
@@ -1108,9 +1220,98 @@
       gallery.appendChild(item);
     });
 
+    let overflowPrimary = 0;
+    let overflowExhibition = 0;
+
+    const recalculateLayout = () => {
+      const isMobile = window.innerWidth <= 960;
+      const topOffset = isMobile ? 5 * 16 : 6 * 16;
+      const bottomPadding = isMobile ? 120 : 260; // Spacious clearance so pictures don't cover the credits too soon
+      const maxVisibleHeight = window.innerHeight - topOffset - bottomPadding;
+      const pauseRoom = isMobile ? 100 : 200; // Extra breathing room before images slide up
+
+      // 1. Calculate Primary Copy Overflow
+      const primaryCopy = document.querySelector(".detail-copy-primary");
+      if (primaryCopy) {
+        const prevTransform = primaryCopy.style.transform;
+        primaryCopy.style.transform = "none";
+        const h = primaryCopy.getBoundingClientRect().height;
+        primaryCopy.style.transform = prevTransform;
+        
+        overflowPrimary = Math.max(0, h - maxVisibleHeight);
+      } else {
+        overflowPrimary = 0;
+      }
+
+      // 2. Calculate Exhibition Copy Overflow
+      const exhibitionCopy = document.querySelector(".detail-copy-secondary");
+      if (project.exhibition && exhibitionCopy) {
+        const prevStyle = exhibitionCopy.style.cssText;
+        exhibitionCopy.style.position = "relative";
+        exhibitionCopy.style.display = "block";
+        exhibitionCopy.style.opacity = "0";
+        exhibitionCopy.style.transform = "none";
+        
+        const h = exhibitionCopy.getBoundingClientRect().height;
+        
+        exhibitionCopy.style.cssText = prevStyle;
+        overflowExhibition = Math.max(0, h - maxVisibleHeight);
+      } else {
+        overflowExhibition = 0;
+      }
+
+      // 3. Update Gallery Padding and Margin to account for primary overflow + pause room
+      const galleryElement = document.querySelector(".detail-gallery");
+      if (galleryElement) {
+        galleryElement.style.marginTop = "-100vh";
+        galleryElement.style.paddingTop = `calc(100vh + ${overflowPrimary}px + ${pauseRoom}px)`;
+      }
+
+      // 4. Update Exhibition Marker height to account for exhibition overflow + pause room
+      if (exhibitionMarker) {
+        const baseHeight = isMobile ? 60 : 100;
+        exhibitionMarker.style.height = `calc(${baseHeight}vh + ${overflowExhibition}px + ${pauseRoom}px)`;
+      }
+    };
+
+    const handleScrollAndTranslation = () => {
+      const y = window.scrollY;
+      const primaryCopy = document.querySelector(".detail-copy-primary");
+      const exhibitionCopy = document.querySelector(".detail-copy-secondary");
+
+      const isExhibitionActive = document.body.classList.contains("exhibition-copy-active");
+      
+      if (!isExhibitionActive) {
+        if (primaryCopy) {
+          const transY = -Math.min(y, overflowPrimary);
+          primaryCopy.style.transform = `translateY(${transY}px)`;
+        }
+        if (exhibitionCopy) {
+          exhibitionCopy.style.transform = "translateY(0px)";
+        }
+      } else {
+        if (primaryCopy) {
+          primaryCopy.style.transform = "translateY(0px)";
+        }
+        
+        if (exhibitionCopy && exhibitionMarker) {
+          const viewportMidpoint = window.innerHeight / 2;
+          const triggerY = exhibitionMarker.offsetTop - viewportMidpoint;
+          const relativeScroll = y - triggerY;
+          
+          if (relativeScroll > 0) {
+            const transY = -Math.min(relativeScroll, overflowExhibition);
+            exhibitionCopy.style.transform = `translateY(${transY}px)`;
+          } else {
+            exhibitionCopy.style.transform = "translateY(0px)";
+          }
+        }
+      }
+    };
+
     const handleScroll = () => {
       const firstImage = gallery.querySelector(".gallery-item.primary");
-      if (!firstImage || window.innerWidth <= 960) {
+      if (!firstImage) {
         document.body.classList.remove("scrolled-copy");
         document.body.classList.remove("exhibition-copy-active");
         document.body.classList.remove("exhibition-copy-dimmed");
@@ -1140,9 +1341,20 @@
       }
     };
 
+    recalculateLayout();
     handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll);
+    handleScrollAndTranslation();
+
+    window.addEventListener("scroll", () => {
+      handleScroll();
+      handleScrollAndTranslation();
+    }, { passive: true });
+
+    window.addEventListener("resize", () => {
+      recalculateLayout();
+      handleScroll();
+      handleScrollAndTranslation();
+    });
   </script>
 </body>
 </html>

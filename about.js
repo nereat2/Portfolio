@@ -49,7 +49,7 @@ document.querySelectorAll('.nav-links a').forEach(link => {
 
 // ─── PAGE SURFACE ────────────────────────────────
 (function initAboutPageSurface() {
-  const OFF_WHITE = '#EAEAEA';
+  const OFF_WHITE = '#F5F5F0';
   const BLACK = '#000000';
 
   document.body.style.background = OFF_WHITE;

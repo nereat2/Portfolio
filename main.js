@@ -95,6 +95,9 @@ document.querySelectorAll('a, button, .prow, .ftag').forEach(el => {
     autoTimer = setTimeout(() => { autoRotate = true; }, 4000);
   }
 
+  // Prevent native link-drag on the <a> tap zones — it fires pointercancel and kills JS drag
+  scene.addEventListener('dragstart', e => e.preventDefault());
+
   scene.addEventListener('pointerdown', e => {
     isDragging    = true;
     autoRotate    = false;
@@ -103,8 +106,7 @@ document.querySelectorAll('a, button, .prow, .ftag').forEach(el => {
     startPointerX = lastPointerX = e.clientX;
     startPointerY = lastPointerY = e.clientY;
     vRotX = vRotY = vPosX = vPosY = 0;
-    scene.setPointerCapture(e.pointerId);
-    // Do NOT preventDefault here — allows native click to fire on short taps
+    // Do NOT setPointerCapture or preventDefault here — allows native click to route correctly on short taps
   });
 
   scene.addEventListener('pointermove', e => {
@@ -113,8 +115,15 @@ document.querySelectorAll('a, button, .prow, .ftag').forEach(el => {
     const dy = e.clientY - lastPointerY;
     dragDist += Math.abs(dx) + Math.abs(dy);
 
-    // Only suppress scroll/default behaviour once we know it's a real drag
-    if (dragDist > 10) e.preventDefault();
+    // Only suppress scroll/default behaviour and capture pointer once we know it's a real drag
+    if (dragDist > 10) {
+      e.preventDefault();
+      if (scene.hasPointerCapture && !scene.hasPointerCapture(e.pointerId)) {
+        try {
+          scene.setPointerCapture(e.pointerId);
+        } catch(err) {}
+      }
+    }
 
     // Rotate
     vRotY = dx * 0.55;
@@ -137,16 +146,24 @@ document.querySelectorAll('a, button, .prow, .ftag').forEach(el => {
   scene.addEventListener('pointerup', e => {
     isDragging = false;
     resumeAuto();
-    // If it was a real drag, briefly block tap-zone clicks so the
-    // browser's synthetic click (if any) doesn't accidentally navigate
-    if (dragDist > 10) {
+    
+    // Taps: navigate programmatically on short tap to bypass any pointer-capture click suppression
+    if (dragDist <= 10) {
+      const clickedEl = document.elementFromPoint(e.clientX, e.clientY);
+      const link = clickedEl ? clickedEl.closest('.face-tap-zone') : null;
+      if (link) {
+        window.location.href = link.href;
+        return;
+      }
+    } else {
+      // If it was a real drag, briefly block tap-zone clicks so any late
+      // synthetic click (if any) doesn't accidentally trigger navigation
       const links = scene.querySelectorAll('.face-tap-zone');
       links.forEach(l => { l.style.pointerEvents = 'none'; });
       setTimeout(() => {
         links.forEach(l => { l.style.pointerEvents = ''; });
       }, 200);
     }
-    // Taps: native click on <a class="face-tap-zone"> fires naturally
   });
 
   scene.addEventListener('pointercancel', () => {
@@ -224,10 +241,18 @@ const hlang  = document.getElementById('hlang');
 let wi = 0, introActive = true;
 const landingParams = new URLSearchParams(window.location.search);
 const returnProject = landingParams.get('project');
-const skipIntro = sessionStorage.getItem('skipIntroOnce') === '1';
+let skipIntro = sessionStorage.getItem('skipIntroOnce') === '1';
+sessionStorage.removeItem('skipIntroOnce');
 
-if (sessionStorage.getItem('skipIntroOnce') === '1') {
-  sessionStorage.removeItem('skipIntroOnce');
+const hasVisited = sessionStorage.getItem('hasVisited') === '1';
+if (hasVisited) {
+  const navEntries = performance.getEntriesByType("navigation");
+  const isReload = navEntries.length > 0 && navEntries[0].type === "reload";
+  if (!isReload) {
+    skipIntro = true;
+  }
+} else {
+  sessionStorage.setItem('hasVisited', '1');
 }
 
 if (skipIntro) {
@@ -288,7 +313,7 @@ if (skipIntro) {
 
 // ─── PAGE SURFACE ────────────────────────────────
 (function initPageSurface() {
-  const OFF_WHITE = '#EAEAEA';
+  const OFF_WHITE = '#F5F5F0';
   const BLACK = '#000000';
 
   document.body.style.background = OFF_WHITE;
@@ -612,16 +637,25 @@ function hexToHsl(hex) {
       mascot.classList.toggle('visible', deepEnough && ctaFar);
     }
 
-    if (homeLink) homeLink.style.color = '#FFFFFF';
-    if (navEl) navEl.classList.add('on-dark');
+    // Nav is over philosophy section when the section's top has reached the top of the viewport
+    // and its bottom hasn't scrolled past the top of the viewport.
+    const isOverPhilosophy = (philRect.top <= 0 && philRect.bottom > 0);
+    if (isOverPhilosophy) {
+      if (navEl) navEl.classList.add('on-dark');
+      if (homeLink) homeLink.style.color = '#FFFFFF';
+    } else {
+      if (navEl) navEl.classList.remove('on-dark');
+      if (homeLink) homeLink.style.color = '';
+    }
   }
 
   window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update, { passive: true });
+  update(); // Run on load to ensure correct nav theme
 
   // Activate as soon as the section enters the viewport (handles intro dismissal timing)
   new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) update();
+    update();
   }, { threshold: 0 }).observe(section);
 
   // ── Cursor parallax (desktop only) ────────────────────────
