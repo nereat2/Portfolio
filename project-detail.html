@@ -142,7 +142,7 @@
     /* Primary copy is relative by default, secondary is absolute */
     .detail-copy-stack .detail-copy-primary {
       position: relative;
-      transition: color .45s ease, opacity .45s ease;
+      transition: color .45s ease, opacity .45s ease, filter .45s ease;
     }
 
     .detail-copy-stack .detail-copy-secondary {
@@ -150,7 +150,7 @@
       inset: 0;
       top: 0;
       pointer-events: none;
-      transition: color .45s ease, opacity .45s ease;
+      transition: color .45s ease, opacity .45s ease, filter .45s ease;
     }
 
     /* Swap relative/absolute positions when exhibition copy is active */
@@ -195,13 +195,18 @@
     body.exhibition-copy-dimmed .detail-copy-secondary .meta-value,
     body.exhibition-copy-dimmed .detail-copy-secondary .abstract {
       color: var(--soft-muted);
+      filter: blur(4px);
     }
 
     body.scrolled-copy .detail-copy-primary,
     body.scrolled-copy .detail-copy-primary .meta-value,
     body.scrolled-copy .detail-copy-primary .abstract {
       color: var(--soft-muted);
+      filter: blur(4px);
     }
+
+    body:not(.scrolled-copy) .detail-copy-primary { filter: blur(0px); }
+    body:not(.exhibition-copy-dimmed) .detail-copy-secondary { filter: blur(0px); }
 
     .eyebrow {
       margin: 0 0 1rem;
