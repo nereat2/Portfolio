@@ -1023,10 +1023,11 @@ section { padding: 5.5rem 2.4rem; }
   width: min(44vmin, 360px);
   height: min(44vmin, 360px);
   transform-style: preserve-3d;
-  background: transparent;
+  background: var(--cream);
   padding: 0;
   box-sizing: border-box;
-  overflow: visible;
+  overflow: hidden;
+  border-radius: 10px;
 }
 
 /* Face positions — translateZ = half of face size = 180px (matches min(44vmin,360px)/2) */
@@ -1043,8 +1044,8 @@ section { padding: 5.5rem 2.4rem; }
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: 10px;
-  padding: 10px;
+  gap: 4px;
+  padding: 4px;
   box-sizing: border-box;
   z-index: 1;
 }
@@ -1064,19 +1065,6 @@ section { padding: 5.5rem 2.4rem; }
   /* hidden but clickable — must sit above ::after (11) and face-label (12) */
 }
 
-/* ── Face bottom gradient — improves label readability ── */
-.face::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 52%;
-  background: linear-gradient(to top, rgba(0,0,0,0.62), transparent);
-  pointer-events: none;
-  z-index: 11;
-  border-radius: 0 0 4px 4px;
-}
 
 /* ── Face label ── */
 .face-label {
