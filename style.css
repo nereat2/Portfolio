@@ -734,6 +734,7 @@ section { padding: 5.5rem 2.4rem; }
   .nav-links a { font-size: 13px; white-space: nowrap; }
   #siteHomeLink { top: 1rem; left: 1.2rem; }
   #siteHomeLink .label-nav { font-size: 13px; }
+  #siteHomeLink .label-hero { font-size: clamp(1.5rem, 5vw, 2rem); }
 
   .hero-tagline {
     left: 1.2rem;
@@ -1031,13 +1032,13 @@ section { padding: 5.5rem 2.4rem; }
   border-radius: 10px;
 }
 
-/* Face positions — translateZ = half of face size = 180px (matches min(44vmin,360px)/2) */
-.face-front  { transform: translateZ(180px); }
-.face-back   { transform: rotateY(180deg) translateZ(180px); }
-.face-right  { transform: rotateY(90deg)  translateZ(180px); }
-.face-left   { transform: rotateY(-90deg) translateZ(180px); }
-.face-top    { transform: rotateX(90deg)  translateZ(180px); }
-.face-bottom { transform: rotateX(-90deg) translateZ(180px); }
+/* Face positions — translateZ = half of face size = calc(min(44vmin,360px)/2) */
+.face-front  { transform: translateZ(calc(min(44vmin, 360px) / 2)); }
+.face-back   { transform: rotateY(180deg) translateZ(calc(min(44vmin, 360px) / 2)); }
+.face-right  { transform: rotateY(90deg)  translateZ(calc(min(44vmin, 360px) / 2)); }
+.face-left   { transform: rotateY(-90deg) translateZ(calc(min(44vmin, 360px) / 2)); }
+.face-top    { transform: rotateX(90deg)  translateZ(calc(min(44vmin, 360px) / 2)); }
+.face-bottom { transform: rotateX(-90deg) translateZ(calc(min(44vmin, 360px) / 2)); }
 
 .sticker-grid {
   position: absolute;
