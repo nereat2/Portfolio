@@ -1095,3 +1095,26 @@ section { padding: 5.5rem 2.4rem; }
 .sticker-grid {
   transition: filter 0.2s ease;
 }
+
+#more-work {
+  padding: 4rem var(--side-pad, 5vw);
+}
+.more-work-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.more-work-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 1.2rem 0;
+  border-bottom: 0.5px solid var(--border, #ddd);
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s;
+}
+.more-work-item:first-child { border-top: 0.5px solid var(--border, #ddd); }
+.more-work-item:hover { opacity: 0.5; }
+.more-work-title { font-size: clamp(1.2rem, 2.5vw, 1.6rem); font-weight: 500; }
+.more-work-tag { font-size: 11px; letter-spacing: 0.08em; opacity: 0.6; }

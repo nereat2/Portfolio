@@ -178,7 +178,7 @@ const FACE_IMAGES = {
   'face-back':   "assets/projects/elen/jpeg/elen-grid.png",
   'face-right':  "assets/projects/adaptune/jpeg/adaptune-grid.png",
   'face-left':   "assets/projects/meeting pond/jpeg/meetingpond-grid.png",
-  'face-top':    "assets/projects/rememberita/jpeg/rememberita-grid.png",
+  'face-top':    "assets/projects/philoxenia/philoxenia-grid.png",
   'face-bottom': "assets/projects/financial planning hub/financialhub-grid.png"
 };
 

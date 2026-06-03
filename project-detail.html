@@ -289,6 +289,7 @@
       z-index: 2;
       margin-top: -100vh;
       padding: 100vh 0 5rem;
+      pointer-events: none;
     }
 
     .gallery-list {
@@ -299,6 +300,7 @@
 
     .gallery-item {
       width: 100%;
+      pointer-events: auto;
     }
 
     .gallery-transition-marker {
@@ -651,6 +653,16 @@
         font-size: 13px;
       }
     }
+    .detail-visit-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-decoration: underline;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .detail-visit-btn:hover { opacity: 1; }
   </style>
 </head>
 <body>
@@ -694,6 +706,9 @@
                 <p class="meta-label">My Role</p>
                 <p class="meta-value" id="detailRole"></p>
               </section>
+            </div>
+            <div id="detailVisit" hidden>
+              <a id="detailVisitLink" href="#" target="_blank" rel="noopener" class="detail-visit-btn">Visit the project ↗</a>
             </div>
           </div>
         </div>
@@ -785,7 +800,10 @@
       "financial-planning-hub": {
         title: "Financial Planning Hub",
         eyebrow: "Service platform",
-        abstract: `<p>This UX/UI project investigates how financial planning can be redesigned as an intuitive and evolving experience. Combining user research, interaction design, and visual storytelling, it proposes a system that integrates planning tools, scenario simulations, and contextual guidance. A dynamic visual metaphor reflects the user's financial evolution over time, making abstract data more understandable and engaging.</p>`,
+        abstract: `<p>The Financial Planning Hub is a new feature concept for a major Swiss banking app, designed to help users understand how their short-term financial decisions affect their long-term goals. Through guided onboarding, a dynamic visual metaphor, real-time what-if simulations and personalised insights, the hub makes financial planning feel approachable, intuitive and confidence-building — rather than overwhelming.</p>`,
+        challenge: "Most banking apps give you the tools to manage money, but very few help you understand it. The brief revealed a concrete gap: users could track spending and investments, but had no way to see how a small decision today — an impulse purchase, a missed saving — quietly shapes a goal years from now. This disconnection between the present and the future creates anxiety, procrastination and a persistent lack of confidence around financial planning. The design challenge was to bridge that gap without adding complexity — making long-term thinking feel as natural and immediate as checking a balance.",
+        approach: "We started with user research — interviews and behavioural analysis that surfaced a clear pattern: people don't avoid financial planning because they don't care, they avoid it because it feels abstract and intimidating. From there we ran a competitive benchmark across financial apps, identifying where existing tools fall short: most offer goal tracking or spending insights in isolation, but almost none connect the two in real time or make the relationship between daily actions and future outcomes visible.\nThat insight shaped every design decision. The onboarding is guided and conversational, reducing cognitive load from the first interaction. A growing tree metaphor translates financial health into something immediately readable — no terminology required. What-if simulations let users explore scenarios (\"what if I saved €50 more per month?\") without consequence, turning planning from a source of anxiety into something closer to play. All designed in Figma, from research synthesis to final interactive prototype.",
+        role: "Concept definition and project framing · User research and synthesis · Competitive benchmark · UX flow and feature architecture · End-to-end Figma prototype · Presentation structure and copy",
         services: ["#UX", "#UI", "#DesignInterface"],
         systemArchitecture: ["#Figma", "#DigitalPrototyping"],
         credits: ["Walter de Nicola", "Roberta Valli", "Riccardo Assirelli", "Isabel Parini"],
@@ -929,6 +947,20 @@
           { label: "View 4", bg: 'center / cover no-repeat url("assets/projects/adaptune/jpeg/adaptune-4.jpg")' },
           { label: "View 5", bg: 'center / cover no-repeat url("assets/projects/adaptune/jpeg/adaptune-5.jpg")' }
         ]
+      },
+      "philoxenia": {
+        title: "Philo & Xeny",
+        eyebrow: "Territory Intelligence Platform",
+        abstract: `<p>A two-agent AI platform designed as an intelligence layer for peer-to-peer accommodation. Philo helps hosts build their listing through voice and chat, and helps guests search by mood and experience rather than price and filters. Xeny turns a host's local knowledge into a living guidebook, delivered to guests as a real-time companion during their stay. Built on Airbnb as a pilot, designed to go further.</p>`,
+        challenge: "P2P platforms promised human connection and became transactional marketplaces. The real design challenge was not fixing Airbnb but designing an intelligence layer that could serve hosts, guests, and the territory simultaneously. A host with no tools to express their identity. A guest who knows the feeling they want but can only search by price and beds. Designing the shared knowledge base that feeds both agents without making either experience feel generic was the structural challenge that held everything together.",
+        approach: "We started from research: host interviews, guest interviews, and forum analysis that made the systemic failure concrete. From there we mapped two parallel journeys and identified where intelligence could intervene without replacing human agency. Every feature was anchored to a specific friction point. The decision to support both voice and chat came directly from research showing voice reduces cognitive load for open-ended input while text is faster for structured data.",
+        role: `Concept definition and project framing · Presentation structure and narrative · <a href="https://maind-philoxeni.vercel.app/" target="_blank" rel="noopener">Scrollytelling development in Vite and React, deployed on Vercel</a> · Aurora design system · Interactive Europe map · Demo video script`,
+        visitUrl: "https://maind-philoxeni.vercel.app/",
+        services: ["#UXResearch", "#ServiceDesign", "#AIDesign", "#ConceptualDesign"],
+        systemArchitecture: ["#React", "#Vite", "#Vercel", "#DesignSystems"],
+        credits: "Gürünlü Günseli, Nerea Asensio, Mélanie Turano, Peng-Hsuan Lee Jennifer, Walter De Nicola · In collaboration with SPARK Reply",
+        theme: "light",
+        images: []
       }
     };
 
@@ -942,7 +974,8 @@
       "rememberita",
       "adaptune",
       "financial-planning-hub",
-      "lynx-2-0"
+      "lynx-2-0",
+      "philoxenia"
     ];
     const currentIndex = PROJECT_ORDER.indexOf(slug);
     const nextSlug = PROJECT_ORDER[(currentIndex + 1 + PROJECT_ORDER.length) % PROJECT_ORDER.length];
@@ -971,7 +1004,16 @@
     document.getElementById("detailEyebrow").textContent = project.eyebrow;
     document.getElementById("detailTitle").textContent = project.title;
     document.getElementById("detailAbstract").innerHTML = project.abstract;
-    
+
+    const visitEl = document.getElementById('detailVisit');
+    const visitLink = document.getElementById('detailVisitLink');
+    if (project.visitUrl) {
+      visitLink.href = project.visitUrl;
+      visitEl.hidden = false;
+    } else {
+      visitEl.hidden = true;
+    }
+
     const featuredEl = document.getElementById('detailFeatured');
     if (project.featured && project.featured.length) {
       featuredEl.innerHTML = project.featured.map(f =>
@@ -987,14 +1029,14 @@
     if (project.challenge || project.approach || project.role) {
       document.getElementById("detailChallenge").textContent = project.challenge || "";
       document.getElementById("detailApproach").textContent = project.approach || "";
-      document.getElementById("detailRole").textContent = project.role || "";
+      document.getElementById("detailRole").innerHTML = project.role || "";
       processMeta.hidden = false;
     } else {
       processMeta.hidden = true;
     }
     document.getElementById("detailServices").textContent = project.services.join(" ");
     document.getElementById("detailSystemArchitecture").textContent = (project.systemArchitecture || []).join(" ");
-    document.getElementById("detailCredits").textContent = project.credits.join(", ");
+    document.getElementById("detailCredits").textContent = Array.isArray(project.credits) ? project.credits.join(", ") : (project.credits || "");
     const exhibitionCopy = document.getElementById("detailExhibitionCopy");
     if (project.exhibition) {
       exhibitionCopy.hidden = false;
