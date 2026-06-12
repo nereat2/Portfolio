@@ -1,183 +1,3 @@
-// ─── CUBE: INTERACTION (rotate + move) ───────────────
-(function initCube() {
-  const scene  = document.getElementById('cubeScene');
-  const cube   = document.getElementById('cube');
-  const hero   = document.querySelector('.hero');
-  if (!scene || !cube || !hero) return;
-
-  // Rotation state
-  let rotX = -18, rotY = 28;
-  let vRotX = 0, vRotY = 0;
-
-  // Position state (offset from hero center, in px)
-  let posX = 0, posY = 0;
-  let vPosX = 0, vPosY = 0;
-
-  // Drag state
-  let isDragging = false;
-  let startPointerX = 0, startPointerY = 0;
-  let lastPointerX = 0, lastPointerY = 0;
-  let dragDist = 0;
-
-  // Auto-rotate when idle
-  let autoRotate = true;
-  let autoTimer = null;
-
-  function applyTransform() {
-    // Scene handles translation, cube handles rotation
-    const heroRect = hero.getBoundingClientRect();
-    const cx = heroRect.width  / 2 + posX;
-    const cy = heroRect.height / 2 + posY;
-    scene.style.left      = cx + 'px';
-    scene.style.top       = cy + 'px';
-    scene.style.transform = 'translate(-50%, -50%)';
-    cube.style.transform  = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-  }
-
-  function clampPos() {
-    // Keep cube within hero bounds (with padding)
-    const heroRect = hero.getBoundingClientRect();
-    const pad = 120;
-    const maxX = heroRect.width  / 2 - pad;
-    const maxY = heroRect.height / 2 - pad;
-    if (posX >  maxX) { posX =  maxX; vPosX *= -0.4; }
-    if (posX < -maxX) { posX = -maxX; vPosX *= -0.4; }
-    if (posY >  maxY) { posY =  maxY; vPosY *= -0.4; }
-    if (posY < -maxY) { posY = -maxY; vPosY *= -0.4; }
-  }
-
-  // Animation loop
-  (function tick() {
-    if (!isDragging) {
-      // Auto-rotate
-      if (autoRotate) {
-        rotY += 0.15;
-      }
-      // Apply inertia from throw
-      rotY  += vRotY;
-      rotX  += vRotX;
-      posX  += vPosX;
-      posY  += vPosY;
-      // Damping
-      vRotY  *= 0.96;
-      vRotX  *= 0.96;
-      vPosX  *= 0.94;
-      vPosY  *= 0.94;
-      // Clamp rotation X so cube never flips upside down
-      rotX = Math.max(-75, Math.min(75, rotX));
-      clampPos();
-    }
-    applyTransform();
-    requestAnimationFrame(tick);
-  })();
-
-  function resumeAuto() {
-    clearTimeout(autoTimer);
-    autoTimer = setTimeout(() => { autoRotate = true; }, 4000);
-  }
-
-  // Prevent native link-drag on the <a> tap zones — it fires pointercancel and kills JS drag
-  scene.addEventListener('dragstart', e => e.preventDefault());
-
-  scene.addEventListener('pointerdown', e => {
-    isDragging    = true;
-    autoRotate    = false;
-    clearTimeout(autoTimer);
-    dragDist      = 0;
-    startPointerX = lastPointerX = e.clientX;
-    startPointerY = lastPointerY = e.clientY;
-    vRotX = vRotY = vPosX = vPosY = 0;
-    // Do NOT setPointerCapture or preventDefault here — allows native click to route correctly on short taps
-  });
-
-  scene.addEventListener('pointermove', e => {
-    if (!isDragging) return;
-    const dx = e.clientX - lastPointerX;
-    const dy = e.clientY - lastPointerY;
-    dragDist += Math.abs(dx) + Math.abs(dy);
-
-    // Only suppress scroll/default behaviour and capture pointer once we know it's a real drag
-    if (dragDist > 10) {
-      e.preventDefault();
-      if (scene.hasPointerCapture && !scene.hasPointerCapture(e.pointerId)) {
-        try {
-          scene.setPointerCapture(e.pointerId);
-        } catch(err) {}
-      }
-    }
-
-    // Rotate
-    vRotY = dx * 0.55;
-    vRotX = -dy * 0.55;
-    rotY += vRotY;
-    rotX += vRotX;
-    rotX = Math.max(-75, Math.min(75, rotX));
-
-    // Translate
-    vPosX = dx * 0.8;
-    vPosY = dy * 0.8;
-    posX += vPosX;
-    posY += vPosY;
-    clampPos();
-
-    lastPointerX = e.clientX;
-    lastPointerY = e.clientY;
-  });
-
-  scene.addEventListener('pointerup', e => {
-    isDragging = false;
-    resumeAuto();
-    
-    // Taps: navigate programmatically on short tap to bypass any pointer-capture click suppression
-    if (dragDist <= 10) {
-      const clickedEl = document.elementFromPoint(e.clientX, e.clientY);
-      const link = clickedEl ? clickedEl.closest('.face-tap-zone') : null;
-      if (link) {
-        window.location.href = link.href;
-        return;
-      }
-    } else {
-      // If it was a real drag, briefly block tap-zone clicks so any late
-      // synthetic click (if any) doesn't accidentally trigger navigation
-      const links = scene.querySelectorAll('.face-tap-zone');
-      links.forEach(l => { l.style.pointerEvents = 'none'; });
-      setTimeout(() => {
-        links.forEach(l => { l.style.pointerEvents = ''; });
-      }, 200);
-    }
-  });
-
-  scene.addEventListener('pointercancel', () => {
-    isDragging = false;
-    resumeAuto();
-  });
-})();
-
-// ─── CUBE: STICKER CROPS FROM GRID PNG ───────────
-const FACE_IMAGES = {
-  'face-front':  "assets/projects/human loci/jpeg/humanloci-grid.png",
-  'face-back':   "assets/projects/elen/jpeg/elen-grid.png",
-  'face-right':  "assets/projects/adaptune/jpeg/adaptune-grid.png",
-  'face-left':   "assets/projects/meeting pond/jpeg/meetingpond-grid.png",
-  'face-top':    "assets/projects/philoxenia/philoxenia-grid.png",
-  'face-bottom': "assets/projects/financial planning hub/financialhub-grid.png"
-};
-
-const POS = ['0% 0%','50% 0%','100% 0%',
-             '0% 50%','50% 50%','100% 50%',
-             '0% 100%','50% 100%','100% 100%'];
-
-document.querySelectorAll('.face').forEach(face => {
-  const key = Array.from(face.classList).find(c => c.startsWith('face-') && c !== 'face');
-  const img = FACE_IMAGES[key];
-  if (!img) return;
-  face.querySelectorAll('.sticker').forEach((sticker, i) => {
-    sticker.style.backgroundImage    = `url('${img}')`;
-    sticker.style.backgroundPosition = POS[i];
-    sticker.style.backgroundSize     = '300% 300%';
-  });
-});
-
 // ─── NAV SCROLL BORDER ────────────────────────────
 const navEl = document.getElementById('nav');
 window.addEventListener('scroll', () => {
@@ -218,57 +38,6 @@ function focusReturnedProject() {
 }
 
 window.addEventListener('load', focusReturnedProject, { once: true });
-
-// ─── PAGE SURFACE ────────────────────────────────
-(function initPageSurface() {
-  const OFF_WHITE = '#F5F5F0';
-  const BLACK = '#000000';
-
-  document.body.style.background = OFF_WHITE;
-  document.documentElement.style.setProperty('--cream', OFF_WHITE);
-  document.documentElement.style.setProperty('--cream2', OFF_WHITE);
-  document.documentElement.style.setProperty('--ink', BLACK);
-  document.documentElement.style.setProperty('--ink2', 'rgba(0,0,0,0.78)');
-  document.documentElement.style.setProperty('--muted', 'rgba(0,0,0,0.72)');
-  document.documentElement.style.setProperty('--border', 'rgba(0,0,0,0.12)');
-  document.documentElement.style.setProperty('--light', OFF_WHITE);
-
-  const fluidCanvas = document.getElementById('fluidCanvas');
-  if (fluidCanvas) fluidCanvas.style.display = 'none';
-
-  document.querySelectorAll('.hero, .hero-sub, .scroll-cue, .nav-links a, .cta-line1, .cta-line2, .cta-link').forEach(el => {
-    if (el) el.style.color = BLACK;
-  });
-  document.querySelectorAll('.cta-link').forEach(el => {
-    el.style.borderBottomColor = BLACK;
-  });
-
-  function hslToRgb(h, s, l) {
-    const hue = ((h % 360) + 360) % 360;
-    const sat = Math.max(0, Math.min(s, 100)) / 100;
-    const lig = Math.max(0, Math.min(l, 100)) / 100;
-    const c = (1 - Math.abs(2 * lig - 1)) * sat;
-    const hp = hue / 60;
-    const x = c * (1 - Math.abs((hp % 2) - 1));
-    let r1 = 0;
-    let g1 = 0;
-    let b1 = 0;
-    if (hp >= 0 && hp < 1) [r1, g1, b1] = [c, x, 0];
-    else if (hp < 2) [r1, g1, b1] = [x, c, 0];
-    else if (hp < 3) [r1, g1, b1] = [0, c, x];
-    else if (hp < 4) [r1, g1, b1] = [0, x, c];
-    else if (hp < 5) [r1, g1, b1] = [x, 0, c];
-    else [r1, g1, b1] = [c, 0, x];
-    const m = lig - c / 2;
-    return [
-      Math.round((r1 + m) * 255),
-      Math.round((g1 + m) * 255),
-      Math.round((b1 + m) * 255)
-    ];
-  }
-
-  window._hslToRgb = hslToRgb;
-})();
 
 // ─── HERO LIQUID TEXT ─────────────────────────────
 (function initLiquidText() {
@@ -467,13 +236,6 @@ function hexToHsl(hex) {
   const navEl    = document.getElementById('nav');
   const isMobile = window.matchMedia('(max-width: 720px)').matches;
 
-  if (window._hslToRgb) {
-    const [r, g, b] = window._hslToRgb(Math.random() * 360, 18 + Math.random() * 18, 8 + Math.random() * 8);
-    const bg = `rgb(${r},${g},${b})`;
-    section.style.background = bg;
-    document.documentElement.style.setProperty('--phil-bg', bg);
-  }
-
   let activeStackPos = -1;
 
   function showPhrase(phraseIdx) {
@@ -606,4 +368,122 @@ function hexToHsl(hex) {
     { threshold: 0.25 }
   );
   obs.observe(cta);
+})();
+
+// ─── WORK SECTION ─────────────────────────────
+// Drag scroll for work section
+(function() {
+  const el = document.getElementById('workScroll');
+  if (!el) return;
+  let down = false, startX, left;
+  el.addEventListener('mousedown', e => {
+    down = true;
+    el.classList.add('is-dragging');
+    startX = e.pageX - el.offsetLeft;
+    left = el.scrollLeft;
+  });
+  document.addEventListener('mouseup', () => {
+    down = false;
+    el.classList.remove('is-dragging');
+  });
+  el.addEventListener('mousemove', e => {
+    if (!down) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    el.scrollLeft = left - (x - startX) * 1.5;
+  });
+})();
+
+// View toggle
+(function() {
+  const btn = document.getElementById('viewToggle');
+  const scroll = document.getElementById('workScroll');
+  if (!btn || !scroll) return;
+  btn.addEventListener('click', () => {
+    scroll.classList.toggle('grid-view');
+    scroll.scrollLeft = 0;
+    btn.textContent = scroll.classList.contains('grid-view')
+      ? 'Scroll view' : 'Grid view';
+  });
+})();
+
+// Filter
+(function() {
+  const btns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.work-card');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      cards.forEach(card => {
+        const tags = card.dataset.tags || '';
+        card.classList.toggle('hidden',
+          f !== 'all' && !tags.includes(f));
+      });
+    });
+  });
+})();
+
+// ─── HERO DOODLE PARALLAX ─────────────────────
+(function() {
+  const hero = document.getElementById('hero');
+  const doodles = document.querySelectorAll(
+    '.hero-doodle[data-depth]'
+  );
+  const reduceMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)'
+  ).matches;
+  if (!hero || !doodles.length || reduceMotion) return;
+
+  let ticking = false;
+  let pointerX = 0;
+  let pointerY = 0;
+
+  function moveDoodles() {
+    const rect = hero.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = (pointerX - cx) / (rect.width / 2);
+    const dy = (pointerY - cy) / (rect.height / 2);
+
+    doodles.forEach(el => {
+      const depth = parseFloat(el.dataset.depth) || 0.08;
+      const mx = dx * depth * 140;
+      const my = dy * depth * 110;
+      el.style.transform =
+        `translate3d(${mx}px, ${my}px, 0)`;
+    });
+    ticking = false;
+  }
+
+  hero.addEventListener('pointermove', (e) => {
+    pointerX = e.clientX;
+    pointerY = e.clientY;
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(moveDoodles);
+  });
+
+  hero.addEventListener('pointerleave', () => {
+    doodles.forEach(el => {
+      el.style.transform = 'translate3d(0, 0, 0)';
+    });
+  });
+})();
+
+// ─── NAV BRAND VISIBILITY ─────────────────────
+(function() {
+  const brand = document.querySelector('.nav-brand');
+  const hero = document.getElementById('hero');
+  if (!brand || !hero) return;
+  const obs = new IntersectionObserver(
+    ([entry]) => {
+      brand.classList.toggle(
+        'nav-brand--hidden', entry.isIntersecting
+      );
+    },
+    { threshold: 0.2 }
+  );
+  obs.observe(hero);
 })();

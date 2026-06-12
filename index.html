@@ -16,158 +16,215 @@
 <body>
 
   <!-- ══════════════════════════════════════
-       BACK TO TOP
-  ══════════════════════════════════════ -->
-  <button id="back-top" aria-label="Back to top">Back to top ↑</button>
-
-  <!-- ══════════════════════════════════════
        NAV
   ══════════════════════════════════════ -->
   <nav id="nav" role="navigation" aria-label="Main navigation">
     <ul class="nav-links">
       <li><a href="about.html">About</a></li>
-      <li><a href="mailto:hello@nereaasensio.me">✉ Email me</a></li>
+      <li><a href="mailto:hello@nereaasensio.me">Email me</a></li>
     </ul>
   </nav>
 
-  <a href="#home" id="siteHomeLink" class="is-hero" aria-label="Go home">
-    <span class="label-hero" aria-hidden="false">Hi, I'm Nerea!</span>
-    <span class="label-nav"  aria-hidden="true">Home</span>
-  </a>
+  <a href="#hero" id="siteHomeLink" class="nav-brand" aria-label="Nerea Asensio">Nerea Asensio</a>
 
   <!-- ══════════════════════════════════════
        HERO
   ══════════════════════════════════════ -->
-  <section class="hero" id="home" aria-label="Hero">
-    <div id="cubeScene" class="cube-scene">
-      <div id="cube" class="cube">
+  <section id="hero">
+    <div class="hero-inner">
+      <p class="hero-label">Interaction and Product Designer</p>
+      <h1 class="hero-headline">Designing experiences<br>that leave a mark.</h1>
+      <p class="hero-intro">Hi, I'm Nerea. A Spanish-born interaction and product designer based in Switzerland, working at the meeting point of physical making and digital experience.</p>
+      <p class="hero-avail">Available for internship from July 2026</p>
+      <div class="hero-links">
+        <a href="assets/cv/nerea_asensio_designer_cv.pdf"
+           class="hero-link" target="_blank" rel="noopener">View CV ↗</a>
+        <a href="https://www.linkedin.com/in/nerea-a-777526192/"
+           class="hero-link" target="_blank" rel="noopener">
+           LinkedIn ↗</a>
+      </div>
+    </div>
+    <div class="hero-doodles" aria-hidden="true">
+      <span class="hero-doodle hero-doodle--1" data-depth="0.08">
+        <img src="assets/doodles/flower_doodle.png" alt="" />
+      </span>
+      <span class="hero-doodle hero-doodle--2" data-depth="0.12">
+        <img src="assets/doodles/glitter_doodle_1.png" alt="" />
+      </span>
+    </div>
 
-        <!-- FRONT: Human Loci -->
-        <div class="face face-front">
-          <div class="sticker-grid">
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-          </div>
-          <a href="project-detail.html?project=human-loci" class="face-tap-zone" aria-label="Human Loci"></a>
-          <div class="face-label">Human Loci</div>
-        </div>
-
-        <!-- BACK: ELEN -->
-        <div class="face face-back">
-          <div class="sticker-grid">
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-          </div>
-          <a href="project-detail.html?project=elen" class="face-tap-zone" aria-label="ELEN"></a>
-          <div class="face-label">ELEN</div>
-        </div>
-
-        <!-- RIGHT: Adaptune -->
-        <div class="face face-right">
-          <div class="sticker-grid">
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-          </div>
-          <a href="project-detail.html?project=adaptune" class="face-tap-zone" aria-label="Adaptune"></a>
-          <div class="face-label">Adaptune</div>
-        </div>
-
-        <!-- LEFT: Meeting Pond -->
-        <div class="face face-left">
-          <div class="sticker-grid">
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-          </div>
-          <a href="project-detail.html?project=meeting-pond" class="face-tap-zone" aria-label="Meeting Pond"></a>
-          <div class="face-label">Meeting Pond</div>
-        </div>
-
-        <!-- TOP: Philo & Xeny -->
-        <div class="face face-top">
-          <div class="sticker-grid">
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-          </div>
-          <a href="project-detail.html?project=philoxenia" class="face-tap-zone" aria-label="Philo and Xeny"></a>
-          <div class="face-label">Philo & Xeny</div>
-        </div>
-
-        <!-- BOTTOM: Financial Planning Hub -->
-        <div class="face face-bottom">
-          <div class="sticker-grid">
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-            <div class="sticker"></div>
-          </div>
-          <a href="project-detail.html?project=financial-planning-hub" class="face-tap-zone" aria-label="Financial Planning Hub"></a>
-          <div class="face-label">Financial Planning Hub</div>
-        </div>
-
-      </div><!-- /.cube -->
-    </div><!-- /.cube-scene -->
-
-    <p class="hero-tagline">
-      <span>Conceptual <strong>thinker.</strong></span>
-      <span>Hands-on <strong>maker.</strong></span>
-    </p>
-
-    <p class="drag-hint" aria-label="Drag the cube to explore projects">
-      spin the cube · explore my work
-    </p>
+    <!-- Marquee strip — last child of hero, sits at the bottom -->
+    <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-inner">Conceptual thinker · Hands-on maker <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" /> Curious by nature <img src="assets/doodles/glitter_doodle_1.png" class="msep-img" alt="" aria-hidden="true" /> Research-led · Craft-driven <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" /> UX · Prototyping · Creative Coding · Data Visualisation <img src="assets/doodles/glitter_doodle_1.png" class="msep-img" alt="" aria-hidden="true" /> From concept to final delivery <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" /> MA Interaction Design, SUPSI <img src="assets/doodles/glitter_doodle_1.png" class="msep-img" alt="" aria-hidden="true" /> Based in Switzerland <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" /> Italian · Spanish · English <img src="assets/doodles/glitter_doodle_1.png" class="msep-img" alt="" aria-hidden="true" /> Born in Barcelona · Always on the move <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" /> Dog mum and mountain person <img src="assets/doodles/glitter_doodle_1.png" class="msep-img" alt="" aria-hidden="true" /> Yoga practitioner <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" />&nbsp;</span>
+      <span class="marquee-inner" aria-hidden="true">Conceptual thinker · Hands-on maker <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" /> Curious by nature <img src="assets/doodles/glitter_doodle_1.png" class="msep-img" alt="" aria-hidden="true" /> Research-led · Craft-driven <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" /> UX · Prototyping · Creative Coding · Data Visualisation <img src="assets/doodles/glitter_doodle_1.png" class="msep-img" alt="" aria-hidden="true" /> From concept to final delivery <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" /> MA Interaction Design, SUPSI <img src="assets/doodles/glitter_doodle_1.png" class="msep-img" alt="" aria-hidden="true" /> Based in Switzerland <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" /> Italian · Spanish · English <img src="assets/doodles/glitter_doodle_1.png" class="msep-img" alt="" aria-hidden="true" /> Born in Barcelona · Always on the move <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" /> Dog mum and mountain person <img src="assets/doodles/glitter_doodle_1.png" class="msep-img" alt="" aria-hidden="true" /> Yoga practitioner <img src="assets/doodles/glitter_doodle_2.png" class="msep-img" alt="" aria-hidden="true" />&nbsp;</span>
+    </div>
+  </div>
   </section>
 
-  <section id="more-work" aria-label="More projects">
-    <p class="sec-label">More work</p>
-    <div class="more-work-list">
-      <a href="project-detail.html?project=rememberita" class="more-work-item">
-        <span class="more-work-title">RemembeRita</span>
-        <span class="more-work-tag">Interactive Reminder Device</span>
+  <!-- ══════════════════════════════════════
+       WORK
+  ══════════════════════════════════════ -->
+  <section id="work">
+    <div class="work-top">
+      <p class="section-label">Selected work</p>
+      <button class="view-toggle" id="viewToggle">Grid view</button>
+    </div>
+    <div class="work-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="ux">UX and Product</button>
+      <button class="filter-btn" data-filter="physical">Physical Computing</button>
+      <button class="filter-btn" data-filter="data">Data and Research</button>
+      <button class="filter-btn" data-filter="speculative">Speculative</button>
+    </div>
+    <div class="work-scroll" id="workScroll">
+
+      <a href="project-detail.html?project=elen"
+         class="work-card work-card--featured"
+         data-tags="speculative physical">
+        <div class="work-card__img">
+          <img src="assets/projects/elen/jpeg/elen-front.jpg"
+               alt="ELEN project" />
+        </div>
+        <div class="work-card__body">
+          <span class="work-card__badge">DDW 2026</span>
+          <h2 class="work-card__title">ELEN</h2>
+          <p class="work-card__desc">A camera that photographs
+          the wireless ghosts in a room</p>
+          <div class="work-card__meta">
+            <span class="work-card__tag">Speculative</span>
+            <span>2026</span>
+          </div>
+        </div>
       </a>
-      <a href="project-detail.html?project=lynx-2-0" class="more-work-item">
-        <span class="more-work-title">Lynx 2.0</span>
-        <span class="more-work-tag">UI Redesign</span>
+
+      <a href="project-detail.html?project=philoxenia"
+         class="work-card"
+         data-tags="ux">
+        <div class="work-card__img">
+          <!-- REPLACE WITH MAIN IMAGE -->
+          <img src="assets/projects/philoxenia/philoxenia-grid.png"
+               alt="Philo and Xeny project" />
+        </div>
+        <div class="work-card__body">
+          <h2 class="work-card__title">Philo and Xeny</h2>
+          <p class="work-card__desc">Two-agent AI platform
+          built on Airbnb as a pilot</p>
+          <div class="work-card__meta">
+            <span class="work-card__tag">UX and Product</span>
+            <span>2025</span>
+          </div>
+        </div>
       </a>
+
+      <a href="project-detail.html?project=financial-planning-hub"
+         class="work-card"
+         data-tags="ux data">
+        <div class="work-card__img">
+          <img src="assets/projects/financial planning hub/jpeg/main_screen_HR.png"
+               alt="Financial Planning Hub" />
+        </div>
+        <div class="work-card__body">
+          <h2 class="work-card__title">Financial Planning Hub</h2>
+          <p class="work-card__desc">UX and interface design
+          for a Swiss private bank</p>
+          <div class="work-card__meta">
+            <span class="work-card__tag">UX and Product</span>
+            <span>2025</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="project-detail.html?project=human-loci"
+         class="work-card"
+         data-tags="physical">
+        <div class="work-card__img">
+          <img src="assets/projects/human loci/jpeg/humanloci-main.jpg"
+               alt="Human Loci" />
+        </div>
+        <div class="work-card__body">
+          <h2 class="work-card__title">Human Loci</h2>
+          <p class="work-card__desc">A tonearm that plays
+          the sounds of a place from memory</p>
+          <div class="work-card__meta">
+            <span class="work-card__tag">Physical Computing</span>
+            <span>2024</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="project-detail.html?project=meeting-pond"
+         class="work-card"
+         data-tags="physical">
+        <div class="work-card__img">
+          <img src="assets/projects/meeting pond/jpeg/meetingpond-general1.jpg"
+               alt="Meeting Pond" />
+        </div>
+        <div class="work-card__body">
+          <h2 class="work-card__title">Meeting Pond</h2>
+          <p class="work-card__desc">Two objects that let people
+          feel each other's presence across distance</p>
+          <div class="work-card__meta">
+            <span class="work-card__tag">Physical Computing</span>
+            <span>2024</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="project-detail.html?project=adaptune"
+         class="work-card"
+         data-tags="ux">
+        <div class="work-card__img">
+          <img src="assets/projects/adaptune/jpeg/adaptune-1.jpg"
+               alt="Adaptune" />
+        </div>
+        <div class="work-card__body">
+          <h2 class="work-card__title">Adaptune</h2>
+          <p class="work-card__desc">ML-driven adaptive audio
+          that responds to your environment</p>
+          <div class="work-card__meta">
+            <span class="work-card__tag">UX and Product</span>
+            <span>2024</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="project-detail.html?project=rememberita"
+         class="work-card"
+         data-tags="ux">
+        <div class="work-card__img">
+          <img src="assets/projects/rememberita/jpeg/rememberita-1.jpg"
+               alt="RemembeRita" />
+        </div>
+        <div class="work-card__body">
+          <h2 class="work-card__title">RemembeRita</h2>
+          <p class="work-card__desc">An interactive reminder
+          device for elderly users</p>
+          <div class="work-card__meta">
+            <span class="work-card__tag">UX and Product</span>
+            <span>2024</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="project-detail.html?project=lynx-2-0"
+         class="work-card"
+         data-tags="ux">
+        <div class="work-card__img">
+          <img src="assets/projects/lynx 2.0/jpeg/phone_triplemockup_HR.png"
+               alt="Lynx 2.0" />
+        </div>
+        <div class="work-card__body">
+          <h2 class="work-card__title">Lynx 2.0</h2>
+          <p class="work-card__desc">UI redesign for a
+          transport information platform</p>
+          <div class="work-card__meta">
+            <span class="work-card__tag">UX and Product</span>
+            <span>2024</span>
+          </div>
+        </div>
+      </a>
+
     </div>
   </section>
 
@@ -177,23 +234,23 @@
       <div class="phil-text-wrap">
 
         <div class="phil-phrase" data-phrase="0" data-side="right">
-          <p class="phil-text">I learn by doing.</p>
+          <p class="phil-text">I design interactions you can feel, not just use.</p>
         </div>
 
         <div class="phil-phrase" data-phrase="1" data-side="left">
-          <p class="phil-text">I grow by trying.</p>
+          <p class="phil-text">For five years I designed spaces people walked into.</p>
         </div>
 
         <div class="phil-phrase phil-phrase--stack" data-phrase="2" data-side="right">
           <div class="phil-text phil-text--stack">
-            <p class="phil-stack-line" data-line="0">Some things work.</p>
-            <p class="phil-stack-line" data-line="1">Some things don't.</p>
-            <p class="phil-stack-line" data-line="2">All of them teach.</p>
+            <p class="phil-stack-line" data-line="0">That taught me good design</p>
+            <p class="phil-stack-line" data-line="1">is something you step inside.</p>
+            <p class="phil-stack-line" data-line="2">Now I bring that instinct to screens, objects and signals.</p>
           </div>
         </div>
 
         <div class="phil-phrase" data-phrase="3" data-side="left">
-          <p class="phil-text">I get better by staying curious.</p>
+          <p class="phil-text">Let's make something worth stepping into.</p>
         </div>
 
       </div>
@@ -219,16 +276,53 @@
 
   <section id="cta" aria-label="Call to action">
     <div class="cta-inner">
-      <p class="cta-line1">Let's work together.</p>
-      <p class="cta-line2">
-        <a href="mailto:hello@nereaasensio.me" class="cta-link">Email me about an internship</a>
-      </p>
-      <p class="cta-line2" style="font-size: 0.8em; opacity: 0.6;">
-        <a href="https://www.linkedin.com/in/nerea-a-777526192/" class="cta-link"
-           target="_blank" rel="noopener">Find me on LinkedIn</a>
-      </p>
+      <p class="cta-headline">Open to opportunities,<br>conversations, and good ideas.</p>
+      <p class="cta-sub">Available for internship from July 2026</p>
+      <div class="cta-btns">
+        <a href="mailto:hello@nereaasensio.me"
+           class="cta-circle-btn">
+          <svg viewBox="0 0 140 46" fill="none"
+               xmlns="http://www.w3.org/2000/svg">
+            <path d="M12,23 C14,6 128,5 130,23
+                     C132,40 12,41 10,23"
+                  stroke="#D42B2B" stroke-width="2"
+                  fill="none" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+          </svg>
+          Email me
+        </a>
+        <a href="assets/cv/nerea_asensio_designer_cv.pdf"
+           class="cta-circle-btn" target="_blank" rel="noopener">
+          <svg viewBox="0 0 100 46" fill="none"
+               xmlns="http://www.w3.org/2000/svg">
+            <path d="M10,23 C12,6 90,5 92,23
+                     C94,40 10,41 8,23"
+                  stroke="#D42B2B" stroke-width="2"
+                  fill="none" stroke-linecap="round"
+                  stroke-linejoin="round"/>
+          </svg>
+          View CV
+        </a>
+      </div>
     </div>
   </section>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer>
+    <div class="footer-left">
+      <img src="assets/doodles/heart_doodle.png" class="footer-heart" alt="" aria-hidden="true" />
+      Made with love by Nerea
+    </div>
+    <div class="footer-center">
+      <button id="back-top" aria-label="Back to top">Back to top ↑</button>
+    </div>
+    <div class="footer-right">
+      <a href="mailto:hello@nereaasensio.me">hello@nereaasensio.me</a>
+      <a href="https://www.linkedin.com/in/nerea-a-777526192/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </footer>
 
   <!-- ══════════════════════════════════════
        JAVASCRIPT
