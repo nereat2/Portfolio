@@ -1,22 +1,3 @@
-// ─── CURSOR ───────────────────────────────────────
-const cur = document.getElementById('cur');
-let mx = 0, my = 0, cx = 0, cy = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-document.addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; });
-document.addEventListener('pointerdown', e => { mx = e.clientX; my = e.clientY; });
-(function animCur() {
-  cx += (mx - cx) * .18;
-  cy += (my - cy) * .18;
-  cur.style.left = cx + 'px';
-  cur.style.top  = cy + 'px';
-  requestAnimationFrame(animCur);
-})();
-
-document.querySelectorAll('a, button, .prow, .ftag').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
-});
-
 // ─── CUBE: INTERACTION (rotate + move) ───────────────
 (function initCube() {
   const scene  = document.getElementById('cubeScene');
@@ -221,79 +202,8 @@ window.addEventListener('scroll', () => {
   update(); // run once on load
 })();
 
-// ─── INTRO ────────────────────────────────────────
-const WORDS = [
-  { w: 'Hello!',      lang: 'English'    },
-  { w: '¡Hola!',      lang: 'Spanish'    },
-  { w: 'Ciao!',       lang: 'Italian'    },
-  { w: 'Hola!',       lang: 'Catalan'    },
-  { w: 'Bonjour!',    lang: 'French'     },
-  { w: 'Olá!',        lang: 'Portuguese' },
-  { w: 'Hej!',        lang: 'Swedish'    },
-  { w: 'こんにちは',   lang: 'Japanese'   },
-  { w: 'Merhaba!',    lang: 'Turkish'    },
-  { w: 'مرحباً',      lang: 'Arabic'     },
-];
-
-const intro  = document.getElementById('intro');
-const hword  = document.getElementById('hword');
-const hlang  = document.getElementById('hlang');
-let wi = 0, introActive = true;
 const landingParams = new URLSearchParams(window.location.search);
 const returnProject = landingParams.get('project');
-let skipIntro = sessionStorage.getItem('skipIntroOnce') === '1';
-sessionStorage.removeItem('skipIntroOnce');
-
-const hasVisited = sessionStorage.getItem('hasVisited') === '1';
-if (hasVisited) {
-  const navEntries = performance.getEntriesByType("navigation");
-  const isReload = navEntries.length > 0 && navEntries[0].type === "reload";
-  if (!isReload) {
-    skipIntro = true;
-  }
-} else {
-  sessionStorage.setItem('hasVisited', '1');
-}
-
-if (skipIntro) {
-  introActive = false;
-  intro.style.display = 'none';
-} else {
-  document.body.classList.add('intro-lock');
-}
-
-function showHello() {
-  if (!introActive) return;
-  hword.className = 'hello-word';
-  hword.textContent = WORDS[wi].w;
-  hlang.textContent = WORDS[wi].lang;
-  void hword.offsetWidth; // force reflow for transition
-  hword.classList.add('visible');
-
-  const hold = wi < 4 ? 900 : 550; // linger longer on the languages she speaks
-  setTimeout(() => {
-    hword.classList.add('fading');
-    setTimeout(() => {
-      wi++;
-      if (wi >= WORDS.length) { endIntro(); return; }
-      showHello();
-    }, 480);
-  }, hold);
-}
-
-function endIntro() {
-  introActive = false;
-  intro.classList.add('out');
-  setTimeout(() => {
-    intro.style.display = 'none';
-    document.body.classList.remove('intro-lock');
-  }, 950);
-}
-
-if (!skipIntro) {
-  setTimeout(showHello, 350);
-  intro.addEventListener('click', endIntro);
-}
 
 function focusReturnedProject() {
   const targetId = returnProject || window.location.hash.replace('#', '');
@@ -307,9 +217,7 @@ function focusReturnedProject() {
   });
 }
 
-if (skipIntro) {
-  window.addEventListener('load', focusReturnedProject, { once: true });
-}
+window.addEventListener('load', focusReturnedProject, { once: true });
 
 // ─── PAGE SURFACE ────────────────────────────────
 (function initPageSurface() {
@@ -520,9 +428,6 @@ document.querySelectorAll('.prow').forEach(row => {
   btn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-
-  btn.addEventListener('mouseenter', () => document.body.classList.add('hov'));
-  btn.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
 })();
 // ─────────────────────────────────────────────
 // IMMERSIVE WORK SECTION LOGIC
@@ -695,12 +600,6 @@ function hexToHsl(hex) {
 (function initCta() {
   const cta = document.getElementById('cta');
   if (!cta) return;
-
-  // Cursor hover for links
-  cta.querySelectorAll('.cta-link').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
-  });
 
   const obs = new IntersectionObserver(
     ([e]) => { if (e.isIntersecting) { cta.classList.add('cta-revealed'); obs.disconnect(); } },
