@@ -468,42 +468,46 @@ nav.on-dark .nav-links a::after {
   scroll-margin-top: 76px;
 }
 .work-top {
-  max-width: var(--max-w);
   width: 100%;
-  margin: 0 auto 20px;
-  padding: 0 var(--pad) 0;
+  margin: 0 0 20px;
+  padding: 0 var(--pad);
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   box-sizing: border-box;
 }
 .section-label {
-  font-size: 20px;
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 800;
   color: var(--accent);
   letter-spacing: 0;
   text-transform: none;
 }
 .view-toggle {
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-transform: none;
   background: none;
-  border: 1px solid var(--accent);
-  border-radius: var(--r-sharp);
-  padding: 6px 14px;
+  border: none;
+  padding: 0;
   cursor: pointer;
   color: var(--accent);
   font-family: var(--font);
-  transition: all 0.15s;
+  position: relative;
+  transition: transform 0.2s;
 }
-.view-toggle:hover {
+.view-toggle::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
   background: var(--accent);
-  color: #fff;
+  transition: width 0.2s;
 }
+.view-toggle:hover { transform: translateY(-2px); }
+.view-toggle:hover::after { width: 100%; }
 .work-filters {
-  max-width: var(--max-w);
-  margin: 0 auto;
   padding: 0 var(--pad) 24px;
   display: flex;
   gap: 20px;
@@ -513,8 +517,8 @@ nav.on-dark .nav-links a::after {
   background: none;
   border: none;
   color: var(--accent);
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
   padding: 0;
   font-family: var(--font);
@@ -600,7 +604,7 @@ nav.on-dark .nav-links a::after {
   z-index: 1;
 }
 .work-card__badge {
-  font-size: 13px;
+  font-size: 15px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   background: var(--accent);
@@ -637,21 +641,19 @@ nav.on-dark .nav-links a::after {
   padding: 0;
 }
 .work-card__tag {
-  font-size: 12px;
+  font-size: 14px;
   color: rgba(255, 255, 255, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.42);
-  padding: 3px 9px;
+  padding: 4px 11px;
   border-radius: var(--r-sharp);
 }
 .work-scroll.grid-view {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 24px;
   overflow: visible;
   cursor: default;
-  max-width: var(--max-w);
   width: 100%;
-  margin: 0 auto;
   padding: 0 var(--pad);
   align-items: start;
   height: auto;
@@ -691,11 +693,12 @@ nav.on-dark .nav-links a::after {
   }
 
   .section-label {
-    font-size: 18px;
+    font-size: clamp(1.5rem, 5vw, 2rem);
   }
 
   .view-toggle {
     flex: 0 0 auto;
+    font-size: 14px;
   }
 
   .work-filters {
@@ -1200,7 +1203,7 @@ section { padding: 5.5rem 2.4rem; }
 .tag-bubble {
   position: absolute;
   padding: 0.75rem 1.9rem;
-  border-radius: var(--r-sharp);
+  border-radius: 999px;
   font-size: 20px;
   font-family: var(--font-display);
   letter-spacing: .02em;

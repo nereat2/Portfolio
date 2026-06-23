@@ -344,27 +344,5 @@ window.addEventListener('load', updateAllPits, { passive: true });
   const img = document.getElementById('aboutPhoto');
   if (!img) return;
 
-  const images = [
-    'assets/who/webp/nerea-about-main.webp',
-    'assets/who/jpeg/0EE6CC74-15D5-4511-9AD6-750D167FF077.jpeg',
-    'assets/who/jpeg/IMG_8007.jpeg',
-    'assets/who/jpeg/IMG_8160.jpeg',
-    'assets/who/jpeg/IMG_8586.jpeg'
-  ];
-
-  // Preload all images up front so transitions are instant
-  images.forEach(src => { const pre = new Image(); pre.src = src; });
-
-  let current = 0;
-
-  function advance() {
-    current = (current + 1) % images.length;
-    img.style.opacity = '0';
-    setTimeout(() => {
-      img.src = images[current];
-      img.decode().then(() => { img.style.opacity = '1'; }).catch(() => { img.style.opacity = '1'; });
-    }, 700);
-  }
-
-  setInterval(advance, 4500);
+  // single static image — no slideshow needed
 })();
