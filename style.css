@@ -696,13 +696,27 @@ nav.on-dark .nav-links a::after {
     font-size: clamp(1.5rem, 5vw, 2rem);
   }
 
+  .hero-headline {
+    font-size: clamp(2.1rem, 8.5vw, 3rem);
+  }
+
   .view-toggle {
     flex: 0 0 auto;
     font-size: 14px;
   }
 
   .work-filters {
-    gap: 14px;
+    gap: 18px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .work-filters::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: 15px;
   }
 
   .work-card {
@@ -1338,6 +1352,32 @@ footer {
     brightness(84%) contrast(91%);
 }
 
+@media (max-width: 720px) {
+  footer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 14px;
+    text-align: center;
+    padding: 26px var(--pad);
+  }
+  .footer-center { order: -1; }
+  .footer-left { justify-content: center; }
+  .footer-right {
+    justify-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+  }
+
+  /* Keep the hand-drawn-ellipse buttons on a single line so the
+     text stays inside the circle. */
+  .cta-btns { gap: 18px; }
+  .cta-circle-btn {
+    white-space: nowrap;
+    padding: 16px 24px;
+    font-size: 18px;
+  }
+}
+
 /* ─────────────────────────────────────────────
    HERO DOODLES
 ───────────────────────────────────────────── */
@@ -1533,5 +1573,22 @@ footer {
 
 
 @media (max-width: 600px) {
-  .cube-scene { display: none; }
+  /* Keep the cube visible — just shrink it and tuck it into the
+     bottom-right corner, clear of the hero text and the marquee. */
+  .cube-scene {
+    width: 116px;
+    height: 116px;
+    right: 7%;
+    bottom: 78px;
+  }
+  .face-front  { transform: translateZ(58px); }
+  .face-back   { transform: rotateY(180deg) translateZ(58px); }
+  .face-right  { transform: rotateY(90deg)  translateZ(58px); }
+  .face-left   { transform: rotateY(-90deg) translateZ(58px); }
+  .face-top    { transform: rotateX(90deg)  translateZ(58px); }
+  .face-bottom { transform: rotateX(-90deg) translateZ(58px); }
+
+  /* The long "Spin the cube" tag won't fit cleanly on a phone and
+     the 3D cube reads as interactive on its own — hide it here. */
+  .cube-label { display: none; }
 }

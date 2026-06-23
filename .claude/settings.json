@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pkill -f remote-debugging-port)",
+      "Bash(pkill -f \"http.server 8099\")"
+    ]
+  }
+}
