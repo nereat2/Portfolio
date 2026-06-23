@@ -11,8 +11,10 @@
   let lastPointerX = 0, lastPointerY = 0;
   let dragDist = 0;
 
-  let autoRotate = true;
-  let autoTimer = null;
+  // Translation variables:
+  let transX = 0, transY = 0;
+  let startPointerX = 0, startPointerY = 0;
+  let startTransX = 0, startTransY = 0;
 
   function applyTransform() {
     cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
@@ -20,7 +22,6 @@
 
   (function tick() {
     if (!isDragging) {
-      if (autoRotate) rotY += 0.15;
       rotY += vRotY;
       rotX += vRotX;
       vRotY *= 0.96;
@@ -31,21 +32,28 @@
     requestAnimationFrame(tick);
   })();
 
-  function resumeAuto() {
-    clearTimeout(autoTimer);
-    autoTimer = setTimeout(() => { autoRotate = true; }, 4000);
-  }
-
   scene.addEventListener('dragstart', e => e.preventDefault());
 
   scene.addEventListener('pointerdown', e => {
     isDragging   = true;
-    autoRotate   = false;
-    clearTimeout(autoTimer);
     dragDist     = 0;
     lastPointerX = e.clientX;
     lastPointerY = e.clientY;
+    
+    // Translation setup:
+    startPointerX = e.clientX;
+    startPointerY = e.clientY;
+    startTransX = transX;
+    startTransY = transY;
+    
     vRotX = vRotY = 0;
+
+    // Hide spin tag:
+    const label = document.querySelector('.cube-label');
+    if (label) {
+      label.style.opacity = '0';
+      label.style.pointerEvents = 'none';
+    }
   });
 
   scene.addEventListener('pointermove', e => {
@@ -61,11 +69,17 @@
       }
     }
 
+    // Rotation:
     vRotY = dx * 0.55;
     vRotX = -dy * 0.55;
     rotY += vRotY;
     rotX += vRotX;
     rotX = Math.max(-75, Math.min(75, rotX));
+
+    // Translation:
+    transX = startTransX + (e.clientX - startPointerX);
+    transY = startTransY + (e.clientY - startPointerY);
+    scene.style.transform = `translate3d(${transX}px, ${transY}px, 0)`;
 
     lastPointerX = e.clientX;
     lastPointerY = e.clientY;
@@ -73,7 +87,6 @@
 
   scene.addEventListener('pointerup', e => {
     isDragging = false;
-    resumeAuto();
     if (dragDist <= 10) {
       const clickedEl = document.elementFromPoint(e.clientX, e.clientY);
       const link = clickedEl ? clickedEl.closest('.face-tap-zone') : null;
@@ -87,7 +100,6 @@
 
   scene.addEventListener('pointercancel', () => {
     isDragging = false;
-    resumeAuto();
   });
 })();
 
@@ -125,7 +137,7 @@ window.addEventListener('scroll', () => {
 // ─── HOME LINK: hero ↔ nav transition ─────────────
 (function initHomeLink() {
   const link = document.getElementById('siteHomeLink');
-  const hero = document.getElementById('home');
+  const hero = document.getElementById('hero');
   if (!link || !hero) return;
 
   function update() {
@@ -604,4 +616,64 @@ function hexToHsl(hex) {
     { threshold: 0.2 }
   );
   obs.observe(hero);
+})();
+
+// ─── ABOUT PROFILE PHOTO CYCLE ───────────────────
+(function initPhotoCycle() {
+  const container = document.getElementById('aboutPhotoContainer');
+  if (!container) return;
+
+  const images = [
+    'assets/who/webp/nerea-about-main.webp',
+    'assets/who/jpeg/0EE6CC74-15D5-4511-9AD6-750D167FF077.jpeg',
+    'assets/who/jpeg/IMG_8007.jpeg',
+    'assets/who/jpeg/IMG_8160.jpeg',
+    'assets/who/jpeg/IMG_8586.jpeg'
+  ];
+
+  // Preload images
+  images.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+
+  const imgElements = container.querySelectorAll('img');
+  if (imgElements.length < 2) return;
+
+  let currentIndex = 0;
+  let intervalId = null;
+  let activeImgIndex = 0; // Index of the active img element
+
+  function showNextImage() {
+    const nextIndex = (currentIndex + 1) % images.length;
+    const nextSrc = images[nextIndex];
+
+    const inactiveImgIndex = 1 - activeImgIndex;
+    const activeImg = imgElements[activeImgIndex];
+    const inactiveImg = imgElements[inactiveImgIndex];
+
+    inactiveImg.src = nextSrc;
+    inactiveImg.style.opacity = '1';
+    activeImg.style.opacity = '0';
+
+    currentIndex = nextIndex;
+    activeImgIndex = inactiveImgIndex;
+  }
+
+  function startCycle() {
+    if (intervalId) return;
+    intervalId = setInterval(showNextImage, 4000);
+  }
+
+  function stopCycle() {
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
+    }
+  }
+
+  container.addEventListener('mouseenter', stopCycle);
+  container.addEventListener('mouseleave', startCycle);
+
+  startCycle();
 })();

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="about-page-html">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,19 +12,19 @@
 
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <canvas id="fluidCanvas" aria-hidden="true"></canvas>
-  <div id="cur" aria-hidden="true"></div>
+<body class="about-page">
 
+  <!-- ══════════════════════════════════════
+       NAV (matches index.html)
+  ══════════════════════════════════════ -->
   <nav id="nav" role="navigation" aria-label="Main navigation">
     <ul class="nav-links">
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="mailto:hello@nereaasensio.me">Email me</a></li>
     </ul>
   </nav>
 
-  <a href="index.html#home" id="siteHomeLink" class="is-nav" aria-label="Go home">
-    <span class="label-hero" aria-hidden="true">Hi, I'm Nerea!</span>
-    <span class="label-nav"  aria-hidden="false">Home</span>
-  </a>
+  <a href="index.html" id="siteHomeLink" class="nav-brand" aria-label="Home">Home</a>
 
   <main>
     <section class="about-grid" aria-label="About Nerea">
@@ -34,6 +34,7 @@
           <span class="r-break">Student.</span>
           <span class="r-break">Work in progress.</span>
         </h1>
+        <p class="about-subtitle">Story-Driven &middot; Experience-First &middot; Physical and Digital</p>
         <p class="about-body">Master's student in Interaction Design at SUPSI, Switzerland. I came from interior and exhibition design field, where I worked for 5 years after my degree and which taught me that design is something you inhabit, not just use.</p>
         <p class="about-body">I care about things that connect people, create feelings, and leave a real impact on the people using them and the world around them.</p>
         <p class="about-body">Curious, adaptable, and with a soft spot for the details that make all the difference.</p>
@@ -44,8 +45,9 @@
         </div>
       </div>
 
-      <div class="about-photo">
-        <img src="assets/who/jpeg/0EE6CC74-15D5-4511-9AD6-750D167FF077.jpeg" alt="Nerea Asensio" />
+      <div class="about-photo" id="aboutPhotoContainer">
+        <img src="assets/who/webp/nerea-about-main.webp" alt="Nerea Asensio" />
+        <img src="" alt="Nerea Asensio" style="opacity: 0;" />
       </div>
     </section>
 
@@ -59,6 +61,10 @@
       <div class="pit-panels">
         <div class="pit-panel active" id="pit-skills">
           <div class="pit-inner">
+            <div class="skill-groups-header">
+              <h3 class="skill-group-title">Design &amp; Research</h3>
+              <h3 class="skill-group-title">Fabrication &amp; Tools</h3>
+            </div>
             <div class="tag-bubble" data-pit="skills">Interaction Design</div>
             <div class="tag-bubble" data-pit="skills">UX Research</div>
             <div class="tag-bubble" data-pit="skills">Prototyping</div>
@@ -76,6 +82,12 @@
             <div class="tag-bubble" data-pit="skills">V-Ray</div>
             <div class="tag-bubble" data-pit="skills">GitHub</div>
             <div class="tag-bubble" data-pit="skills">Notion</div>
+            <div class="tag-bubble" data-pit="skills">Laser Cutting</div>
+            <div class="tag-bubble" data-pit="skills">3D Printing</div>
+            <div class="tag-bubble" data-pit="skills">3D Scanning</div>
+            <div class="tag-bubble" data-pit="skills">Vinyl Cutting</div>
+            <div class="tag-bubble" data-pit="skills">TouchDesigner</div>
+            <div class="tag-bubble" data-pit="skills">N8N</div>
             <div class="tag-bubble tag-bubble--emoji" data-pit="skills">✏️</div>
             <div class="tag-bubble tag-bubble--emoji" data-pit="skills">🖥️</div>
             <div class="tag-bubble tag-bubble--emoji" data-pit="skills">🔧</div>
@@ -136,22 +148,61 @@
       </div>
     </section>
 
+    <!-- ══════════════════════════════════════
+         CTA (matches index.html)
+    ══════════════════════════════════════ -->
     <section id="cta" aria-label="Call to action">
       <div class="cta-inner">
-        <p class="cta-line1">Let's work together.</p>
-        <p class="cta-line2">
-          <a href="mailto:hello@nereaasensio.me" class="cta-link">Email me about an internship</a>
-        </p>
-        <p class="cta-line2" style="font-size: 0.8em; opacity: 0.6;">
-          <a href="https://www.linkedin.com/in/nerea-a-777526192/" class="cta-link"
-             target="_blank" rel="noopener">Find me on LinkedIn</a>
-        </p>
+        <p class="cta-headline">Open to opportunities,<br>conversations, and good ideas.</p>
+        <p class="cta-sub">Available for internship from July 2026</p>
+        <div class="cta-btns">
+          <a href="mailto:hello@nereaasensio.me"
+             class="cta-circle-btn">
+            <svg viewBox="0 0 140 46" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path d="M12,23 C14,6 128,5 130,23
+                       C132,40 12,41 10,23"
+                    stroke="#D42B2B" stroke-width="2"
+                    fill="none" stroke-linecap="round"
+                    stroke-linejoin="round"/>
+            </svg>
+            Email me
+          </a>
+          <a href="assets/cv/nerea_asensio_designer_cv.pdf"
+             class="cta-circle-btn" target="_blank" rel="noopener">
+            <svg viewBox="0 0 100 46" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path d="M10,23 C12,6 90,5 92,23
+                       C94,40 10,41 8,23"
+                    stroke="#D42B2B" stroke-width="2"
+                    fill="none" stroke-linecap="round"
+                    stroke-linejoin="round"/>
+            </svg>
+            View CV
+          </a>
+        </div>
       </div>
     </section>
   </main>
 
-  <button id="back-top" aria-label="Back to top">Nowhere to go but up ↑↑</button>
+  <!-- ══════════════════════════════════════
+       FOOTER (matches index.html)
+  ══════════════════════════════════════ -->
+  <footer>
+    <div class="footer-left">
+      <img src="assets/doodles/heart_doodle.png" class="footer-heart" alt="" aria-hidden="true" />
+      Made with love by Nerea
+    </div>
+    <div class="footer-center">
+      <button id="back-top" aria-label="Back to top">Back to top ↑</button>
+    </div>
+    <div class="footer-right">
+      <a href="mailto:hello@nereaasensio.me">hello@nereaasensio.me</a>
+      <a href="https://www.linkedin.com/in/nerea-a-777526192/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </footer>
 
   <script src="about.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>

@@ -1,79 +1,3 @@
-// ─── CURSOR ───────────────────────────────────────
-const cur = document.getElementById('cur');
-let mx = 0, my = 0, cx = 0, cy = 0;
-
-document.addEventListener('mousemove', e => {
-  mx = e.clientX;
-  my = e.clientY;
-});
-
-document.addEventListener('pointermove', e => {
-  mx = e.clientX;
-  my = e.clientY;
-});
-
-document.addEventListener('pointerdown', e => {
-  mx = e.clientX;
-  my = e.clientY;
-});
-
-(function animCur() {
-  cx += (mx - cx) * 0.18;
-  cy += (my - cy) * 0.18;
-  if (cur) {
-    cur.style.left = `${cx}px`;
-    cur.style.top = `${cy}px`;
-  }
-  requestAnimationFrame(animCur);
-})();
-
-document.querySelectorAll('a, button, .nav-logo, .tag-bubble').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
-});
-
-document.querySelectorAll('.nav-links a').forEach(link => {
-  const label = link.textContent;
-  link.textContent = '';
-  const word = document.createElement('span');
-  word.className = 'nav-label';
-  Array.from(label).forEach((ch, i) => {
-    const span = document.createElement('span');
-    span.className = 'nav-char';
-    span.style.setProperty('--i', i);
-    span.textContent = ch === ' ' ? '\u00A0' : ch;
-    word.appendChild(span);
-  });
-  link.appendChild(word);
-});
-
-// ─── PAGE SURFACE ────────────────────────────────
-(function initAboutPageSurface() {
-  const OFF_WHITE = '#F5F5F0';
-  const BLACK = '#000000';
-
-  document.body.style.background = OFF_WHITE;
-  document.documentElement.style.setProperty('--cream', OFF_WHITE);
-  document.documentElement.style.setProperty('--cream2', OFF_WHITE);
-  document.documentElement.style.setProperty('--ink', BLACK);
-  document.documentElement.style.setProperty('--ink2', 'rgba(0,0,0,0.78)');
-  document.documentElement.style.setProperty('--muted', 'rgba(0,0,0,0.72)');
-  document.documentElement.style.setProperty('--border', 'rgba(0,0,0,0.12)');
-  document.documentElement.style.setProperty('--light', OFF_WHITE);
-
-  const fluidCanvas = document.getElementById('fluidCanvas');
-  if (fluidCanvas) fluidCanvas.style.display = 'none';
-
-  document.querySelectorAll('.nav-links a, .about-q, .about-body, .pit-tab, .cta-line1, .cta-line2, .cta-link, #back-top').forEach(el => {
-    if (el) el.style.color = BLACK;
-  });
-  document.querySelectorAll('.cta-link').forEach(el => {
-    el.style.borderBottomColor = BLACK;
-  });
-  const navInitials = document.getElementById('nl-initials');
-  if (navInitials) navInitials.style.color = BLACK;
-})();
-
 // ─── NAV SCROLL BORDER ────────────────────────────
 const navEl = document.getElementById('nav');
 window.addEventListener('scroll', () => {
@@ -109,7 +33,8 @@ function applyBubblePosition(bubble) {
 
 function clampBubbleToArena(bubble, pit) {
   bubble.x = clamp(bubble.x, 0, Math.max(0, pit.arenaW - bubble.w));
-  bubble.y = clamp(bubble.y, 0, Math.max(0, pit.arenaH - bubble.h));
+  const minY = pit.panel.id === 'pit-skills' ? 75 : 0;
+  bubble.y = clamp(bubble.y, minY, Math.max(minY, pit.arenaH - bubble.h));
 }
 
 function updatePitBounds(pit) {
@@ -250,7 +175,8 @@ function initPit(panelEl) {
     const w = el.offsetWidth;
     const h = el.offsetHeight;
     const x = Math.random() * Math.max(0, pit.arenaW - w);
-    const y = -(h + Math.random() * Math.min(pit.arenaH * 0.18, 140));
+    const minY = pit.panel.id === 'pit-skills' ? 75 : 0;
+    const y = minY + Math.random() * Math.max(0, Math.min(pit.arenaH * 0.18, 100));
 
     const bubble = {
       el,
@@ -369,11 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const cta = document.getElementById('cta');
   if (!cta) return;
 
-  cta.querySelectorAll('.cta-link').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
-  });
-
   const obs = new IntersectionObserver(
     ([entry]) => {
       if (entry.isIntersecting) {
@@ -403,12 +324,9 @@ document.addEventListener('DOMContentLoaded', () => {
   btn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-
-  btn.addEventListener('mouseenter', () => document.body.classList.add('hov'));
-  btn.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
 })();
 
-window.addEventListener('resize', () => {
+function updateAllPits() {
   pits.forEach(pit => {
     updatePitBounds(pit);
     pit.bubbles.forEach(bubble => {
@@ -416,4 +334,7 @@ window.addEventListener('resize', () => {
       applyBubblePosition(bubble);
     });
   });
-}, { passive: true });
+}
+
+window.addEventListener('resize', updateAllPits, { passive: true });
+window.addEventListener('load', updateAllPits, { passive: true });
