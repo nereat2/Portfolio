@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
   <style>
     @font-face {
       font-family: "Wix Madefor Text";
@@ -59,9 +63,14 @@
 
     * { box-sizing: border-box; }
 
+    /* disable page-level scroll snap from style.css */
     html {
       scroll-behavior: smooth;
+      scroll-snap-type: none !important;
     }
+
+    /* old back-link replaced by proper nav */
+    .back-link { display: none !important; }
 
     body {
       margin: 0;
@@ -213,7 +222,7 @@
       font-size: 0.78rem;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--accent);
     }
 
     .detail-title {
@@ -222,6 +231,7 @@
       font-size: clamp(2.6rem, 7vw, 7rem);
       line-height: 0.92;
       max-width: 12ch;
+      color: var(--accent);
     }
 
     .abstract {
@@ -229,7 +239,7 @@
       max-width: calc(100vw - 4rem);
       font-size: clamp(1.05rem, 1.8vw, 1.28rem);
       line-height: 1.85;
-      color: var(--muted);
+      color: var(--ink);
       transition: color .45s ease;
     }
 
@@ -274,14 +284,24 @@
       font-size: 0.78rem;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--accent);
     }
 
     .meta-value {
       margin: 0;
-      color: var(--fg);
+      color: var(--ink);
       line-height: 1.8;
       transition: color .45s ease;
+    }
+
+    /* sidebar metadata (type, architecture, credits) → muted */
+    .detail-side-meta .meta-value {
+      color: var(--muted);
+    }
+
+    /* process section body text (challenge, approach, role) → ink */
+    #detailProcessMeta .meta-value {
+      color: var(--ink);
     }
 
     .detail-gallery {
@@ -459,101 +479,21 @@
       background: rgba(0, 0, 0, 0.22);
     }
 
-    .detail-footer-actions {
-      position: fixed;
-      left: 2rem;
-      right: 2rem;
-      bottom: 2rem;
-      z-index: 30;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      pointer-events: none;
-    }
-
-    .footer-action {
-      pointer-events: auto;
-      background: none;
-      border: none;
-      padding: 0;
-      font: 400 11px/1 var(--font-body);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      cursor: pointer;
-      transition: color .2s ease, transform .25s ease;
-    }
-
-    .footer-action:hover,
-    .footer-action:focus-visible {
-      color: var(--fg);
-      transform: scale(1.14);
-      outline: none;
-    }
-
-    #detailBackTop {
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(6px) scale(1);
-      transition: opacity .35s ease, transform .35s ease, color .2s;
-    }
-
-    #detailBackTop.visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0) scale(1);
-    }
-
-    #detailBackTop.visible:hover,
-    #detailBackTop.visible:focus-visible {
-      transform: translateY(0) scale(1.14);
-    }
-
     #nextProjectLink {
-      font-size: 24px;
-      line-height: 1;
-      letter-spacing: 0.05em;
-      text-transform: none;
       font-family: var(--font-body);
+      font-size: 15px;
       font-weight: 400;
       color: var(--muted);
       text-decoration: none;
       display: inline-block;
-      position: relative;
-      transform-origin: center;
-      transition:
-        color .25s ease,
-        opacity .25s ease,
-        transform .35s var(--ease-out-expo),
-        text-shadow .35s ease;
-    }
-
-    #nextProjectLink::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -0.22em;
-      height: 1px;
-      background: currentColor;
-      transform: scaleX(0);
-      transform-origin: right;
-      transition: transform .35s var(--ease-out-expo);
+      transition: color .2s ease, transform .2s ease;
     }
 
     #nextProjectLink:hover,
     #nextProjectLink:focus-visible {
-      color: var(--fg);
-      opacity: 1;
+      color: var(--accent);
       transform: translateY(-2px);
-      text-shadow: 0 0 18px rgba(0, 0, 0, 0.08);
       outline: none;
-    }
-
-    #nextProjectLink:hover::after,
-    #nextProjectLink:focus-visible::after {
-      transform: scaleX(1);
-      transform-origin: left;
     }
 
     @media (max-width: 960px) {
@@ -643,14 +583,9 @@
         left: 1.5rem;
       }
 
-      .detail-footer-actions {
-        left: 1.5rem;
-        right: 1.5rem;
-        bottom: 1.5rem;
-      }
-
       #nextProjectLink {
         font-size: 13px;
+        transform: none;
       }
     }
     .detail-visit-btn {
@@ -666,7 +601,17 @@
   </style>
 </head>
 <body>
-  <a class="back-link" id="backToWorkLink" href="./index.html">Home</a>
+  <nav id="nav" role="navigation" aria-label="Main navigation">
+    <ul class="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="mailto:hello@nereaasensio.me">Email me</a></li>
+    </ul>
+  </nav>
+
+  <a href="index.html" id="siteHomeLink" class="nav-brand is-nav" aria-label="Nerea Asensio">Nerea Asensio</a>
+
+  <!-- kept hidden; JS references this id to set href and sessionStorage -->
+  <a class="back-link" id="backToWorkLink" href="./index.html" aria-hidden="true" tabindex="-1">Home</a>
 
   <main class="detail-page">
     <section class="detail-hero">
@@ -735,10 +680,54 @@
     </section>
   </main>
 
-  <div class="detail-footer-actions">
-    <button class="footer-action" id="detailBackTop" type="button">Nowhere to go but up ↑↑</button>
-    <a class="footer-action" id="nextProjectLink" href="./index.html#work">Next project</a>
-  </div>
+  <!-- ══════════════════════════════════════
+       CTA
+  ══════════════════════════════════════ -->
+  <section id="cta" aria-label="Call to action">
+    <div class="cta-inner">
+      <p class="cta-headline">Open to opportunities,<br>conversations, and good ideas.</p>
+      <p class="cta-sub">Available for internship from July 2026</p>
+      <div class="cta-btns">
+        <a href="mailto:hello@nereaasensio.me" class="cta-circle-btn">
+          <svg viewBox="0 0 140 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12,23 C14,6 128,5 130,23 C132,40 12,41 10,23"
+                  stroke="#D42B2B" stroke-width="2" fill="none"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Email me
+        </a>
+        <a href="assets/cv/nerea_asensio_designer_cv.pdf"
+           class="cta-circle-btn" target="_blank" rel="noopener">
+          <svg viewBox="0 0 100 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10,23 C12,6 90,5 92,23 C94,40 10,41 8,23"
+                  stroke="#D42B2B" stroke-width="2" fill="none"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          View CV
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer>
+    <div class="footer-left">
+      <img src="assets/doodles/heart_doodle.png" class="footer-heart" alt="" aria-hidden="true" />
+      Made with love by Nerea
+    </div>
+    <div class="footer-center">
+      <button id="back-top" aria-label="Back to top"
+              onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</button>
+    </div>
+    <div class="footer-right">
+      <a class="footer-action" id="nextProjectLink" href="./index.html#work">Next project →</a>
+    </div>
+  </footer>
+
+  <!-- hidden: JS references these IDs for scroll-triggered behaviour -->
+  <button id="detailBackTop" type="button" aria-hidden="true" tabindex="-1" style="display:none"></button>
 
   <script>
     const PROJECTS = {
