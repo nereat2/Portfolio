@@ -1,3 +1,121 @@
+// ─── CUBE: INTERACTION (rotate + drag) ───────────────
+(function initCube() {
+  const scene = document.getElementById('cubeScene');
+  const cube  = document.getElementById('cube');
+  if (!scene || !cube) return;
+
+  let rotX = -18, rotY = 28;
+  let vRotX = 0, vRotY = 0;
+
+  let isDragging = false;
+  let lastPointerX = 0, lastPointerY = 0;
+  let dragDist = 0;
+
+  let autoRotate = true;
+  let autoTimer = null;
+
+  function applyTransform() {
+    cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+  }
+
+  (function tick() {
+    if (!isDragging) {
+      if (autoRotate) rotY += 0.15;
+      rotY += vRotY;
+      rotX += vRotX;
+      vRotY *= 0.96;
+      vRotX *= 0.96;
+      rotX = Math.max(-75, Math.min(75, rotX));
+    }
+    applyTransform();
+    requestAnimationFrame(tick);
+  })();
+
+  function resumeAuto() {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(() => { autoRotate = true; }, 4000);
+  }
+
+  scene.addEventListener('dragstart', e => e.preventDefault());
+
+  scene.addEventListener('pointerdown', e => {
+    isDragging   = true;
+    autoRotate   = false;
+    clearTimeout(autoTimer);
+    dragDist     = 0;
+    lastPointerX = e.clientX;
+    lastPointerY = e.clientY;
+    vRotX = vRotY = 0;
+  });
+
+  scene.addEventListener('pointermove', e => {
+    if (!isDragging) return;
+    const dx = e.clientX - lastPointerX;
+    const dy = e.clientY - lastPointerY;
+    dragDist += Math.abs(dx) + Math.abs(dy);
+
+    if (dragDist > 10) {
+      e.preventDefault();
+      if (scene.hasPointerCapture && !scene.hasPointerCapture(e.pointerId)) {
+        try { scene.setPointerCapture(e.pointerId); } catch(err) {}
+      }
+    }
+
+    vRotY = dx * 0.55;
+    vRotX = -dy * 0.55;
+    rotY += vRotY;
+    rotX += vRotX;
+    rotX = Math.max(-75, Math.min(75, rotX));
+
+    lastPointerX = e.clientX;
+    lastPointerY = e.clientY;
+  });
+
+  scene.addEventListener('pointerup', e => {
+    isDragging = false;
+    resumeAuto();
+    if (dragDist <= 10) {
+      const clickedEl = document.elementFromPoint(e.clientX, e.clientY);
+      const link = clickedEl ? clickedEl.closest('.face-tap-zone') : null;
+      if (link) { window.location.href = link.href; return; }
+    } else {
+      const links = scene.querySelectorAll('.face-tap-zone');
+      links.forEach(l => { l.style.pointerEvents = 'none'; });
+      setTimeout(() => { links.forEach(l => { l.style.pointerEvents = ''; }); }, 200);
+    }
+  });
+
+  scene.addEventListener('pointercancel', () => {
+    isDragging = false;
+    resumeAuto();
+  });
+})();
+
+// ─── CUBE: STICKER CROPS FROM GRID PNG ───────────
+const FACE_IMAGES = {
+  'face-front':  "assets/projects/human loci/jpeg/humanloci-grid.png",
+  'face-back':   "assets/projects/elen/jpeg/elen-grid.png",
+  'face-right':  "assets/projects/adaptune/jpeg/adaptune-grid.png",
+  'face-left':   "assets/projects/meeting pond/jpeg/meetingpond-grid.png",
+  'face-top':    "assets/projects/philoxenia/philoxenia-grid.png",
+  'face-bottom': "assets/projects/financial planning hub/financialhub-grid.png"
+};
+
+const POS = ['0% 0%','50% 0%','100% 0%',
+             '0% 50%','50% 50%','100% 50%',
+             '0% 100%','50% 100%','100% 100%'];
+
+document.querySelectorAll('.face').forEach(face => {
+  const key = Array.from(face.classList).find(c => c.startsWith('face-') && c !== 'face');
+  const img = FACE_IMAGES[key];
+  if (!img) return;
+  face.querySelectorAll('.sticker').forEach((sticker, i) => {
+    sticker.style.backgroundImage    = `url('${img}')`;
+    sticker.style.backgroundPosition = POS[i];
+    sticker.style.backgroundSize     = '300% 300%';
+  });
+});
+
 // ─── NAV SCROLL BORDER ────────────────────────────
 const navEl = document.getElementById('nav');
 window.addEventListener('scroll', () => {
