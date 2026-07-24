@@ -1341,6 +1341,11 @@ footer {
   text-decoration: none;
 }
 .footer-right a:hover { color: var(--accent); }
+.footer-left a {
+  color: var(--muted);
+  text-decoration: none;
+}
+.footer-left a:hover { color: var(--accent); }
 .footer-heart {
   width: 16px;
   height: 16px;

@@ -105,12 +105,12 @@
 
 // ─── CUBE: STICKER CROPS FROM GRID PNG ───────────
 const FACE_IMAGES = {
-  'face-front':  "assets/projects/human loci/jpeg/humanloci-grid.png",
-  'face-back':   "assets/projects/elen/jpeg/elen-grid.png",
-  'face-right':  "assets/projects/adaptune/jpeg/adaptune-grid.png",
-  'face-left':   "assets/projects/meeting pond/jpeg/meetingpond-grid.png",
-  'face-top':    "assets/projects/philoxenia/philoxenia-grid.png",
-  'face-bottom': "assets/projects/financial planning hub/financialhub-grid.png"
+  'face-front':  "assets/projects/human loci/webp/humanloci-grid.webp",
+  'face-back':   "assets/projects/elen/webp/elen-grid.webp",
+  'face-right':  "assets/projects/adaptune/webp/adaptune-grid.webp",
+  'face-left':   "assets/projects/meeting pond/webp/meetingpond-grid.webp",
+  'face-top':    "assets/projects/philoxenia/webp/philoxenia-grid.webp",
+  'face-bottom': "assets/projects/financial planning hub/webp/financialhub-grid.webp"
 };
 
 const POS = ['0% 0%','50% 0%','100% 0%',
@@ -625,10 +625,10 @@ function hexToHsl(hex) {
 
   const images = [
     'assets/who/webp/nerea-about-main.webp',
-    'assets/who/jpeg/0EE6CC74-15D5-4511-9AD6-750D167FF077.jpeg',
-    'assets/who/jpeg/IMG_8007.jpeg',
-    'assets/who/jpeg/IMG_8160.jpeg',
-    'assets/who/jpeg/IMG_8586.jpeg'
+    'assets/who/webp/0EE6CC74-15D5-4511-9AD6-750D167FF077.webp',
+    'assets/who/webp/IMG_8007.webp',
+    'assets/who/webp/IMG_8160.webp',
+    'assets/who/webp/IMG_8586.webp'
   ];
 
   // Preload images
