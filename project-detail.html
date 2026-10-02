@@ -304,6 +304,31 @@
       color: var(--ink);
     }
 
+    .meta-list {
+      margin: 0;
+      padding-left: 1.1em;
+      list-style: disc;
+    }
+    .meta-list li {
+      margin-bottom: 0.6em;
+    }
+    .meta-list li:last-child {
+      margin-bottom: 0;
+    }
+    .meta-value a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .meta-value a:hover {
+      opacity: 1;
+    }
+    .meta-value p + p {
+      margin-top: 0.9em;
+    }
+
     .detail-gallery {
       position: relative;
       z-index: 2;
@@ -598,6 +623,141 @@
       transition: opacity 0.2s;
     }
     .detail-visit-btn:hover { opacity: 1; }
+
+    /* ── Story layout: opt-in via project.story; other projects keep the hero + gallery layout ── */
+    body.story-mode .detail-hero,
+    body.story-mode .detail-gallery { display: none; }
+
+    .story {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 3rem;
+      align-items: start;
+      padding: 7rem 2rem 6rem;
+    }
+    .story[hidden] { display: none; }
+
+    .story-side {
+      position: sticky;
+      top: 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+    .story-side .meta-block { padding: 0.8rem 0 0; }
+    .story-side .meta-block:first-child { border-top: 0; padding: 0; }
+    .story-side .meta-label { font-size: 0.68rem; margin-bottom: 0.5rem; }
+    .story-side .meta-value { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+    .story-side .meta-value.tags { font-weight: 500; color: var(--ink); }
+    .story-side .meta-list { list-style: none; padding: 0; }
+    .story-side .meta-list li { margin-bottom: 0.3em; }
+
+    .story-main { min-width: 0; }
+    .story-main .detail-title { max-width: none; font-size: clamp(2.6rem, 5.2vw, 4.8rem); line-height: 0.98; margin-bottom: 1.6rem; }
+    .story-main .abstract { max-width: none; font-size: 1.4rem; line-height: 1.5; }
+    .story-main .abstract p + p { margin-top: 1.1rem; }
+
+    .story-flow {
+      margin-top: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .story-text { padding: 0; }
+    /* label row with a hairline running to the edge of the column */
+    .story-text > .meta-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .story-text > .meta-label::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    /* consecutive text sections sit closer together than text and images */
+    .story-text + .story-text { margin-top: -1rem; }
+    .story-text .meta-value {
+      font-size: 1.15rem;
+      line-height: 1.65;
+    }
+    /* second level: a lead paragraph, then softer body text with bolder run-in heads */
+    .story-text .meta-value p { color: var(--muted); }
+    .story-text .meta-value p.lead {
+      font-size: 1.5rem;
+      line-height: 1.4;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 1.1rem;
+    }
+    .story-text .meta-value strong { font-weight: 600; color: var(--ink); }
+    .story-text .meta-list.meta-list--rows { counter-reset: none; }
+    .story-text .meta-list.meta-list--rows li {
+      display: block;
+      margin: 0;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .story-text .meta-list.meta-list--rows li:first-child { padding-top: 0; }
+    .story-text .meta-list.meta-list--rows li:last-child { border-bottom: 0; }
+    .story-text .meta-list.meta-list--rows li::before { content: none; }
+    .story-text .meta-list { list-style: none; padding: 0; counter-reset: step; }
+    .story-text .meta-list li {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 2.6rem minmax(0, 1fr);
+      margin-bottom: 0.7em;
+    }
+    .story-text .meta-list li::before {
+      content: counter(step, decimal-leading-zero);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      padding-top: 0.38em;
+      color: var(--accent);
+    }
+    .story-text .meta-value p + p { margin-top: 1em; }
+
+    .story-figure { margin: 0; }
+    .story-figure img,
+    .story-figure video {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 16px 60px rgba(0, 0, 0, 0.12);
+    }
+    .story-video {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 16px 60px rgba(0, 0, 0, 0.12);
+    }
+    .story-video:hover .video-controls,
+    .story-video:focus-within .video-controls {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .story-figure figcaption {
+      margin-top: 0.7rem;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    @media (max-width: 960px) {
+      .story {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 6rem 1.5rem 4rem;
+      }
+      .story-side { position: static; order: 2; }
+    }
   </style>
 </head>
 <body>
@@ -643,13 +803,29 @@
                 <p class="meta-label">Challenge</p>
                 <p class="meta-value" id="detailChallenge"></p>
               </section>
+              <section class="meta-block" id="detailProcessBlock" hidden>
+                <p class="meta-label">Process</p>
+                <div class="meta-value" id="detailProcess"></div>
+              </section>
               <section class="meta-block" id="detailApproachBlock">
                 <p class="meta-label">Approach</p>
-                <p class="meta-value" id="detailApproach"></p>
+                <div class="meta-value" id="detailApproach"></div>
               </section>
               <section class="meta-block" id="detailRoleBlock">
                 <p class="meta-label">My Role</p>
                 <p class="meta-value" id="detailRole"></p>
+              </section>
+              <section class="meta-block" id="detailOutcomeBlock" hidden>
+                <p class="meta-label">Outcome</p>
+                <p class="meta-value" id="detailOutcome"></p>
+              </section>
+              <section class="meta-block" id="detailReflectionBlock" hidden>
+                <p class="meta-label">Reflection</p>
+                <p class="meta-value" id="detailReflection"></p>
+              </section>
+              <section class="meta-block" id="detailResourcesBlock" hidden>
+                <p class="meta-label">Resources</p>
+                <div class="meta-value" id="detailResources"></div>
               </section>
             </div>
             <div id="detailVisit" hidden>
@@ -674,6 +850,8 @@
         </div>
       </div>
     </section>
+
+    <section class="story" id="story" hidden></section>
 
     <section class="detail-gallery">
       <div class="gallery-list" id="galleryList"></div>
@@ -952,6 +1130,75 @@
         images: [
           { label: "Philo & Xeny Platform", bg: 'center / cover no-repeat url("assets/projects/philoxenia/webp/philoxenia-main1.webp")' }
         ]
+      },
+      "aura-of-words": {
+        title: "An Aura of Words",
+        eyebrow: "Citizen language, visualized",
+        abstract: `<p>An Aura of Words turns thousands of Google Reviews of five Lugano parks into a living portrait. Every review is broken down word by word into six semantic lenses, feeling, senses, action, social context, infrastructure, and friction, then blended into a colour aura unique to each park. The interface ends by asking the only question that matters: does this aura match how you see this park?</p>`,
+        challenge: `<p>Official records describe a park by what's physically there, planning documents, maintenance logs, facility counts. They say almost nothing about how people actually feel in a place.</p><p>We started from the opposite premise: the language people use in a review, written voluntarily right after a visit, holds a more honest portrait than any official record ever could. The hard part was that this language was vast, messy, and scattered across hundreds of reviews with no shared structure. Making it legible without flattening what makes it valuable, its contradictions, its bias, its feeling, was the real design problem.</p>`,
+        process: [
+          "Started from five provisional categories, reasoned out before the full dataset existed",
+          "Read 100 real reviews to test them, then validated the set against the complete corpus",
+          "Found a gap the first five didn't cover: people kept naming physical features, benches, paths, playgrounds, in a register that wasn't sensory or emotional, so a sixth category, Infrastructure and Amenities, was added because the data asked for it",
+          "Built a hand curated lexicon per category, matched word by word across every review with boundary aware matching, so a phrase like \"not crowded\" couldn't get miscaught as \"crowded\"",
+          "Tracked up to seven co-occurring terms per word occurrence, so the encoding captures which feelings and features cluster together in the same breath, not just which category wins overall",
+          "Got hands-on exposure to the team's review scraping pipeline, Python and Playwright against Google Maps, a first real introduction to structured data collection"
+        ],
+        approach: `<p><strong>Small data over big data.</strong> The brief's provocation was to distrust the instinct to reach for the biggest dataset available. A Google review is small data: personal, voluntary, unpolished, and more honest for it.</p>
+          <p><strong>A living lexicon, not a fixed rubric.</strong> Categories were built from the reviews themselves and revised when the data pushed back, not decided in advance and forced onto the text.</p>
+          <p><strong>Colour as the primary language.</strong> Each category keeps one consistent colour across the whole interface, so a reader recognises a theme on sight, no legend required until they want one.</p>
+          <p><strong>A guided arrival, not a dashboard.</strong> The interface opens on the title over a drift of real, scraped review snippets floating in space, before anything is explained. From there it moves into the framing and the six categories, then a methodology moment where a single review is coded live in front of you, word by word, before opening out to the map of all five parks, a per-park word network, a side-by-side comparison stripped down to colour alone, and finally a prompt that classifies a visitor's own words the same way, live. The order is deliberate: feel the method once on a single review, then trust the pattern at scale.</p>`,
+        role: [
+          "Structure and front-end build of the scrollytelling one-pager, with Jérémy Martin on the scroll animations",
+          "Aesthetic direction, tone, and colour palette",
+          "Visual design of the aura blobs",
+          "Semantic framework and category validation",
+          "Editorial direction of the interface copy",
+          "Hands-on exposure to the review-scraping pipeline"
+        ],
+        outcome: `<p>A one-page interface in a minimal, warm style. It brings the colours of each aura's characteristics into the explanation of the methodology at the very start, so the problem and the solution are framed with the user from the first scroll. There is little text: the piece is more visual than anything else.</p>
+          <p>The map is interactive and makes you want to explore. The auras feel light and fluffy, something truly ethereal and emotional, which is exactly what we wanted to convey by reading each review this way.</p>
+          <p>The final piece covers five parks and over 3,400 reviewed words, from 1,620 for Parco Ciani down to 65 for Parco Lambertenghi. All five auras share emotional as their dominant lens, so what tells the parks apart lives in the secondary colours.</p>`,
+        reflection: `<p>I learned how big data is created, and how many small types of data surround us without us even realising. Working with real comments from real people also showed me how hard it can be to filter and tell data apart, because so much depends on the tone and intention of whoever wrote it. And this kind of data is never scientific, so it shouldn't be treated as if it were.</p>
+          <p>The part I would push furthest is the end of the experience. The brief asked for something that opens a real community debate, but the final step only lets each visitor add their own words to a park's portrait, one at a time. They never see or respond to what other people wrote. A next version would bring that conversation into the interface, letting people compare how they see a park with how others do.</p>`,
+        resources: [
+          `<a href="https://jerem-marti.github.io/MAInD-Making_Use_of_Data-2026-Lugano_Parks/" target="_blank" rel="noopener">Live visualisation</a>`,
+          `<a href="https://github.com/jerem-marti/MAInD-Making_Use_of_Data-2026-Lugano_Parks" target="_blank" rel="noopener">GitHub repository</a>`
+        ],
+        visitUrl: "https://jerem-marti.github.io/MAInD-Making_Use_of_Data-2026-Lugano_Parks/",
+        services: ["#DataVisualization", "#InteractionDesign", "#UXResearch"],
+        systemArchitecture: ["#React", "#Vite", "#TypeScript", "#WebGL", "#Python"],
+        credits: ["Annabelle Conron", "Nicholas Vos", "Jérémy Martin", "Julie Alme"],
+        story: [
+          { src: "assets/projects/aura-of-words/webp/aura-opening.webp", alt: "Opening screen of An Aura of Words", caption: "The opening screen: real review snippets drift around the title before anything is explained." },
+          { text: "challenge" },
+          { text: "process" },
+          { src: "assets/projects/aura-of-words/webp/aura-debate.webp", alt: "Framing text about the data", caption: "The framing: this is a portrait of what gets written down about the parks, not of the parks themselves." },
+          { src: "assets/projects/aura-of-words/webp/aura-dataset.webp", alt: "Dataset of physical elements in each park", caption: "A dataset of each park's physical elements (layout, lights, benches, play equipment) with condition, accessibility and usage." },
+          { src: "assets/projects/aura-of-words/webp/aura-tests.webp", alt: "Early visual tests in Figma", caption: "Early visual tests in Figma: aura gradients over a park outline, and the five park locations on the lake." },
+          { text: "approach" },
+          { src: "assets/projects/aura-of-words/webp/aura-methodology.webp", alt: "A single review turning into an aura", caption: "Methodology: one review is read word by word, then imagined across thousands of words. That is an aura." },
+          { src: "assets/projects/aura-of-words/webp/aura-map.webp", alt: "The map of the five parks", caption: "The map: one blob per park. Size shows how many words were reviewed, colour shows the kind of language." },
+          { src: "assets/projects/aura-of-words/webp/aura-wordmap.webp", alt: "Word map of Parco Ciani", caption: "A park's word map: Parco Ciani's 98 distinct words, coloured by lens, each linked to the review it came from." },
+          { text: "role" },
+          { text: "reflection" },
+          { text: "outcome" },
+          { type: "vimeo", src: "1232341432", alt: "An Aura of Words walkthrough", caption: "Walkthrough of the full experience." },
+          { src: "assets/projects/aura-of-words/webp/aura-review.webp", alt: "A single review split into lenses", caption: "One review, read by the system: each coloured word is matched to a lens, and ambiguous words get the most plausible reading." },
+          { src: "assets/projects/aura-of-words/webp/aura-comparison.webp", alt: "All five auras side by side", caption: "All five auras side by side, sized equally on purpose so that only the colours speak." },
+          { src: "assets/projects/aura-of-words/webp/aura-poster.webp", alt: "Poster design for Parco Tassino", caption: "Poster design for Parco Tassino, with a QR code back to the piece: does this portrait match how you see this park?" }
+        ],
+        theme: "light",
+        images: [
+          { label: "Opening", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-opening.webp")' },
+          { label: "Framing", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-debate.webp")' },
+          { label: "The six categories", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-categories.webp")' },
+          { label: "Methodology, one review at a time", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-methodology.webp")' },
+          { label: "The map", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-map.webp")' },
+          { label: "Word map detail", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-wordmap.webp")' },
+          { label: "Aura comparison", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-comparison.webp")' },
+          { label: "Poster design", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-poster.webp")' }
+        ]
       }
     };
 
@@ -966,7 +1213,8 @@
       "adaptune",
       "financial-planning-hub",
       "lynx-2-0",
-      "philoxenia"
+      "philoxenia",
+      "aura-of-words"
     ];
     const currentIndex = PROJECT_ORDER.indexOf(slug);
     const nextSlug = PROJECT_ORDER[(currentIndex + 1 + PROJECT_ORDER.length) % PROJECT_ORDER.length];
@@ -1019,12 +1267,29 @@
     const processMeta = document.getElementById("detailProcessMeta");
     if (project.challenge || project.approach || project.role) {
       document.getElementById("detailChallenge").textContent = project.challenge || "";
-      document.getElementById("detailApproach").textContent = project.approach || "";
+      document.getElementById("detailApproach").innerHTML = project.approach || "";
       document.getElementById("detailRole").innerHTML = project.role || "";
       processMeta.hidden = false;
     } else {
       processMeta.hidden = true;
     }
+
+    const toggleBlock = (blockId, valueId, content, isList) => {
+      const block = document.getElementById(blockId);
+      const value = document.getElementById(valueId);
+      if (content && content.length) {
+        value.innerHTML = isList
+          ? `<ul class="meta-list">${content.map(li => `<li>${li}</li>`).join("")}</ul>`
+          : content;
+        block.hidden = false;
+      } else {
+        block.hidden = true;
+      }
+    };
+    toggleBlock("detailProcessBlock", "detailProcess", project.process, true);
+    toggleBlock("detailOutcomeBlock", "detailOutcome", project.outcome, false);
+    toggleBlock("detailReflectionBlock", "detailReflection", project.reflection, false);
+    toggleBlock("detailResourcesBlock", "detailResources", project.resources, true);
     document.getElementById("detailServices").textContent = project.services.join(" ");
     document.getElementById("detailSystemArchitecture").textContent = (project.systemArchitecture || []).join(" ");
     document.getElementById("detailCredits").textContent = Array.isArray(project.credits) ? project.credits.join(", ") : (project.credits || "");
@@ -1257,6 +1522,124 @@
       item.appendChild(frame);
       gallery.appendChild(item);
     });
+
+    if (project.story) {
+      document.body.classList.add("story-mode");
+      const storyEl = document.getElementById("story");
+      const LABELS = { challenge: "Challenge", process: "Process", approach: "Approach", role: "My Role", outcome: "Outcome", reflection: "Reflection" };
+      const textBlock = key => {
+        const v = project[key];
+        if (!v || !v.length) return "";
+        const body = Array.isArray(v)
+          ? `<ul class="meta-list${key === "role" ? " meta-list--rows" : ""}">${v.map(li => `<li>${li}</li>`).join("")}</ul>`
+          : (v.trim().startsWith("<") ? v : `<p>${v}</p>`);
+        const lead = ["challenge", "outcome", "reflection"].includes(key) && !Array.isArray(v);
+        return `<section class="story-text"><p class="meta-label">${LABELS[key]}</p><div class="meta-value">${lead ? body.replace("<p>", '<p class="lead">') : body}</div></section>`;
+      };
+      const figure = (it, alt) => {
+        const cap = it.caption ? `<figcaption>${it.caption}</figcaption>` : "";
+        const media = it.type === "vimeo"
+          ? `<div class="story-video" data-vimeo="${it.src}"><iframe class="gallery-video gallery-vimeo" id="story-vimeo-${it.src}" src="https://player.vimeo.com/video/${it.src}?autoplay=1&loop=1&muted=1&autopause=0&controls=0&background=0&title=0&byline=0&portrait=0&api=1&player_id=story-vimeo-${it.src}" title="${it.alt || project.title}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`
+          : it.type === "video"
+          ? `<div class="story-video"><video class="gallery-video" src="${it.src}" muted loop playsinline preload="metadata"></video></div>`
+          : `<img src="${it.src}" alt="${it.alt || alt}" loading="lazy" />`;
+        return `<figure class="story-figure">${media}${cap}</figure>`;
+      };
+      const flow = project.story.map(b =>
+        b.text ? textBlock(b.text)
+        : figure(b, project.title)
+      ).join("");
+      const sideBlock = (label, html, cls = "") => html ? `<section class="meta-block"><p class="meta-label">${label}</p><div class="meta-value ${cls}">${html}</div></section>` : "";
+      const resources = (project.resources || []).length
+        ? `<ul class="meta-list">${project.resources.map(r => `<li>${r.replace(/>([^<]+)<\/a>/, '>$1 ↗</a>')}</li>`).join("")}</ul>` : "";
+      storyEl.innerHTML = `
+        <aside class="story-side">
+          ${sideBlock("Project Type", project.services.join(" "), "tags")}
+          ${sideBlock("System Architecture", (project.systemArchitecture || []).join(" "), "tags")}
+          ${sideBlock("Team", Array.isArray(project.credits) ? project.credits.join(", ") : (project.credits || ""))}
+          ${sideBlock("Resources", resources)}
+        </aside>
+        <div class="story-main">
+          <p class="eyebrow">${project.eyebrow}</p>
+          <h1 class="detail-title">${project.title}</h1>
+          <div class="abstract">${project.abstract}</div>
+          <div class="story-flow">${flow}</div>
+        </div>`;
+      storyEl.hidden = false;
+
+      // video: same pill controls as the other project pages; plays while on screen
+      storyEl.querySelectorAll(".story-video").forEach(box => {
+        const video = box.querySelector("video");
+        const frame = box.querySelector("iframe");
+        const controls = document.createElement("div");
+        controls.className = "video-controls";
+        const playButton = document.createElement("button");
+        playButton.className = "video-btn";
+        playButton.type = "button";
+        playButton.textContent = "Play";
+        const timeline = document.createElement("input");
+        timeline.className = "video-range timeline";
+        timeline.type = "range"; timeline.min = "0"; timeline.max = "100"; timeline.step = "0.1"; timeline.value = "0";
+        const volume = document.createElement("input");
+        volume.className = "video-range volume";
+        volume.type = "range"; volume.min = "0"; volume.max = "1"; volume.step = "0.01"; volume.value = "0";
+        controls.append(playButton, timeline, volume);
+        box.appendChild(controls);
+
+        let userPaused = false;
+        let isPaused = true;
+        let api;
+        if (frame) {
+          let duration = 0;
+          let seeking = false;
+          const send = payload => frame.contentWindow?.postMessage(payload, "https://player.vimeo.com");
+          const subscribe = () => {
+            ["play", "pause", "timeupdate", "loaded"].forEach(ev => send({ method: "addEventListener", value: ev }));
+            send({ method: "setVolume", value: 0 });
+          };
+          window.addEventListener("message", event => {
+            if (event.origin !== "https://player.vimeo.com" || event.source !== frame.contentWindow) return;
+            let d = event.data;
+            if (typeof d === "string") { try { d = JSON.parse(d); } catch { return; } }
+            if (!d) return;
+            if (d.event === "ready") subscribe();
+            if (d.event === "play") { isPaused = false; playButton.textContent = "Pause"; }
+            if (d.event === "pause") { isPaused = true; playButton.textContent = "Play"; }
+            if (d.event === "loaded" && d.data && d.data.duration) duration = d.data.duration;
+            if (d.event === "timeupdate" && d.data && !seeking) {
+              duration = d.data.duration || duration;
+              if (d.data.percent != null) timeline.value = d.data.percent * 100;
+              else if (duration > 0 && d.data.seconds != null) timeline.value = (d.data.seconds / duration) * 100;
+            }
+          });
+          frame.addEventListener("load", subscribe);
+          timeline.addEventListener("change", () => { seeking = false; });
+          api = {
+            play: () => { subscribe(); send({ method: "play" }); },
+            pause: () => send({ method: "pause" }),
+            seek: pct => { if (duration) { seeking = true; send({ method: "setCurrentTime", value: (pct / 100) * duration }); } },
+            volume: level => { send({ method: "setMuted", value: level === 0 }); send({ method: "setVolume", value: level }); }
+          };
+        } else {
+          video.addEventListener("timeupdate", () => { if (video.duration) timeline.value = (video.currentTime / video.duration) * 100; });
+          video.addEventListener("play", () => { isPaused = false; playButton.textContent = "Pause"; });
+          video.addEventListener("pause", () => { isPaused = true; playButton.textContent = "Play"; });
+          api = {
+            play: () => video.play().catch(() => {}),
+            pause: () => video.pause(),
+            seek: pct => { if (video.duration) video.currentTime = (pct / 100) * video.duration; },
+            volume: level => { video.muted = false; video.volume = level; }
+          };
+        }
+        playButton.addEventListener("click", () => { userPaused = !isPaused; isPaused ? api.play() : api.pause(); });
+        timeline.addEventListener("input", () => api.seek(Number(timeline.value)));
+        volume.addEventListener("input", () => api.volume(Number(volume.value)));
+        new IntersectionObserver(entries => entries.forEach(e => {
+          if (e.isIntersecting) { if (!userPaused) api.play(); }
+          else api.pause();
+        }), { threshold: 0.4 }).observe(box);
+      });
+    }
 
     let overflowPrimary = 0;
     let overflowExhibition = 0;
