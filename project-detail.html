@@ -646,19 +646,21 @@
     }
     .story-side .meta-block { padding: 0.8rem 0 0; }
     .story-side .meta-block:first-child { border-top: 0; padding: 0; }
-    .story-side .meta-label { font-size: 0.68rem; margin-bottom: 0.5rem; }
-    .story-side .meta-value { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+    .story-side .meta-label { font-size: 0.64rem; margin-bottom: 0.45rem; }
+    .story-side .meta-value { color: var(--muted); font-size: 0.8rem; line-height: 1.6; }
     .story-side .meta-value.tags { font-weight: 500; color: var(--ink); }
     .story-side .meta-list { list-style: none; padding: 0; }
     .story-side .meta-list li { margin-bottom: 0.3em; }
 
     .story-main { min-width: 0; }
-    .story-main .detail-title { max-width: none; font-size: clamp(2.6rem, 5.2vw, 4.8rem); line-height: 0.98; margin-bottom: 1.6rem; }
-    .story-main .abstract { max-width: none; font-size: 1.4rem; line-height: 1.5; }
+    /* text is left-aligned and flows into two columns so lines stay short while images run full width */
+    .story-main > .eyebrow { font-size: 0.68rem; }
+    .story-main .detail-title { font-size: clamp(2.1rem, 3.4vw, 3.1rem); line-height: 1.02; margin-bottom: 1.2rem; }
+    .story-main .abstract { font-size: 1.12rem; line-height: 1.6; max-width: 52rem; }
     .story-main .abstract p + p { margin-top: 1.1rem; }
 
     .story-flow {
-      margin-top: 3.5rem;
+      margin-top: 3rem;
       display: flex;
       flex-direction: column;
       gap: 3rem;
@@ -667,6 +669,7 @@
     .story-text { padding: 0; }
     /* label row with a hairline running to the edge of the column */
     .story-text > .meta-label {
+      font-size: 0.68rem;
       display: flex;
       align-items: center;
       gap: 1rem;
@@ -681,17 +684,27 @@
     /* consecutive text sections sit closer together than text and images */
     .story-text + .story-text { margin-top: -1rem; }
     .story-text .meta-value {
-      font-size: 1.15rem;
-      line-height: 1.65;
+      font-size: 1rem;
+      line-height: 1.7;
     }
+    .story-text .meta-value.cols, .story-text .meta-value .cols { column-count: 2; column-gap: 3rem; }
+    .story-text .meta-value.avoid > p, .story-text .meta-list li { break-inside: avoid; }
+    .story-text .meta-value.pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+    .story-text .meta-value .pair__lead p.lead { margin: 0; }
+    .story-split .story-text .meta-value.cols { column-count: 1; }
     /* second level: a lead paragraph, then softer body text with bolder run-in heads */
     .story-text .meta-value p { color: var(--muted); }
     .story-text .meta-value p.lead {
-      font-size: 1.5rem;
-      line-height: 1.4;
+      font-size: 1.22rem;
+      line-height: 1.45;
       font-weight: 500;
       color: var(--ink);
-      margin-bottom: 1.1rem;
+      margin-bottom: 0.9rem;
     }
     .story-text .meta-value strong { font-weight: 600; color: var(--ink); }
     .story-text .meta-list.meta-list--rows { counter-reset: none; }
@@ -713,7 +726,7 @@
     }
     .story-text .meta-list li::before {
       content: counter(step, decimal-leading-zero);
-      font-size: 0.78rem;
+      font-size: 0.7rem;
       letter-spacing: 0.08em;
       padding-top: 0.38em;
       color: var(--accent);
@@ -743,9 +756,62 @@
       transform: translateY(0);
       pointer-events: auto;
     }
+    .story-figure .story-video video.gallery-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .story-video--phone { aspect-ratio: 1 / 2; }
+    .story-figure .story-video--phone video.gallery-video { object-fit: cover; }
+    .story-zoom {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: zoom-in;
+    }
+    .story-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+      gap: 2.5rem;
+      align-items: start;
+    }
+    /* the phones stay in view while the text beside them scrolls */
+    .story-split__media {
+      position: sticky;
+      top: 6rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    .story-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(245, 245, 240, 0.98);
+      overflow: auto;
+    }
+    .story-lightbox img { display: block; max-width: none; height: auto; }
+    .story-lightbox__close {
+      position: fixed;
+      top: 1rem;
+      right: 1.5rem;
+      z-index: 1001;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.6rem 1rem;
+      background: #000;
+      color: #fff;
+      font: 500 0.82rem/1 var(--font-body);
+      cursor: pointer;
+    }
     .story-figure figcaption {
-      margin-top: 0.7rem;
-      font-size: 0.82rem;
+      margin-top: 0.6rem;
+      font-size: 0.78rem;
       line-height: 1.5;
       color: var(--muted);
     }
@@ -757,6 +823,10 @@
         padding: 6rem 1.5rem 4rem;
       }
       .story-side { position: static; order: 2; }
+      .story-split { grid-template-columns: 1fr; }
+      .story-text .meta-value.cols, .story-text .meta-value .cols { column-count: 1; }
+      .story-text .meta-value.pair { grid-template-columns: 1fr; gap: 1rem; }
+      .story-split__media { position: static; }
     }
   </style>
 </head>
@@ -1116,19 +1186,92 @@
         ]
       },
       "philoxenia": {
-        title: "Philo & Xeny",
-        eyebrow: "Territory Intelligence Platform",
-        abstract: `<p>A two-agent AI platform designed as an intelligence layer for peer-to-peer accommodation. Philo helps hosts build their listing through voice and chat, and helps guests search by mood and experience rather than price and filters. Xeny turns a host's local knowledge into a living guidebook, delivered to guests as a real-time companion during their stay. Built on Airbnb as a pilot, designed to go further.</p>`,
-        challenge: "P2P platforms promised human connection and became transactional marketplaces. The real design challenge was not fixing Airbnb but designing an intelligence layer that could serve hosts, guests, and the territory simultaneously. A host with no tools to express their identity. A guest who knows the feeling they want but can only search by price and beds. Designing the shared knowledge base that feeds both agents without making either experience feel generic was the structural challenge that held everything together.",
-        approach: "We started from research: host interviews, guest interviews, and forum analysis that made the systemic failure concrete. From there we mapped two parallel journeys and identified where intelligence could intervene without replacing human agency. Every feature was anchored to a specific friction point. The decision to support both voice and chat came directly from research showing voice reduces cognitive load for open-ended input while text is faster for structured data.",
-        role: `Concept definition and project framing · Presentation structure and narrative · <a href="https://maind-philoxeni.vercel.app/" target="_blank" rel="noopener">Scrollytelling development in Vite and React, deployed on Vercel</a> · Aurora design system · Interactive Europe map · Demo video script`,
+        title: "Philo & Xeni",
+        eyebrow: "Intelligence layer for hospitality",
+        abstract: `<p>A two-agent AI platform designed as an intelligence layer for peer-to-peer accommodation. Philo helps hosts build their listing through voice and chat, and helps guests search by mood and experience rather than price and filters. Xeni turns a host's local knowledge into a living guidebook, delivered to guests as a real-time companion during their stay. Built on Airbnb as a pilot, designed to go further.</p>`,
+        challenge: `<p>P2P platforms promised human connection and became transactional marketplaces. The real design challenge was not fixing Airbnb but designing an intelligence layer that could serve hosts, guests, and the territory simultaneously.</p><p>A host with no tools to express their identity. A guest who knows the feeling they want but can only search by price and beds. Designing the shared knowledge base that feeds both agents without making either experience feel generic was the structural challenge that held everything together.</p>`,
+        process: [
+          "Research on three tracks: 4 interviews, 11 forum voices, and academic papers plus platform analysis",
+          "Host insights: hosting becomes management and operations crowd out hospitality, listings blur into one another, and neighbourhood knowledge stays invisible",
+          "Guest insights: value only lands when it is relevant in the moment, guests look for local connection beyond the four walls of a stay, and price wins by default",
+          "Zoomed out, every actor was optimising for the wrong thing: platforms for listing volume, hosts for occupancy, guests for the cheapest price. A solution owned by one platform would always serve that platform first, so the agent had to sit above them",
+          "Framed the opportunity as one question: how might we build an intelligence layer that gives P2P platforms the tools to deliver personalised, locally rooted experiences that neither hosts nor guests could access alone?",
+          "Distilled the research into two archetypes, Marco the evolving host and Sofia the experience seeker",
+          "Built a blueprint of the whole experience across host, Airbnb and agent, showing what the agent does at each step, through which touchpoint, and what knowledge it draws on"
+        ],
+        approach: `<p><strong>Every feature answers a friction.</strong> We started from research and mapped two parallel journeys, host and guest, then identified where intelligence could step in without replacing human agency. Every feature is anchored to a specific friction point found in the research.</p>
+          <p><strong>Voice and chat, as complements.</strong> The research showed that voice reduces cognitive load for open-ended input, while text is faster for structured data. So both agents support both modes, and the user chooses how to talk to them.</p>
+          <p><strong>Two agents, because there are two kinds of users.</strong> Hosts and guests have different needs and different journeys, but what a host teaches the system is what a guest benefits from. So the agents are separate in what they do and shared in what they know.</p>`,
+        role: [
+          "Concept definition and project framing",
+          "Presentation structure and narrative",
+          `<a href="https://maind-philoxeni.vercel.app/" target="_blank" rel="noopener">Scrollytelling one-pager</a> in Vite and React, deployed on Vercel`,
+          "UX research"
+        ],
+        outcome: `<p>Philo and Xeni turn P2P hosting from a transaction into a relationship, with value for the host, the guest and the territory.</p>
+          <p><strong>For hosts,</strong> setting up a listing becomes a conversation instead of a flow of 40+ steps, and their local knowledge finally turns into a listing identity and a guidebook. The AI does the heavy lifting: it analyses competing listings, local demand and guest segments to position the listing, and enriches it with territory intelligence about the neighbourhood. Hosts can speak or type, whichever suits the moment.</p>
+          <p><strong>For guests,</strong> discovery works by feeling instead of filters, results are ranked by fit rather than price, and the stay comes with a narrated guide in the host's voice. With voice mode on, the guide talks to them as they move through the place.</p>
+          <p><strong>For the territory,</strong> local businesses and organisations can contribute verified knowledge that surfaces as genuine recommendations, not advertising.</p>
+          <p>The pilot is built on Airbnb, but the agents are an intelligence layer that sits above any platform, deployable across services like Hostelworld, Booking.com and Tripadvisor, and into adjacent territories such as mobility, restaurants and dining, local experiences and travel.</p>`,
+        reflection: `<p>This project gave me a view of the whole design process, starting with the weight of research: user interviews and surveys, and the analysis that turns raw data into a clearly framed problem.</p>
+          <p>It also introduced me to the technical side of conversational agents. Following the creation of each agent's system prompt showed me how much of an agent's behaviour, from its personality to its tone, is designed through language.</p>
+          <p>Working with a brand like Airbnb added another lesson. We drew on its identity and interface language, and stayed close to its product logic in the concept, which gave me a practical view of how products already on the market come to be, and how a similar one can be built from scratch.</p>`,
+        resources: [
+          `<a href="https://maind-philoxeni.vercel.app/" target="_blank" rel="noopener">Scrollytelling one-pager</a>`,
+          `<a href="assets/projects/philoxenia/philo-and-xeni-final-presentation.pdf" target="_blank" rel="noopener">Final presentation (PDF)</a>`
+        ],
+        story: [
+          { src: "assets/projects/philoxenia/webp/px-cover.webp", alt: "Philo & Xeni, the love of strangers", caption: "Philo & Xeni: the love of strangers. A project by SUPSI MAInD in collaboration with SPARK Reply." },
+          { text: "challenge" },
+          { src: "assets/projects/philoxenia/webp/px-context.webp", alt: "Hotel departments compared with a single P2P host", caption: "The context: in traditional hospitality, entire departments handle what one P2P host manages alone." },
+          { src: "assets/projects/philoxenia/webp/px-model.webp", alt: "Every actor optimises for the wrong thing", caption: "The problem is the model, not Airbnb: platforms, hosts and guests each optimise for the wrong thing, so the agent has to sit above them." },
+          { text: "process" },
+          { src: "assets/projects/philoxenia/webp/px-research.webp", alt: "Research and insights", caption: "Research and insights: two sides of the same stay, with the host and guest quotes that made the tension concrete." },
+          { src: "assets/projects/philoxenia/webp/px-users.webp", alt: "The archetypes Marco and Sofia", caption: "The two archetypes: Marco, the evolving host, and Sofia, the experience seeker." },
+          { src: "assets/projects/philoxenia/webp/px-blueprint.webp", alt: "Agentic experience blueprint, host launching a listing", caption: "The agentic experience blueprint for a host launching or editing a listing: the actors, what the agent does at each step, its touchpoints and the knowledge it relies on." },
+          { text: "approach" },
+          { label: "The agents", html: `<p>Philo and Xeni are two agents with four roles, running on one shared intelligence.</p><p>Philo, the listing co-pilot, is about the host's space and the guest's search. Xeni, the guidebook co-pilot, is about the host's knowledge of a place and the guest's experience of it. A third beneficiary is the territory itself: local businesses and organisations contribute verified knowledge, which surfaces as genuine recommendations, not advertising.</p>` },
+          { src: "assets/projects/philoxenia/webp/px-agents.webp", alt: "Meet Philo and Xeni", caption: "Meet the agents: Philo, 'the love of', who optimises, and Xeni, 'the stranger', who invites you to wander." },
+          { src: "assets/projects/philoxenia/webp/px-roles.webp", alt: "Two agents, four roles, one shared intelligence", caption: "Two agents, four roles, one shared intelligence: for the host, for the guest and for the territory." },
+          { split: {
+            label: "Philo, the listing co-pilot",
+            html: `<p><strong>For hosts,</strong> Philo turns setting up a listing from data entry into a conversation. The host describes their place by voice or chat, and Philo extracts the details, validates them and fills the listing in real time. In parallel it analyses competing listings, local demand and guest segments to position the property, and layers in territory intelligence: the character of the neighbourhood and the points of interest nearby.</p>
+              <p><strong>For guests,</strong> Philo searches by feeling, not by filter. It reads the mood and intent of a trip, learns from past trips, reviews and saved places, and ranks results by fit instead of price.</p>
+              <p><strong>Why it matters.</strong> Hosts have the knowledge but never had the tools to turn it into a listing identity, and guests know the feeling they want while current search only answers parameters.</p>`,
+            items: [
+              { type: "video", phone: true, src: "assets/projects/philoxenia/video/philo-build-a-listing.mp4", caption: "Building a listing by conversation: Philo asks, the host answers by voice or chat, and the listing takes shape." },
+              { type: "video", phone: true, src: "assets/projects/philoxenia/video/philo-photo-analysis.mp4", caption: "Photo guidance and analysis: Philo guides the photos, checks them, and asks for what is missing." }
+            ]
+          } },
+          { split: {
+            label: "Xeni, the guidebook co-pilot",
+            html: `<p><strong>For hosts,</strong> Xeni makes local knowledge shareable. It asks about places to visit, activities, city advice and personal stories, the things that would never fit in a form field, and combines them with territory intelligence: events that weekend, recent openings, routes and the character of the area. The guidebook stays alive, so what is new in the neighbourhood reaches the next guest, not only the one who arrived last year.</p>
+              <p><strong>For guests,</strong> Xeni turns that knowledge into a companion. Before the stay, the host's character comes through. During the stay, a live map with voice narration adapts to where the guest is and what they have already done. After the stay, shared stories and photos make the guide richer for the next guest.</p>
+              <p><strong>Why it matters.</strong> Local value is underused, and a host's knowledge rarely reaches the guest in a meaningful way.</p>`,
+            items: [
+              { type: "video", phone: true, src: "assets/projects/philoxenia/video/xeni-guest-guide.mp4", caption: "A narrated guide: after Xeni's introduction, the guest follows the host's stops on a live map." },
+              { type: "video", phone: true, src: "assets/projects/philoxenia/video/xeni-customise-guidebook.mp4", caption: "Customising a guidebook: the guest picks a host's guide and tells Xeni what to add." }
+            ]
+          } },
+          { label: "How they work", html: `<p>Host and guest journeys are separate experiences, but they run on the same intelligence.</p><p>What the host teaches the agent, the guest benefits from, and the other way around. The system works across three layers. The <strong>location layer</strong> is the spatial intelligence that makes the experience feel physically real: points of interest, area context, routing and travel time. The <strong>user layer</strong> is everything the agent learns from the person in front of it: host stories and tone, guest preferences, dialogue memory and feedback. The <strong>market layer</strong> holds the external signals that keep recommendations grounded in reality: demand and supply data, competitor listings and pricing patterns.</p>` },
+          { src: "assets/projects/philoxenia/webp/px-layers.webp", alt: "The location, user and market layers", caption: "The three layers of shared intelligence: location, user and market." },
+          { label: "How we built them", html: `<p>Each agent was created with its own system prompt: a personality and a tone matched to its task and its role. Philo is the conversational listing co-pilot, built to help a host or a guest get to the right listing. Xeni is the voice of the guidebook, built to guide a guest through a place with the host's own stories. Both draw on the same shared intelligence while serving two different kinds of users with different needs.</p><p>To present the concept we also built a scrollytelling one-pager in Vite and React, deployed on Vercel. All the screens, flows and prototypes shown on this page, together with the design system and the visual identity of the agents, were designed by Jenni.</p>`, lead: false },
+          { src: "assets/projects/philoxenia/webp/px-flow-listing.webp", alt: "Listing creation flow", zoom: true, zoomWidth: 5560, caption: "The host flow for creating a listing with Philo, from telling Philo about the place to publishing. Designed by Jenni." },
+          { src: "assets/projects/philoxenia/webp/px-flow-search.webp", alt: "Search listings flow", zoom: true, zoomWidth: 5600, caption: "The guest search flow with Philo: standard exploration, the agent popup, the agent's analysis of what the guest says, and its suggestions. Designed by Jenni." },
+          { src: "assets/projects/philoxenia/webp/px-flow-guidebook.webp", alt: "Guidebook creation flow", zoom: true, zoomWidth: 5600, caption: "The guidebook creation flow with Xeni, from the agent popup and lens selection to memory-based conversation, dynamic personalisation and publishing. Designed by Jenni." },
+          { text: "role" },
+          { text: "reflection" },
+          { text: "outcome" },
+          { src: "assets/projects/philoxenia/webp/px-beyond.webp", alt: "Beyond the platform", caption: "Beyond the platform: built for Airbnb, deployable wherever hosts, guests and local knowledge need to connect." },
+          { src: "assets/projects/philoxenia/webp/px-closing.webp", alt: "There are no strangers here, only friends you haven't met yet", caption: "φιλοξενία: the love of strangers." }
+        ],
         visitUrl: "https://maind-philoxeni.vercel.app/",
         services: ["#UXResearch", "#ServiceDesign", "#AIDesign", "#ConceptualDesign"],
-        systemArchitecture: ["#React", "#Vite", "#Vercel", "#DesignSystems"],
+        systemArchitecture: ["#React", "#Vite", "#Vercel", "#SystemPrompts"],
         credits: "Gürünlü Günseli, Nerea Asensio, Mélanie Turano, Peng-Hsuan Lee Jennifer, Walter De Nicola · In collaboration with SPARK Reply",
         theme: "light",
         images: [
-          { label: "Philo & Xeny Platform", bg: 'center / cover no-repeat url("assets/projects/philoxenia/webp/philoxenia-main1.webp")' }
+          { label: "Philo & Xeni Platform", bg: 'center / cover no-repeat url("assets/projects/philoxenia/webp/philoxenia-main1.webp")' }
         ]
       },
       "aura-of-words": {
@@ -1527,26 +1670,47 @@
       document.body.classList.add("story-mode");
       const storyEl = document.getElementById("story");
       const LABELS = { challenge: "Challenge", process: "Process", approach: "Approach", role: "My Role", outcome: "Outcome", reflection: "Reflection" };
-      const textBlock = key => {
-        const v = project[key];
+      // each section picks the arrangement that suits its content:
+      // lead | body side by side when the body is short, lead on top and body in two columns when it is long,
+      // lists and run-in paragraphs in two columns
+      const textFrom = (label, v, opts = {}) => {
         if (!v || !v.length) return "";
-        const body = Array.isArray(v)
-          ? `<ul class="meta-list${key === "role" ? " meta-list--rows" : ""}">${v.map(li => `<li>${li}</li>`).join("")}</ul>`
-          : (v.trim().startsWith("<") ? v : `<p>${v}</p>`);
-        const lead = ["challenge", "outcome", "reflection"].includes(key) && !Array.isArray(v);
-        return `<section class="story-text"><p class="meta-label">${LABELS[key]}</p><div class="meta-value">${lead ? body.replace("<p>", '<p class="lead">') : body}</div></section>`;
+        let inner, cls = "";
+        if (Array.isArray(v)) {
+          inner = `<ul class="meta-list${opts.rows ? " meta-list--rows" : ""}">${v.map(li => `<li>${li}</li>`).join("")}</ul>`;
+          cls = "cols avoid";
+        } else {
+          const html = v.trim().startsWith("<") ? v : `<p>${v}</p>`;
+          const ps = html.match(/<p[\s\S]*?<\/p>/g) || [];
+          if (opts.lead && ps.length) {
+            const lead = ps[0].replace("<p>", '<p class="lead">');
+            const rest = ps.slice(1).join("");
+            const len = rest.replace(/<[^>]*>/g, "").length;
+            if (!rest) inner = lead;
+            else if (len < 750) { inner = `<div class="pair__lead">${lead}</div><div class="pair__body">${rest}</div>`; cls = "pair"; }
+            else inner = `${lead}<div class="cols">${rest}</div>`;
+          } else if (ps.length >= 2) { inner = html; cls = "cols avoid"; }
+          else inner = html;
+        }
+        return `<section class="story-text"><p class="meta-label">${label}</p><div class="meta-value ${cls}">${inner}</div></section>`;
       };
+      const textBlock = key => textFrom(LABELS[key], project[key], { rows: key === "role", lead: ["challenge", "outcome", "reflection"].includes(key) });
       const figure = (it, alt) => {
-        const cap = it.caption ? `<figcaption>${it.caption}</figcaption>` : "";
+        const zoomHint = it.zoom ? " Click to explore." : "";
+        const cap = it.caption ? `<figcaption>${it.caption}${zoomHint}</figcaption>` : "";
         const media = it.type === "vimeo"
           ? `<div class="story-video" data-vimeo="${it.src}"><iframe class="gallery-video gallery-vimeo" id="story-vimeo-${it.src}" src="https://player.vimeo.com/video/${it.src}?autoplay=1&loop=1&muted=1&autopause=0&controls=0&background=0&title=0&byline=0&portrait=0&api=1&player_id=story-vimeo-${it.src}" title="${it.alt || project.title}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen frameborder="0" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`
           : it.type === "video"
-          ? `<div class="story-video"><video class="gallery-video" src="${it.src}" muted loop playsinline preload="metadata"></video></div>`
+          ? `<div class="story-video${it.phone ? " story-video--phone" : ""}"><video class="gallery-video" src="${it.src}" muted loop playsinline preload="metadata"></video></div>`
+          : it.zoom
+          ? `<button class="story-zoom" type="button" data-full="${it.src}" data-width="${it.zoomWidth || 4200}" aria-label="Open full size"><img src="${it.src}" alt="${it.alt || alt}" loading="lazy" /></button>`
           : `<img src="${it.src}" alt="${it.alt || alt}" loading="lazy" />`;
         return `<figure class="story-figure">${media}${cap}</figure>`;
       };
       const flow = project.story.map(b =>
         b.text ? textBlock(b.text)
+        : b.label ? textFrom(b.label, b.html || b.list, { lead: b.lead !== false && !b.list })
+        : b.split ? `<div class="story-split"><div>${textFrom(b.split.label, b.split.html, {})}</div><div class="story-split__media">${b.split.items.map(it => figure(it, project.title)).join("")}</div></div>`
         : figure(b, project.title)
       ).join("");
       const sideBlock = (label, html, cls = "") => html ? `<section class="meta-block"><p class="meta-label">${label}</p><div class="meta-value ${cls}">${html}</div></section>` : "";
@@ -1566,6 +1730,21 @@
           <div class="story-flow">${flow}</div>
         </div>`;
       storyEl.hidden = false;
+
+      // zoomable images: open at a larger size in a scrollable overlay
+      storyEl.addEventListener("click", e => {
+        const btn = e.target.closest(".story-zoom");
+        if (!btn) return;
+        const box = document.createElement("div");
+        box.className = "story-lightbox";
+        box.innerHTML = `<button class="story-lightbox__close" type="button">Close</button><img src="${btn.dataset.full}" alt="" style="width:${btn.dataset.width}px" />`;
+        const close = () => { box.remove(); document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+        const onKey = ev => { if (ev.key === "Escape") close(); };
+        box.querySelector("button").addEventListener("click", close);
+        document.addEventListener("keydown", onKey);
+        document.body.style.overflow = "hidden";
+        document.body.appendChild(box);
+      });
 
       // video: same pill controls as the other project pages; plays while on screen
       storyEl.querySelectorAll(".story-video").forEach(box => {
