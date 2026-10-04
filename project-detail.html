@@ -1143,13 +1143,78 @@
       "meeting-pond": {
         title: "Meeting Pond",
         eyebrow: "Connected presence system",
-        abstract: `<p>A pair of connected light objects that let two distant people feel each other's presence without words or screens. Each device sits in a calm idle state showing a minimal surface of light. When one person taps, a ripple travels across distance and arrives in real time on the other device, turning a small physical gesture into a shared moment.</p>`,
-        challenge: "Working with an LED matrix gives you very few pixels, which makes it genuinely hard to create visuals that feel both meaningful and beautiful. The constraint pushes you toward abstraction immediately, and it is easy to end up with something that looks technically functional but emotionally empty.",
-        approach: "We decided to lead with concept rather than visuals. Once we had a strong emotional idea around the feeling of distant presence, the right visual followed naturally. Water was an obvious and poetic fit: it moves, it responds to touch, and it conveys connection without needing to represent anything literally. The constraint became an advantage.",
-        role: "Concept and emotional framing · Water ripple visual design on the LED matrix · Project communication and documentation",
+        abstract: `<p>A pair of connected light objects that let two distant people feel each other's presence without words, notifications or screens. Each device shows a minimal pond of light in a calm idle state. When one person taps, a drop falls into the surface and its ripples radiate outward, appearing in real time on the other device.</p>`,
+        challenge: `<p>In a world saturated with messages, alerts and screens, can connection be felt through something more subtle, ambient and non-verbal?</p>
+          <p>Working with an LED matrix gives you very few pixels, which makes it genuinely hard to create visuals that feel both meaningful and beautiful. The constraint pushes you toward abstraction immediately, and it is easy to end up with something that looks technically functional but emotionally empty.</p>`,
+        process: [
+          "Started from a question: two users, two distant spaces, one shared surface. How can distance be made visible?",
+          "Explored different visual languages, signals, marks, traces and symbols, which felt too literal and too close to conventional communication",
+          "Converged on water: a surface that reacts, carries impact and returns to stillness, where a ripple travels without transporting matter, only energy",
+          "Tested gesture recognition with the laptop's camera, then facial recognition and visual effects on the LED matrix",
+          "Built a first control interface to tune the size, speed and quantity of the ripples",
+          "Abandoned the external interface for an embodied model, with every control integrated into the device itself",
+          "Enclosed each unit in a custom frame, turning it into a wall-mounted object that reads as a luminous painting"
+        ],
+        approach: `<p><strong>Disturbance as presence.</strong> Instead of sending text or explicit content, the user leaves a temporary trace of their energy in a shared visual environment. Each drop fades, so that the next one can be meaningful again.</p>
+          <p><strong>Concept before visuals.</strong> We decided to lead with concept rather than visuals. Once the emotional idea of distant presence was clear, the right visual followed: water moves, responds to touch and conveys connection without representing anything literally. The constraint of the LED matrix became an advantage.</p>
+          <p><strong>Three gestures, no interface.</strong> Moving the hand left or right changes the colour of the local pond, moving it up or down adjusts its intensity, and a tap releases a drop. The drop carries the sender's colour and, on the other device, mixes with the local pond: two states meeting in one shared moment.</p>`,
+        role: [
+          "Concept and emotional framing",
+          "Design and coding of the water ripples on the LED matrix",
+          "Project communication and documentation"
+        ],
+        reflection: `<p>The limitations of the medium shaped the project more than any other factor.</p>
+          <p>A small, low-resolution LED matrix is not made for detail, so the first challenge was finding an element that could carry the concept at all: the idea of distant presence was clear, but not how to represent it on such a constrained device. Once water emerged as the answer, the difficulty shifted to the code, reproducing the smooth, fluid feeling of water with so few pixels, and then making two devices respond to each other live. Resolving these constraints one by one is what made the project so rewarding.</p>`,
+        outcome: `<p>A working pair of connected light objects: a tap on one creates ripples on both, in real time.</p>
+          <p>Every interaction happens through gestures read by the camera, with no visible interface. The drop briefly merges the sender's colour with the other pond, then fades, leaving no archive of messages and no pressure to reply.</p>`,
+        resources: [
+          `<a href="assets/projects/meeting pond/meeting-pond-presentation.pdf" target="_blank" rel="noopener">Final presentation (PDF)</a>`,
+          `<a href="https://github.com/jerem-marti/MAInD-ID151.01-2026-MissingDrop" target="_blank" rel="noopener">Code repository (GitHub)</a>`
+        ],
+        license: `Documentation and content: CC BY 4.0<br>Source code: MIT License`,
         services: ["#HumanComputerInteraction", "#PhysicalComputing", "#ExperienceDesign"],
         systemArchitecture: ["#LEDMatrix", "#GestureRecognition", "#RealTimeSystem", "#IoT"],
-        credits: ["Jérémy Martin"],
+        credits: ["Nerea Asensio", "Jérémy Martin"],
+        story: [
+          { src: "assets/projects/meeting pond/webp/meetingpond-general1.webp", alt: "Two Meeting Pond devices side by side", caption: "Meeting Pond: two ponds of light, connected across distance." },
+          { text: "challenge" },
+          { row: [
+            { src: "assets/projects/meeting pond/webp/mp-slide-2.webp", alt: "We live surrounded by communication", caption: "The starting point: presence is quieter than communication." },
+            { src: "assets/projects/meeting pond/webp/mp-slide-3.webp", alt: "Two users, two distant spaces, one shared surface", caption: "The question: how can distance be made visible?" }
+          ] },
+          { text: "process" },
+          { src: "assets/projects/meeting pond/webp/mp-slide-5.webp", alt: "Process, exploring visual languages", caption: "Exploring visual languages on the LED matrix, before water felt just right." },
+          { row: [
+            { type: "video", phone: true, src: "assets/projects/meeting pond/video/mp-proto-laptop.mp4", caption: "Initial tests using the laptop's camera." },
+            { type: "video", phone: true, src: "assets/projects/meeting pond/video/mp-proto-face.mp4", caption: "Facial recognition tests." },
+            { type: "video", phone: true, src: "assets/projects/meeting pond/video/mp-proto-effects.mp4", caption: "Effects exploration." },
+            { type: "video", phone: true, src: "assets/projects/meeting pond/video/mp-proto-params.mp4", caption: "Initial tests with interface parameters." }
+          ] },
+          { row: [
+            { src: "assets/projects/meeting pond/webp/meetingpond-components.webp", alt: "Components of one unit", caption: "The components of one unit: LED matrix, battery, smartphone camera and Wi-Fi microcontroller." },
+            { src: "assets/projects/meeting pond/webp/mp-interface.webp", alt: "Final prototype in its frame", caption: "The final prototype in its frame." }
+          ] },
+          { text: "approach" },
+          { src: "assets/projects/meeting pond/webp/mp-slide-6.webp", alt: "Concept, a tapping gesture becomes a drop", caption: "A tapping gesture becomes a drop. The ripple carries energy, then the pond resets." },
+          { label: "The experience", html: `<p>Ambient emotional connection rather than information exchange.</p>
+            <p>When inactive, the device emits a calm visual atmosphere, and the user is never prompted to check anything. When the other person interacts, the water shifts and ripples radiate: someone was here, someone thought of you. There is no need to answer and no record of missed interactions. Users can respond with another drop, creating a gentle dialogue of ripples.</p>` },
+          { src: "assets/projects/meeting pond/webp/mp-slide-4.webp", alt: "Two people in two rooms with Meeting Pond", caption: "Two people, two distant rooms, one shared pond." },
+          { label: "How it was built", html: `<p>Meeting Pond was designed by two people. Together we developed the concept and the visual language of the pond, and shared the making of the frame and the finishing of the object.</p>
+            <p><strong>Jérémy Martin</strong> led the real-time system connecting the two devices, from gesture sensing to the networking between them, and integrated the electronics and the LED matrix into a self-contained object. <strong>I</strong> focused on the concept and its emotional framing, the design and the coding of the water ripples on the LED matrix, and the project's communication and documentation.</p>`, lead: false },
+          { text: "role" },
+          { text: "reflection" },
+          { text: "outcome" },
+          { type: "vimeo", src: "1182421737", alt: "Meeting Pond video", caption: "Meeting Pond in use: a tap on one device ripples across both." },
+          { row: [
+            { src: "assets/projects/meeting pond/webp/meetingpond-interaction1.webp", alt: "Tapping the pond", caption: "A tap releases a drop." },
+            { src: "assets/projects/meeting pond/webp/meetingpond-general2.webp", alt: "Two ponds after a drop", caption: "The ripple arrives on the other pond." }
+          ] },
+          { row: [
+            { src: "assets/projects/meeting pond/webp/meetingpond-general3.webp", alt: "Ponds in green and yellow", caption: "Each person tunes the colour of their own pond." },
+            { src: "assets/projects/meeting pond/webp/meetingpond-general4.webp", alt: "Ponds in blue", caption: "Two states meeting on one shared surface." }
+          ] },
+          { src: "assets/projects/meeting pond/webp/mp-slide-7.webp", alt: "Closing slides", caption: "Like in life, a subtle action can travel far and change someone else's state." }
+        ],
         theme: {
           bg: "#EEF6F2",
           fg: "#121915",
@@ -1159,12 +1224,7 @@
           panel: "rgba(255,255,255,0.48)"
         },
         images: [
-          { label: "System overview", type: "vimeo", src: "1182421737" },
-          { label: "Interaction 1", bg: 'center / cover no-repeat url("assets/projects/meeting pond/webp/meetingpond-interaction1.webp")' },
-          { label: "General view 2", bg: 'center / cover no-repeat url("assets/projects/meeting pond/webp/meetingpond-general2.webp")' },
-          { label: "General view 3", bg: 'center / cover no-repeat url("assets/projects/meeting pond/webp/meetingpond-general3.webp")' },
-          { label: "General view 4", bg: 'center / cover no-repeat url("assets/projects/meeting pond/webp/meetingpond-general4.webp")' },
-          { label: "Components", bg: 'center / cover no-repeat url("assets/projects/meeting pond/webp/meetingpond-components.webp")' }
+          { label: "System overview", type: "vimeo", src: "1182421737" }
         ]
       },
       "financial-planning-hub": {
