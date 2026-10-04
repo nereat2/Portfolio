@@ -788,6 +788,44 @@
       grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
       gap: 1rem;
     }
+    .story-row { align-items: start; }
+    /* carousel: one image at a time, swipe or use the arrows */
+    .story-carousel__track {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    .story-carousel__track::-webkit-scrollbar { display: none; }
+    .story-carousel__track > .story-figure { flex: 0 0 100%; scroll-snap-align: start; }
+    .story-carousel__nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
+    }
+    .story-carousel__count { font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; margin-right: 0.4rem; }
+    .story-carousel__btn {
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--fg);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background .2s ease, opacity .2s ease;
+    }
+    .story-carousel__btn:hover { background: var(--panel); }
+    .story-carousel__btn:disabled { opacity: 0.3; cursor: default; }
+    /* a second chapter (e.g. an exhibition): a new title, then the story continues */
+    .story-chapter { display: flex; flex-direction: column; gap: 3rem; margin-top: 3rem; }
+    .story-chapter__head > .eyebrow { margin: 0 0 0.4rem; font-size: 0.68rem; }
+    .story-chapter__head .detail-title { margin: 0; }
+    .story-chapter__meta { margin: 0.8rem 0 0; font-size: 0.85rem; color: var(--muted); }
+    .story-text > .meta-label:empty { display: none; }
     .story-split {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
@@ -839,6 +877,7 @@
       .story-side { position: static; order: 2; }
       .story-split { grid-template-columns: 1fr; }
       .story-row { grid-template-columns: 1fr; }
+      .story-chapter { gap: 2rem; margin-top: 2rem; }
       .story-text .meta-value.cols, .story-text .meta-value .cols { column-count: 1; }
       .story-text .meta-value > .meta-list.meta-list--rows { grid-template-columns: 1fr; }
       .story-text .meta-value > .meta-list.meta-list--rows li:nth-child(2) { padding-top: 0.7rem; }
@@ -1190,20 +1229,101 @@
           { label: "Displayed at Digital Design Week 2026, Milan · Porta Venezia district" },
           { label: "Mentioned in niwwrd magazine", url: "https://www.niwwrd.com/post/digital-design-week-2026-what-stood-out-as-it-closes" }
         ],
-        eyebrow: "Speculative identity system",
+        eyebrow: "Speculative photographic instrument",
         abstract: `<p>ELEN is a speculative photographic instrument that treats wireless data as contemporary haunting. It captures the personal network signals leaking invisibly from people in a space and translates them into spectral forms layered onto a real photograph of the site. Ghost figures made entirely from behavioral data.</p>`,
-        challenge: "The brief asked us to make the invisible visible, but finding a concept strong enough to actually build was harder than it sounds. The visual ghosts had to feel organic and fluid while being generated entirely through code, which meant developing a visual language from scratch. Getting the device to reliably detect and interpret wireless signal data added another layer of complexity, since some of that data is inherently unstable and difficult to handle cleanly.",
-        approach: "We committed to perfecting every single part rather than cutting corners anywhere. That meant being willing to dig into unfamiliar technologies and spend real time on the technical side until each component performed the way the concept demanded. The quality of the result comes directly from not settling for \"good enough\" at any stage.",
-        role: "Concept development · Visual ghost language design and code · Packaging and brochure design · Project communication and documentation",
+        challenge: `<p>The brief came from the Fotomuseum Winterthur: a speculative camera, conceived from the start for an exhibition, that extends perception beyond its natural limits.</p>
+          <p>Finding the right concept was the first difficulty. It had to answer the museum's brief while being innovative and making real use of technology. The ghosts then had to feel organic and fluid while being generated entirely through code, which meant developing a visual language from scratch. Getting the device to reliably detect and interpret wireless signal data added another layer of complexity, since some of that data is inherently unstable and difficult to handle cleanly.</p>`,
+        process: [
+          "Started from the museum's research framing: imaging technologies have always been used to perceive what the eye cannot, from spirit photography to computational cameras",
+          "Defined the concept: a camera for the wireless signals that surround us, where ghosts are no longer supernatural but infrastructural",
+          "Built passive wireless monitoring on a Raspberry Pi, capturing signal strength and device identifiers without connecting to any network",
+          "Developed the visual language of the entities in code: soft, fluid forms that feel organic while being driven entirely by data",
+          "Mapped signal characteristics to each entity: strength to scale, number of devices to density, network activity to motion",
+          "Designed the object as handheld field equipment, with a 3D-printed body, orange plexiglass and two front buttons",
+          "Completed it as a finished product: packaging, a brochure with instructions, and its own user experience",
+          "Designed the exhibition at SACEBA, with a live projection of the signals present in the space"
+        ],
+        approach: `<p><strong>Measured, not invented.</strong> Every entity is driven by a real wireless signal in the room, so the image is a trace of actual presence rather than decoration. Device identifiers are anonymised the moment they are captured: ELEN shows that someone is there, never who.</p>
+          <p><strong>A visual language for data.</strong> Each signal becomes a soft, shifting spectral form, with a fragment of broadcast metadata as its temporary name. The forms had to read as presences rather than charts, organic enough to feel alive and precise enough to stay true to the data.</p>
+          <p><strong>No part left unfinished.</strong> We committed to perfecting every single part rather than cutting corners anywhere. That meant digging into unfamiliar technologies and spending real time on the technical side until each component performed the way the concept demanded.</p>`,
+        role: [
+          "Ideation and concept, with the team",
+          "Output aesthetic: the look, code and behaviour of the entities",
+          "Brochure, graphic content and video production",
+          "Exhibition art direction and set-up, with the team",
+          "Project communication and documentation"
+        ],
+        reflection: `<p>Designing for an exhibition from the start shaped every decision in the project.</p>
+          <p>ELEN was not only a device. It was prepared as a finished, ready-to-sell product, with its own packaging, a brochure with instructions and its own user experience, and at the same time as an experience designed for a specific space, SACEBA. The installation made the concept tangible: personal data leaks every day and everywhere, and visitors could see their own digital ghosts appear live in the room.</p>`,
+        outcome: `<p>A working handheld prototype that detects the wireless signals in a space and turns them into a living spectral overlay, in real time.</p>
+          <p>ELEN was presented at SACEBA as an installation, then shown at Digital Design Week 2026 in Milan, in the Porta Venezia district, and mentioned in niwwrd magazine.</p>`,
+        resources: [
+          `<a href="assets/projects/elen/elen-brochure.pdf" target="_blank" rel="noopener">Brochure (PDF)</a>`,
+          `<a href="https://github.com/jerem-marti/MAInD-Prototyping_Spatial_Experiences-2026" target="_blank" rel="noopener">Code repository (GitHub)</a>`
+        ],
+        license: `Documentation and media: CC BY-NC-SA 4.0<br>Hardware designs: CERN-OHL-S v2 with non-commercial clause<br>Source code: PolyForm Noncommercial 1.0.0`,
         services: ["#SpeculativeDesign", "#InteractionDesign", "#ProductDesign"],
         systemArchitecture: ["#RaspberryPi", "#Kismet", "#PhysicalComputing", "#WifiSignal", "#RealTimeVisualization"],
-        credits: ["Jérémy Martin", "Nicholas Vos"],
-        exhibition: {
-          eyebrow: "Exhibition",
-          title: "ELEN Exhibition",
-          abstract: `<p>ELEN was presented as an immersive installation that extended the device into space. Displayed on a custom rotating platform, the object was accompanied by its packaging and brochure, forming a cohesive product narrative. A large-scale projection translated live wireless signals from the exhibition environment into evolving entities, allowing visitors to see their own presence emerge in real time. The setup transformed the space into a responsive field, where the invisible activity of the audience became part of the work itself.</p>`,
-          credits: ["SACEBA - Morbio Inferiore", "Leonardo Angelucci"]
-        },
+        credits: ["Nerea Asensio", "Jérémy Martin", "Nicholas Vos"],
+        story: [
+          { src: "assets/projects/elen/webp/elen-front.webp", alt: "ELEN, the handheld device", caption: "ELEN: a device that shows the digital entities that surround us." },
+          { text: "challenge" },
+          { type: "vimeo", src: "1182423777", alt: "ELEN explanatory video", caption: "How ELEN works: from wireless signal to electronic entity." },
+          { text: "process" },
+          { row: [
+            { src: "assets/projects/elen/webp/elen-detail.webp", alt: "Detail of the device", caption: "The orange plexiglass body and the handle." },
+            { src: "assets/projects/elen/webp/elen-view.webp", alt: "The device from the front", caption: "The finished product." }
+          ] },
+          { text: "approach" },
+          { label: "How it was built", html: `<p>ELEN was a team effort. All three of us shaped the ideation and the concept together, and together we art-directed the exhibition and built the elements that displayed ELEN at SACEBA.</p>
+            <p><strong>Jérémy Martin</strong> built the software architecture and the signal engineering, from passive wireless monitoring to the live overlay, and designed the product's UX: how the device is switched on, how a moment is captured, how the gallery is browsed, and how the entities hold their place as you move through the space.</p>
+            <p><strong>Nicholas Vos</strong> led the product design and the material decisions, modelled the body and assembled it, and developed the packaging from an initial idea of mine. He also contributed to the photo editing and art direction.</p>
+            <p><strong>I</strong> was responsible for the output aesthetic: the look, the code and the behaviour of the entities. I also created the graphic content, from the brochure to the video production, and took care of the project's communication and documentation.</p>`, lead: false },
+          { src: "assets/projects/elen/webp/elen-architecture.webp", alt: "ELEN system architecture", caption: "The system architecture: from the wireless signals in the space to the image, and how each signal characteristic shapes the entities." },
+          { src: "assets/projects/elen/webp/elen-chassis.webp", alt: "Render of the internal chassis", caption: "The 3D-printed internal chassis, the structural backbone that holds every component in place." },
+          { row: [
+            { src: "assets/projects/elen/webp/elen-interaction1.webp", alt: "Scanning a space with ELEN", caption: "Scanning the space: the entities appear on the screen as you move." },
+            { src: "assets/projects/elen/webp/elen-interaction3.webp", alt: "The back of the device", caption: "The back of the device, with the camera module and ventilation ports." }
+          ] },
+          { src: "assets/projects/elen/webp/elen-interaction2.webp", alt: "Carrying ELEN by the handle", caption: "Carried by the field handle, like a piece of equipment." },
+          { row: [
+            { src: "assets/projects/elen/webp/elen-brochure-instructions.webp", alt: "Brochure, concept and instructions", zoom: true, zoomWidth: 1536, caption: "The brochure: the concept and four instructions, from powering on to opening the gallery." },
+            { src: "assets/projects/elen/webp/elen-brochure-features.webp", alt: "Brochure, product features", zoom: true, zoomWidth: 1536, caption: "The brochure: an overview of the product's features." }
+          ] },
+          { src: "assets/projects/elen/webp/elen-box.webp", alt: "ELEN packaging", caption: "The packaging, designed to present ELEN as a finished product." },
+          { text: "role" },
+          { text: "reflection" },
+          { text: "outcome" },
+          { row: [
+            { src: "assets/projects/elen/webp/elen-leds.webp", alt: "Sensing and power LEDs", caption: "Sensing and power LEDs." },
+            { src: "assets/projects/elen/webp/elen-back.webp", alt: "Back details", caption: "Back details." }
+          ] },
+          { src: "assets/projects/elen/webp/elen-packaging.webp", alt: "ELEN packaging", caption: "ELEN packaging." },
+          { carousel: [
+            { src: "assets/projects/elen/webp/elen-output-1.webp", alt: "Output, Lugano station", caption: "Lugano Station ghosts." },
+            { src: "assets/projects/elen/webp/elen-output-2.webp", alt: "Output, Lugano station", caption: "Lugano Station ghosts." },
+            { src: "assets/projects/elen/webp/elen-output-3.webp", alt: "Output, church", caption: "Church ghosts." },
+            { src: "assets/projects/elen/webp/elen-output-4.webp", alt: "Output, lakeside", caption: "Lakeside ghosts." },
+            { src: "assets/projects/elen/webp/elen-output-5.webp", alt: "Output, Parco Ciani", caption: "Parco Ciani's ghosts." },
+            { src: "assets/projects/elen/webp/elen-output-6.webp", alt: "Output, Parco Ciani", caption: "Parco Ciani's ghosts." }
+          ] },
+          { chapter: {
+            eyebrow: "ELEN at SACEBA, Morbio Inferiore",
+            title: "Exhibition",
+            meta: "Course teacher: Leonardo Angelucci",
+            html: `<p>ELEN was presented as an immersive installation that extended the device into space.</p>
+            <p>Displayed on a custom rotating platform, the object was accompanied by its packaging and brochure, forming a cohesive product narrative. A large-scale projection translated live wireless signals from the exhibition environment into evolving entities, allowing visitors to see their own presence emerge in real time. The setup transformed the space into a responsive field, where the invisible activity of the audience became part of the work itself.</p>`,
+            items: [
+            { src: "assets/projects/elen/webp/elen-expo2.webp", alt: "Live projection at SACEBA", caption: "The live projection at SACEBA: the wireless signals in the room, translated into entities." },
+            { row: [
+              { src: "assets/projects/elen/webp/elen-expo1.webp", alt: "ELEN on its platform with packaging and brochure", caption: "The device on its platform, with its packaging and brochure." },
+              { src: "assets/projects/elen/webp/elen-expo3.webp", alt: "Entities in the projection", caption: "The visitors' digital ghosts, appearing live." }
+            ] },
+            { src: "assets/projects/elen/webp/elen-expo5.webp", alt: "ELEN at the exhibition", caption: "ELEN at the exhibition." },
+            { type: "vimeo", src: "1232739501", alt: "ELEN exhibition video", caption: "The exhibition at SACEBA." }
+            ]
+          } }
+        ],
         theme: {
           bg: "#161217",
           fg: "#F0EAF5",
@@ -1214,19 +1334,7 @@
         },
         images: [
           { label: "Front", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-front.webp")' },
-          { label: "Detail", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-detail.webp")' },
-          { label: "Box", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-box.webp")' },
-          { label: "View", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-view.webp")' },
-          { label: "Interaction 1", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-interaction1.webp")' },
-          { label: "Interaction 2", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-interaction2.webp")' },
-          { label: "Interaction 3", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-interaction3.webp")' },
-          { label: "ELEN video", type: "vimeo", src: "1182423777" },
-          { type: "section-break", key: "exhibition" },
-          { label: "Exhibition 1", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-expo1.webp")' },
-          { label: "Exhibition 2", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-expo2.webp")' },
-          { label: "Exhibition 3", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-expo3.webp")' },
-          { label: "Exhibition 4", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-expo4.webp")' },
-          { label: "Exhibition 5", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-expo5.webp")' }
+          { label: "ELEN video", type: "vimeo", src: "1182423777" }
         ]
       },
       "lynx-2-0": {
@@ -1801,14 +1909,18 @@
           : `<img src="${it.src}" alt="${it.alt || alt}" loading="lazy" />`;
         return `<figure class="story-figure">${media}${cap}</figure>`;
       };
-      const flow = project.story.map(b =>
-        b.text ? textBlock(b.text)
+      const renderBlock = b =>
+        b.chapter ? `<section class="story-chapter"><div class="story-chapter__head"><p class="eyebrow">${b.chapter.eyebrow}</p><h2 class="detail-title">${b.chapter.title}</h2>${b.chapter.meta ? `<p class="story-chapter__meta">${b.chapter.meta}</p>` : ""}</div>${textFrom("", b.chapter.html, { lead: true })}${b.chapter.items.map(renderBlock).join("")}</section>`
+        : b.carousel ? `<div class="story-carousel"><div class="story-carousel__track">${b.carousel.map(it => figure(it, project.title)).join("")}</div><div class="story-carousel__nav"><span class="story-carousel__count">1 / ${b.carousel.length}</span><button class="story-carousel__btn" type="button" data-dir="-1" aria-label="Previous image">←</button><button class="story-carousel__btn" type="button" data-dir="1" aria-label="Next image">→</button></div></div>`
+        : b.text ? textBlock(b.text)
         : b.label ? textFrom(b.label, b.html || b.list, { lead: b.lead !== false && !b.list })
         : b.row ? `<div class="story-row" style="--cols:${b.row.length}">${b.row.map(it => figure(it, project.title)).join("")}</div>`
         : b.split ? `<div class="story-split"><div>${textFrom(b.split.label, b.split.html, {})}</div><div class="story-split__media">${b.split.items.map(it => figure(it, project.title)).join("")}</div></div>`
-        : figure(b, project.title)
-      ).join("");
+        : figure(b, project.title);
+      const flow = project.story.map(renderBlock).join("");
       const sideBlock = (label, html, cls = "") => html ? `<section class="meta-block"><p class="meta-label">${label}</p><div class="meta-value ${cls}">${html}</div></section>` : "";
+      const featured = (project.featured || []).length
+        ? `<ul class="meta-list">${project.featured.map(f => `<li>${f.url ? `<a href="${f.url}" target="_blank" rel="noopener">${f.label} ↗</a>` : f.label}</li>`).join("")}</ul>` : "";
       const resources = (project.resources || []).length
         ? `<ul class="meta-list">${project.resources.map(r => `<li>${r.replace(/>([^<]+)<\/a>/, '>$1 ↗</a>')}</li>`).join("")}</ul>` : "";
       storyEl.innerHTML = `
@@ -1816,6 +1928,7 @@
           ${sideBlock("Project Type", project.services.join(" "), "tags")}
           ${sideBlock("System Architecture", (project.systemArchitecture || []).join(" "), "tags")}
           ${sideBlock("Team", Array.isArray(project.credits) ? project.credits.join(", ") : (project.credits || ""))}
+          ${sideBlock("Featured", featured)}
           ${sideBlock("Resources", resources)}
           ${sideBlock("License", project.license)}
         </aside>
@@ -1826,6 +1939,38 @@
           <div class="story-flow">${flow}</div>
         </div>`;
       storyEl.hidden = false;
+
+      storyEl.querySelectorAll(".story-carousel").forEach(car => {
+        const track = car.querySelector(".story-carousel__track");
+        const count = car.querySelector(".story-carousel__count");
+        const [prev, next] = car.querySelectorAll(".story-carousel__btn");
+        const total = track.children.length;
+        const pitch = () => total > 1 ? track.children[1].offsetLeft - track.children[0].offsetLeft : track.clientWidth;
+        const current = () => Math.round(track.scrollLeft / pitch());
+        const update = () => {
+          const i = current();
+          count.textContent = `${i + 1} / ${total}`;
+          prev.disabled = i === 0;
+          next.disabled = i === total - 1;
+        };
+        car.querySelectorAll(".story-carousel__btn").forEach(btn => btn.addEventListener("click", () => {
+          const slide = track.children[current() + Number(btn.dataset.dir)];
+          if (slide) track.scrollTo({ left: slide.offsetLeft - track.offsetLeft, behavior: "smooth" });
+        }));
+        track.addEventListener("scroll", update, { passive: true });
+        update();
+      });
+
+      // images side by side share one aspect ratio, so their tops, bottoms and captions line up
+      storyEl.querySelectorAll(".story-row").forEach(row => {
+        const imgs = [...row.querySelectorAll("img")];
+        const align = () => {
+          if (!imgs.every(i => i.naturalWidth)) return;
+          const ratio = imgs.reduce((sum, i) => sum + i.naturalWidth / i.naturalHeight, 0) / imgs.length;
+          imgs.forEach(i => { i.style.aspectRatio = ratio; i.style.objectFit = "cover"; });
+        };
+        imgs.forEach(i => i.complete ? align() : i.addEventListener("load", align));
+      });
 
       // zoomable images: open at a larger size in a scrollable overlay
       storyEl.addEventListener("click", e => {
