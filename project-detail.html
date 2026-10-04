@@ -717,6 +717,15 @@
     .story-text .meta-list.meta-list--rows li:first-child { padding-top: 0; }
     .story-text .meta-list.meta-list--rows li:last-child { border-bottom: 0; }
     .story-text .meta-list.meta-list--rows li::before { content: none; }
+    /* two-column role rows: a grid keeps both columns aligned row by row */
+    .story-text .meta-value.cols:has(> .meta-list--rows) { column-count: 1; }
+    .story-text .meta-value > .meta-list.meta-list--rows {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 3rem;
+    }
+    .story-text .meta-value > .meta-list.meta-list--rows li:nth-child(2) { padding-top: 0; }
+    .story-text .meta-value > .meta-list.meta-list--rows li:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
     .story-text .meta-list { list-style: none; padding: 0; counter-reset: step; }
     .story-text .meta-list li {
       counter-increment: step;
@@ -774,6 +783,11 @@
       background: none;
       cursor: zoom-in;
     }
+    .story-row {
+      display: grid;
+      grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+      gap: 1rem;
+    }
     .story-split {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
@@ -824,7 +838,11 @@
       }
       .story-side { position: static; order: 2; }
       .story-split { grid-template-columns: 1fr; }
+      .story-row { grid-template-columns: 1fr; }
       .story-text .meta-value.cols, .story-text .meta-value .cols { column-count: 1; }
+      .story-text .meta-value > .meta-list.meta-list--rows { grid-template-columns: 1fr; }
+      .story-text .meta-value > .meta-list.meta-list--rows li:nth-child(2) { padding-top: 0.7rem; }
+      .story-text .meta-value > .meta-list.meta-list--rows li:nth-last-child(2):nth-child(odd) { border-bottom: 1px solid var(--border); }
       .story-text .meta-value.pair { grid-template-columns: 1fr; gap: 1rem; }
       .story-split__media { position: static; }
     }
@@ -983,12 +1001,88 @@
         title: "Human Loci",
         eyebrow: "Tangible experience of place",
         abstract: `<p>A listening object that transforms places into tactile and auditory experiences. Each disk encodes a specific location through recorded soundscapes and a distinct material identity. Place a disk on the player and the environment comes to life through touch, sound, and form.</p>`,
-        challenge: "We didn't know how plexiglass would behave structurally or aesthetically until we started cutting it. Finding the right thickness and slot dimensions to achieve clean curves without cracking took many iterations. The tonearm was the trickiest part: it needed to trigger a small on/off switch with enough precision that any slight misalignment would break the interaction. I modelled and 3D printed several versions, each one refining the tolerances a little more, until it worked consistently.",
-        approach: "We kept testing and iterating on every component in parallel rather than waiting for one to be perfect before moving to the next. Each version of a part taught us something specific about what had to change, which made the process faster and more grounded than trying to solve things on paper first.",
-        role: "Concept development and project storytelling · Tonearm mechanism design and 3D prototyping · Object aesthetics and formal decisions · Presentation structure and project documentation",
+        challenge: `<p>The brief was to design and prototype a physical object with digital fabrication. Our answer was a synesthetic listening object that does not play music but places, a screen-free ritual where the choice of place is made by touch.</p>
+          <p>We didn't know how plexiglass would behave structurally or aesthetically until we started cutting it. Finding the right thickness and slot dimensions to achieve clean curves without cracking took many iterations. The tonearm was the trickiest part: it needed to trigger a small on/off switch with enough precision that any slight misalignment would break the interaction. I modelled and 3D printed several versions, each one refining the tolerances a little more, until it worked consistently.</p>`,
+        process: [
+          "Started from an inspiration, a player that reinterprets the ritual of vinyl, and borrowed the ritual while changing what it means: instead of choosing a song, you choose a place",
+          "Defined the concept: a synesthetic listening object that plays places, an archive of human presence over time",
+          "Reduced the interaction to its essentials: place the disk, engage the tonearm, listen, with a minimal wheel for volume",
+          "Tested and iterated on every component in parallel instead of waiting for one to be perfect before moving to the next",
+          "Cut the transparent box in plexiglass over many iterations to find the thickness and slot dimensions that bend cleanly without cracking",
+          "Modelled and 3D printed several tonearms, refining the tolerances until it triggered the switch consistently through a magnetic cam mechanism",
+          "Built the speaker box as two sealed chambers for stereo separation, testing an acrylic mock-up and a wooden prototype before the final version",
+          "Gave each of the three places, train station, marina and park, a disk with its own material and texture"
+        ],
+        approach: `<p><strong>A transparent system.</strong> The object is built so that structure, sound and interaction stay visible and readable. Nothing is hidden behind a casing, so the way it works becomes part of the experience.</p>
+          <p><strong>Three gestures, no screen.</strong> Place the disk, engage the tonearm, listen. The tonearm replaces a traditional on/off switch as the primary interaction, and the volume is a minimal circular wheel with no additional interface.</p>
+          <p><strong>Learn by making.</strong> We kept testing and iterating on every component in parallel rather than waiting for one to be perfect before moving to the next. Each version of a part taught us something specific about what had to change, which made the process faster and more grounded than trying to solve things on paper first.</p>`,
+        role: [
+          "Concept development and project storytelling",
+          "Tonearm and volume wheel design and 3D prototyping",
+          "Object aesthetics and formal decisions",
+          "Presentation structure and project documentation"
+        ],
+        outcome: `<p>A working prototype of a listening object that plays places. Place a disk, engage the tonearm, and the sound of a place fills the room.</p>
+          <p>Three places were realised, a train station, a marina and a park. Each disk represents a specific human space through sound, material and texture, so a place can be recognised by touch before any sound begins.</p>`,
+        reflection: `<p>Creating an object from scratch means not limiting the work to specific materials, shapes or functions from the start.</p>
+          <p>The project pushed the team beyond its usual materials and techniques, and it was as much a technical education as a creative process. The collaboration was decisive: each member brought complementary strengths, from concept development to technical problem-solving, and the trust between us is what shaped Human Loci into its final form.</p>`,
+        resources: [
+          `<a href="assets/projects/human loci/human-loci-presentation.pdf" target="_blank" rel="noopener">Final presentation (PDF)</a>`,
+          `<a href="https://github.com/jerem-marti/MAInD-Digital_Fabrication-2025-Human_Loci" target="_blank" rel="noopener">Code repository (GitHub)</a>`
+        ],
+        license: `Documentation and content: CC BY 4.0<br>Hardware design files: CERN OHL v2 Permissive<br>Source code: MIT License`,
+        story: [
+          { src: "assets/projects/human loci/webp/humanloci-generalview2.webp", alt: "Human Loci, transparent listening object", caption: "Human Loci: a transparent listening object that plays places instead of music." },
+          { text: "challenge" },
+          { src: "assets/projects/human loci/webp/hl-slide-2.webp", alt: "The inspiration, a player that reinterprets vinyl", caption: "The inspiration: a player that reinterprets the ritual of vinyl, which we borrowed and gave a new meaning." },
+          { text: "process" },
+          { src: "assets/projects/human loci/webp/hl-slide-5.webp", alt: "Anatomy of the object", caption: "The anatomy of the object: the tonearm as primary interaction, the volume control, and the sealed speaker box." },
+          { src: "assets/projects/human loci/webp/hl-slide-6.webp", alt: "The interaction, place, engage, listen", caption: "The whole interaction: place the disk, engage the tonearm, listen." },
+          { row: [
+            { src: "assets/projects/human loci/webp/hl-slide-8.webp", alt: "Making the box", caption: "Making the box: trying the transparent shell and its parts by hand." },
+            { src: "assets/projects/human loci/webp/hl-slide-9.webp", alt: "Early wooden prototypes", caption: "Early wooden prototypes and the first tonearm model." }
+          ] },
+          { row: [
+            { src: "assets/projects/human loci/webp/hl-cam-sketch.webp", alt: "Sketch of the tonearm cam", caption: "The cam sketch in Fusion 360: its geometry took several iterations to fit reliably." },
+            { src: "assets/projects/human loci/webp/hl-cam-extrusion.webp", alt: "Cam extrusion with magnet holes", caption: "The cam extruded, with holes for the magnets that snap it between two positions." }
+          ] },
+          { src: "assets/projects/human loci/webp/hl-tonearm-3d.webp", alt: "3D model of the tonearm", caption: "The tonearm in 3D: the arm, the magnetic cam and the microswitch it triggers to start and stop playback." },
+          { row: [
+            { src: "assets/projects/human loci/webp/hl-slide-10.webp", alt: "Volume control", caption: "The volume control: a minimal wheel with no additional interface." },
+            { src: "assets/projects/human loci/webp/hl-slide-11.webp", alt: "Speaker box", caption: "The speaker box: from acrylic mock-up and wooden prototype to the technical drawing." }
+          ] },
+          { src: "assets/projects/human loci/webp/hl-slide-12.webp", alt: "Electronics on the bench", caption: "The electronics on the bench: an RFID reader, a microcontroller and the signal flow." },
+          { text: "approach" },
+          { row: [
+            { src: "assets/projects/human loci/webp/hl-slide-13.webp", alt: "The belt", caption: "The belt: a continuous strip that lets rigid acrylic bend around the whole object." },
+            { src: "assets/projects/human loci/webp/hl-slide-14.webp", alt: "Cutting the belt", caption: "Laser-cutting and testing the pattern of the belt." }
+          ] },
+          { src: "assets/projects/human loci/webp/hl-slide-15.webp", alt: "Three disks, train station, marina and park", caption: "Each disk represents a specific human space through sound, material and texture: train station, marina and park." },
+          { row: [
+            { src: "assets/projects/human loci/webp/hl-slide-16.webp", alt: "Making the disks", caption: "Making the disks: laser-cut layers and a mould." },
+            { src: "assets/projects/human loci/webp/hl-slide-17.webp", alt: "Casting the disks", caption: "Casting and colouring the disks." }
+          ] },
+          { row: [
+            { src: "assets/projects/human loci/webp/hl-slide-18.webp", alt: "Technical drawing", caption: "The technical drawing of the object." },
+            { src: "assets/projects/human loci/webp/hl-slide-19.webp", alt: "3D model", caption: "The 3D model, showing how electronics, speakers and mechanics fit inside the shell." }
+          ] },
+          { text: "role" },
+          { text: "reflection" },
+          { text: "outcome" },
+          { row: [
+            { src: "assets/projects/human loci/webp/humanloci-generalview1.webp", alt: "The prototype with the park disk", caption: "The prototype with the park disk in place." },
+            { src: "assets/projects/human loci/webp/humanloci-generalview3.webp", alt: "The transparent shell and the belt", caption: "The transparent shell and the belt, seen from the side." }
+          ] },
+          { row: [
+            { src: "assets/projects/human loci/webp/humanloci-detail1.webp", alt: "Tonearm on the train station disk", caption: "The tonearm resting on the train station disk." },
+            { src: "assets/projects/human loci/webp/humanloci-interaction1.webp", alt: "A hand interacting with the object", caption: "Interacting with the object." }
+          ] },
+          { src: "assets/projects/human loci/webp/humanloci-interaction2.webp", alt: "Placing the marina disk", caption: "Placing the marina disk." },
+          { type: "vimeo", src: "1232734752", alt: "Human Loci demo", caption: "Demo: place a disk, move the tonearm, listen." }
+        ],
         services: ["#TangibleInteraction", "#EmbodiedInteraction", "#ConceptualDesign", "#DesignResearch"],
-        systemArchitecture: ["#PhysicalComputing", "#EmbededSystems", "#RFID", "#Microcontroller"],
-        credits: ["Jérémy Martin", "Nicholas Vos"],
+        systemArchitecture: ["#PhysicalComputing", "#EmbeddedSystems", "#RFID", "#Microcontroller"],
+        credits: ["Nerea Asensio", "Jérémy Martin", "Nicholas Vos"],
         theme: {
           bg: "#F3EDE8",
           fg: "#18180F",
@@ -1710,6 +1804,7 @@
       const flow = project.story.map(b =>
         b.text ? textBlock(b.text)
         : b.label ? textFrom(b.label, b.html || b.list, { lead: b.lead !== false && !b.list })
+        : b.row ? `<div class="story-row" style="--cols:${b.row.length}">${b.row.map(it => figure(it, project.title)).join("")}</div>`
         : b.split ? `<div class="story-split"><div>${textFrom(b.split.label, b.split.html, {})}</div><div class="story-split__media">${b.split.items.map(it => figure(it, project.title)).join("")}</div></div>`
         : figure(b, project.title)
       ).join("");
@@ -1722,6 +1817,7 @@
           ${sideBlock("System Architecture", (project.systemArchitecture || []).join(" "), "tags")}
           ${sideBlock("Team", Array.isArray(project.credits) ? project.credits.join(", ") : (project.credits || ""))}
           ${sideBlock("Resources", resources)}
+          ${sideBlock("License", project.license)}
         </aside>
         <div class="story-main">
           <p class="eyebrow">${project.eyebrow}</p>
