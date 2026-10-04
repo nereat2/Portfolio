@@ -1283,6 +1283,105 @@
           { label: "Demo", type: "vimeo", src: "1182424276" }
         ]
       },
+      "thea": {
+        title: "Thea",
+        eyebrow: "A wearable sense for allergies",
+        abstract: `<p>Thea is a wearable companion that gives the allergic body a new sense: how close you are to your limit, how fast you are approaching it, and what to do next. A screenless band translates invisible environmental load into light, touch and, only when needed, a calm voice.</p>`,
+        challenge: `<p>Allergic reactions feel random, but they are cumulative: allergens, the environment and the state of the body add up, invisibly, until a personal limit is crossed.</p>
+          <p>Triggers are hard to trace, reactions are often recognised too late, and managing them means constant vigilance. Existing tools answer with more forecasts, numbers and alerts, which mostly add anxiety. The design question became: how might we give the body a new sense, felt rather than read, so a person knows how close they are to their limit while there is still room to act?</p>`,
+        process: [
+          "Researched life with allergies through interviews, co-design and a conversation with a professional from the aha! Swiss Allergy Centre",
+          "Defined the Cumulative Load Model: allergens fill a cup, co-factors lower the threshold, and the Action Window is the room left to act",
+          "Started from a medical patch, abandoned because the object itself signalled illness",
+          "Moved to the wrist, culturally neutral and well suited to sensing, but early bands still read as a smartwatch",
+          "Removed the case entirely: a single continuous band with the technology hidden inside and light glowing through its surface",
+          "Prototyped from paper and cardboard to a 3D-printed housing for the electronics, then tested textiles and closures",
+          "Designed the multimodal language: a light gauge, haptic rhythms and a voice that stays silent by default",
+          "Designed the companion app, with an onboarding that teaches Thea's language before anything is tracked",
+          "Wrote a co-design and usability protocol, run Wizard-of-Oz, to test whether something this calm can still be trusted"
+        ],
+        approach: `<p><strong>Felt, not read.</strong> No screens and no numbers. A light gauge fills to show how close you are to your limit, and a haptic rhythm tells how fast it is changing: the number of pulses encodes the speed, their order the direction.</p>
+          <p><strong>Silence as the default.</strong> Thea's voice speaks only when you ask, or at a true edge. Its rarity is what makes it trusted: when you hear it, it means something. In a reaction it speaks first, with the calm authority of a paramedic rather than an alarm.</p>
+          <p><strong>Private by design.</strong> The intelligence is designed to run on the device itself, so no biometric or environmental data needs to leave the band. The app shows exactly what Thea knows, and everything can be reviewed, exported or deleted.</p>`,
+        role: [
+          "Research and ideation",
+          "Companion app: UX, UI and onboarding",
+          "Art direction of the project's photo and video documentation",
+          "Final presentation design"
+        ],
+        outcome: `<p>A functional prototype across all four workstreams: the device, its physical form, the companion app and the voice agent.</p>
+          <p>A multimodal language where stillness and silence are the default: a light gauge, a haptic rhythm and a voice that speaks only when asked or at a true edge. Alongside it, a complete co-design and usability protocol, ready to run with people who live with allergies.</p>`,
+        resources: [
+          `<a href="assets/projects/thea/thea-presentation.pdf" target="_blank" rel="noopener">Final presentation (PDF)</a>`,
+          `<a href="https://ma-in-d-multimodal-20252026-thea.vercel.app/" target="_blank" rel="noopener">Onboarding prototype</a>`,
+          `<a href="https://github.com/nereat2/MAInD-Multimodal-20252026-thea" target="_blank" rel="noopener">Code repository (GitHub)</a>`,
+          `<a href="https://github.com/jerem-marti/MAInD-Multimodal_Experience_Design-Demo-2026" target="_blank" rel="noopener">Device demo code (GitHub)</a>`
+        ],
+        services: ["#WearableDesign", "#MultimodalInteraction", "#UXDesign", "#CoDesign"],
+        systemArchitecture: ["#ArduinoUNOQ", "#VoiceInterface", "#HapticFeedback", "#EdgeAI"],
+        credits: ["Nerea Asensio", "Lucia Ciapessoni", "Jérémy Martin", "Nicholas Vos"],
+        story: [
+          { src: "assets/projects/thea/webp/thea-hero.webp", alt: "Thea, a textile wristband", caption: "Thea: a screenless wearable that gives the allergic body a new sense." },
+          { text: "challenge" },
+          { src: "assets/projects/thea/webp/thea-slide-2.webp", alt: "Living with allergies", caption: "Living with allergies: trigger ambiguity, late recognition, cumulative causes and a constant psychological burden." },
+          { src: "assets/projects/thea/webp/thea-slide-3.webp", alt: "The Cumulative Load Model", caption: "The Cumulative Load Model: the Action Window is the room left before a reaction." },
+          { text: "process" },
+          { text: "approach" },
+          { label: "Brand identity", html: `<p>Thea's brand is built on one idea, attunement: a calm new sense, never a tracker, a monitor or a medical alert.</p>
+            <p>Its promise moves from calm perception to reconnection: feel your load quietly, step back into the world you have been avoiding, and get your life back. The palette is drawn from the product photography, cobalt, orange and linen, and on the device colour is the signal: white rests, cobalt speaks, orange acts. The mark is an abstract loop of light that implies sight without ever becoming a face, and the voice follows the same principles: say less, stay plain, warm and never anxious. The brand was defined by Jérémy Martin and guided every other part of the project, from the voice agent to the app.</p>` },
+          { src: "assets/projects/thea/webp/thea-brand-cover.webp", alt: "Thea brand book cover", caption: "The brand book: the sense you were missing. Reconnect with your allergens." },
+          { src: "assets/projects/thea/webp/thea-brand-visual.webp", alt: "Thea visual identity", caption: "The visual identity: cobalt, orange and linen, and on the loop, colour is state." },
+          { src: "assets/projects/thea/webp/thea-slide-5.webp", alt: "What Thea does for you", caption: "What Thea does: ongoing monitoring, window check, voice update and support during a reaction." },
+          { src: "assets/projects/thea/webp/thea-slide-6.webp", alt: "How Thea interacts", caption: "Three channels, each with one job: light for where you are, touch for how fast, voice when needed." },
+          { row: [
+            { type: "video", phone: true, src: "assets/projects/thea/video/thea-state-request.mp4", caption: "Status request." },
+            { type: "video", phone: true, src: "assets/projects/thea/video/thea-state-listening.mp4", caption: "Voice listening." },
+            { type: "video", phone: true, src: "assets/projects/thea/video/thea-state-thinking.mp4", caption: "Voice thinking." },
+            { type: "video", phone: true, src: "assets/projects/thea/video/thea-state-speaking.mp4", caption: "Voice speaking." },
+            { type: "video", phone: true, src: "assets/projects/thea/video/thea-state-alert.mp4", caption: "Status alert." }
+          ] },
+          { src: "assets/projects/thea/webp/thea-slide-7.webp", alt: "Thea's voice", caption: "Thea's voice: a confidant, not an alarm." },
+          { src: "assets/projects/thea/webp/thea-slide-8.webp", alt: "Laura and the dog", caption: "A use case in four beats: Laura, who is allergic to dogs, goes to dinner at her friend's house." },
+          { src: "assets/projects/thea/webp/thea-storyboard.webp", alt: "Storyboard of the four scenarios", zoom: true, zoomWidth: 2400, caption: "The four scenarios: a status check, an imminent reaction, the edge, and graceful failure when Thea is unsure." },
+          { row: [
+            { src: "assets/projects/thea/webp/thea-slide-9.webp", alt: "Severe allergic reaction", caption: "When the Action Window closes, the device enters urgency mode." },
+            { src: "assets/projects/thea/webp/thea-slide-10.webp", alt: "Thea speaks first", caption: "In a real reaction, Thea stops asking you to look and starts telling you what to do." }
+          ] },
+          { label: "The companion app", html: `<p>Before anything is tracked, the app teaches Thea's language.</p>
+            <p>The onboarding unfolds in three acts: it explains the cup model and the Action Window, gets to know the user's allergic history, and sets expectations, with practice signals so nothing feels unfamiliar during a real alert. After a reaction, the app reconstructs what happened, what led up to it and how the window responded: a learning moment, not a relived one.</p>` },
+          { row: [
+            { src: "assets/projects/thea/webp/thea-app-1.webp", alt: "Onboarding, your body keeps a score", caption: "Explaining the cumulative load." },
+            { src: "assets/projects/thea/webp/thea-app-2.webp", alt: "Onboarding, your body has a ceiling", caption: "The personal threshold." },
+            { src: "assets/projects/thea/webp/thea-app-3.webp", alt: "Onboarding, this space is your freedom", caption: "The Action Window." }
+          ] },
+          { row: [
+            { src: "assets/projects/thea/webp/thea-app-4.webp", alt: "Onboarding, how Thea reaches you", caption: "How Thea reaches you: light, vibration and voice." },
+            { src: "assets/projects/thea/webp/thea-app-5.webp", alt: "Onboarding, how to reach Thea", caption: "How to reach Thea: a single tap or a long press." },
+            { src: "assets/projects/thea/webp/thea-app-6.webp", alt: "Onboarding, if a reaction starts", caption: "What Thea does if a reaction starts." }
+          ] },
+          { row: [
+            { src: "assets/projects/thea/webp/thea-slide-12.webp", alt: "What the app doesn't hide", caption: "What the app doesn't hide: onboarding, data always visible, and the story after a reaction." },
+            { src: "assets/projects/thea/webp/thea-slide-13.webp", alt: "Local AI and ethics", caption: "Local AI and ethics: on-device by design, full visibility, a companion and not a diagnosis." }
+          ] },
+          { label: "How it was built", html: `<p>Thea was the work of a team of four. Together we carried out the research and the ideation.</p>
+            <p><strong>Jérémy Martin</strong> defined the brand and Thea's personality, wrote the voice agent's system prompt, coded the voice interface, designed the co-design protocol and built the final demo. <strong>Nicholas Vos</strong> led the electronics, the sensing firmware and the motion work. <strong>Lucia Ciapessoni</strong> led the 3D modelling, the physical form and the documentation. <strong>I</strong> led the companion app, its UX, UI and onboarding, art-directed the project's photo and video documentation, and designed the final presentation. Photography by Niccolò Quaresima.</p>`, lead: false },
+          { text: "role" },
+          { text: "outcome" },
+          { type: "vimeo", src: "1232759690", alt: "Thea video", caption: "Thea, the project video." },
+          { row: [
+            { src: "assets/projects/thea/webp/thea-photo-3.webp", alt: "Thea worn on the wrist", caption: "The light halo glows through the band: calm technology that stays at the edge of attention." },
+            { src: "assets/projects/thea/webp/thea-photo-4.webp", alt: "Thea on the wrist with flowers", caption: "Holding a wildflower again: Thea is designed to help people reconnect with what they avoid." },
+            { src: "assets/projects/thea/webp/thea-photo-5.webp", alt: "Thea among flowers", caption: "Reconnect with your allergens: step back into the world you have been keeping at arm's length." }
+          ] },
+          { row: [
+            { src: "assets/projects/thea/webp/thea-photo-1.webp", alt: "Thea on a rope", caption: "Thea, the sense you were missing." },
+            { src: "assets/projects/thea/webp/thea-photo-2.webp", alt: "Thea open on a blue surface", caption: "Thea among the allergens it helps you sense." }
+          ] }
+        ],
+        images: [
+          { label: "Thea", bg: 'center / cover no-repeat url("assets/projects/thea/webp/thea-hero.webp")' }
+        ]
+      },
       "elen": {
         title: "ELEN",
         featured: [
@@ -1614,6 +1713,7 @@
       "human-loci",
       "meeting-pond",
       "elen",
+      "thea",
       "rememberita",
       "adaptune",
       "financial-planning-hub",

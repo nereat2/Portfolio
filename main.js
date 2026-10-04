@@ -110,7 +110,7 @@ const FACE_IMAGES = {
   'face-right':  "assets/projects/adaptune/webp/adaptune-grid.webp",
   'face-left':   "assets/projects/meeting pond/webp/meetingpond-grid.webp",
   'face-top':    "assets/projects/philoxenia/webp/philoxenia-grid.webp",
-  'face-bottom': "assets/projects/financial planning hub/webp/financialhub-grid.webp"
+  'face-bottom': "assets/projects/thea/webp/thea-grid.webp"
 };
 
 const POS = ['0% 0%','50% 0%','100% 0%',
