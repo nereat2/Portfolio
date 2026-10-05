@@ -247,7 +247,7 @@
       margin-bottom: 1.2rem;
       padding: 0.7rem 1rem;
       border-left: 2px solid currentColor;
-      font-size: 11px;
+      font-size: 0.6875rem;
       letter-spacing: 0.06em;
       opacity: 0.75;
       display: flex;
@@ -506,7 +506,7 @@
 
     #nextProjectLink {
       font-family: var(--font-body);
-      font-size: 15px;
+      font-size: 0.9375rem;
       font-weight: 400;
       color: var(--muted);
       text-decoration: none;
@@ -609,14 +609,14 @@
       }
 
       #nextProjectLink {
-        font-size: 13px;
+        font-size: 0.8125rem;
         transform: none;
       }
     }
     .detail-visit-btn {
       display: inline-block;
       margin-top: 1rem;
-      font-size: 12px;
+      font-size: 0.75rem;
       letter-spacing: 0.08em;
       text-decoration: underline;
       opacity: 0.7;
@@ -630,10 +630,13 @@
 
     .story {
       display: grid;
-      grid-template-columns: 1fr 3fr;
-      gap: 3rem;
+      grid-template-columns: minmax(16rem, 1fr) 3fr;
+      gap: 4rem;
       align-items: start;
-      padding: 7rem 2rem 6rem;
+      padding: 7rem 2.4rem 6rem;
+      /* on very wide screens the page stops growing, so images stay in proportion with the text */
+      max-width: 112rem;
+      margin: 0 auto;
     }
     .story[hidden] { display: none; }
 
@@ -646,17 +649,17 @@
     }
     .story-side .meta-block { padding: 0.8rem 0 0; }
     .story-side .meta-block:first-child { border-top: 0; padding: 0; }
-    .story-side .meta-label { font-size: 0.64rem; margin-bottom: 0.45rem; }
-    .story-side .meta-value { color: var(--muted); font-size: 0.8rem; line-height: 1.6; }
+    .story-side .meta-label { font-size: 0.74rem; margin-bottom: 0.45rem; }
+    .story-side .meta-value { color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
     .story-side .meta-value.tags { font-weight: 500; color: var(--ink); }
     .story-side .meta-list { list-style: none; padding: 0; }
     .story-side .meta-list li { margin-bottom: 0.3em; }
 
     .story-main { min-width: 0; }
     /* text is left-aligned and flows into two columns so lines stay short while images run full width */
-    .story-main > .eyebrow { font-size: 0.68rem; }
-    .story-main .detail-title { font-size: clamp(2.1rem, 3.4vw, 3.1rem); line-height: 1.02; margin-bottom: 1.2rem; }
-    .story-main .abstract { font-size: 1.12rem; line-height: 1.6; max-width: 52rem; }
+    .story-main > .eyebrow { font-size: 0.82rem; }
+    .story-main .detail-title { font-size: clamp(2.6rem, 4vw, 4.2rem); line-height: 1.02; margin-bottom: 1.2rem; }
+    .story-main .abstract { font-size: 1.25rem; line-height: 1.6; max-width: 56rem; }
     .story-main .abstract p + p { margin-top: 1.1rem; }
 
     .story-flow {
@@ -669,7 +672,7 @@
     .story-text { padding: 0; }
     /* label row with a hairline running to the edge of the column */
     .story-text > .meta-label {
-      font-size: 0.68rem;
+      font-size: 0.8rem;
       display: flex;
       align-items: center;
       gap: 1rem;
@@ -684,7 +687,7 @@
     /* consecutive text sections sit closer together than text and images */
     .story-text + .story-text { margin-top: -1rem; }
     .story-text .meta-value {
-      font-size: 1rem;
+      font-size: 1.1rem;
       line-height: 1.7;
     }
     .story-text .meta-value.cols, .story-text .meta-value .cols { column-count: 2; column-gap: 3rem; }
@@ -700,7 +703,7 @@
     /* second level: a lead paragraph, then softer body text with bolder run-in heads */
     .story-text .meta-value p { color: var(--muted); }
     .story-text .meta-value p.lead {
-      font-size: 1.22rem;
+      font-size: 1.38rem;
       line-height: 1.45;
       font-weight: 500;
       color: var(--ink);
@@ -735,7 +738,7 @@
     }
     .story-text .meta-list li::before {
       content: counter(step, decimal-leading-zero);
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       letter-spacing: 0.08em;
       padding-top: 0.38em;
       color: var(--accent);
@@ -822,7 +825,7 @@
     .story-carousel__btn:disabled { opacity: 0.3; cursor: default; }
     /* a second chapter (e.g. an exhibition): a new title, then the story continues */
     .story-chapter { display: flex; flex-direction: column; gap: 3rem; margin-top: 3rem; }
-    .story-chapter__head > .eyebrow { margin: 0 0 0.4rem; font-size: 0.68rem; }
+    .story-chapter__head > .eyebrow { margin: 0 0 0.4rem; font-size: 0.82rem; }
     .story-chapter__head .detail-title { margin: 0; }
     .story-chapter__meta { margin: 0.8rem 0 0; font-size: 0.85rem; color: var(--muted); }
     .story-text > .meta-label:empty { display: none; }
@@ -863,7 +866,7 @@
     }
     .story-figure figcaption {
       margin-top: 0.6rem;
-      font-size: 0.78rem;
+      font-size: 0.9rem;
       line-height: 1.5;
       color: var(--muted);
     }
@@ -1231,12 +1234,34 @@
         title: "Financial Planning Hub",
         eyebrow: "Service platform",
         abstract: `<p>The Financial Planning Hub is a new feature concept for a major Swiss banking app, designed to help users understand how their short-term financial decisions affect their long-term goals. Through guided onboarding, a dynamic visual metaphor, real-time what-if simulations and personalised insights, the hub makes financial planning feel approachable, intuitive and confidence-building — rather than overwhelming.</p>`,
-        challenge: "Most banking apps give you the tools to manage money, but very few help you understand it. The brief revealed a concrete gap: users could track spending and investments, but had no way to see how a small decision today — an impulse purchase, a missed saving — quietly shapes a goal years from now. This disconnection between the present and the future creates anxiety, procrastination and a persistent lack of confidence around financial planning. The design challenge was to bridge that gap without adding complexity — making long-term thinking feel as natural and immediate as checking a balance.",
-        approach: "We started with user research — interviews and behavioural analysis that surfaced a clear pattern: people don't avoid financial planning because they don't care, they avoid it because it feels abstract and intimidating. From there we ran a competitive benchmark across financial apps, identifying where existing tools fall short: most offer goal tracking or spending insights in isolation, but almost none connect the two in real time or make the relationship between daily actions and future outcomes visible.\nThat insight shaped every design decision. The onboarding is guided and conversational, reducing cognitive load from the first interaction. A growing tree metaphor translates financial health into something immediately readable — no terminology required. What-if simulations let users explore scenarios (\"what if I saved €50 more per month?\") without consequence, turning planning from a source of anxiety into something closer to play. All designed in Figma, from research synthesis to final interactive prototype.",
-        role: "Concept definition and project framing · User research and synthesis · Competitive benchmark · UX flow and feature architecture · End-to-end Figma prototype · Presentation structure and copy",
+        challenge: `<p>Most banking apps give you the tools to manage money, but very few help you understand it.</p>
+          <p>The brief revealed a concrete gap: users could track spending and investments, but had no way to see how a small decision today, an impulse purchase or a missed saving, quietly shapes a goal years from now. This disconnection between the present and the future creates anxiety, procrastination and a persistent lack of confidence around financial planning. The challenge was to bridge that gap without adding complexity, making long-term thinking feel as natural and immediate as checking a balance.</p>`,
+        approach: `<p><strong>Research first.</strong> Interviews and behavioural analysis surfaced a clear pattern: people don't avoid financial planning because they don't care, they avoid it because it feels abstract and intimidating. A competitive benchmark showed that most financial apps offer goal tracking or spending insights in isolation, but almost none connect the two in real time or make the link between daily actions and future outcomes visible.</p>
+          <p><strong>Design for confidence.</strong> The onboarding is guided and conversational, reducing cognitive load from the first interaction. A growing tree metaphor translates financial health into something immediately readable, with no terminology required. What-if simulations ("what if I saved €50 more per month?") let users explore scenarios without consequence, turning planning into something closer to play. Everything was designed in Figma, from research synthesis to the final interactive prototype.</p>`,
+        role: [
+          "Concept definition and project framing",
+          "User research and synthesis",
+          "Competitive benchmark",
+          "UX flow and feature architecture",
+          "End-to-end Figma prototype",
+          "Presentation structure and copy"
+        ],
         services: ["#UX", "#UI", "#DesignInterface"],
         systemArchitecture: ["#Figma", "#DigitalPrototyping"],
-        credits: ["Walter de Nicola", "Roberta Valli", "Riccardo Assirelli", "Isabel Parini"],
+        credits: ["Nerea Asensio", "Walter de Nicola", "Roberta Valli", "Riccardo Assirelli", "Isabel Parini"],
+        story: [
+          { src: "assets/projects/financial planning hub/webp/home_screen_1_HR.webp", alt: "Financial Planning Hub home screen", caption: "The Financial Planning Hub inside the banking app." },
+          { text: "challenge" },
+          { src: "assets/projects/financial planning hub/webp/onboarding_1_HR.webp", alt: "Onboarding screens", caption: "A guided, conversational onboarding." },
+          { text: "approach" },
+          { row: [
+            { src: "assets/projects/financial planning hub/webp/main_screen_HR.webp", alt: "The growing tree on the main screen", caption: "The growing tree: financial health at a glance." },
+            { src: "assets/projects/financial planning hub/webp/mock_dashboard_HR.webp", alt: "Main page of the hub", caption: "The main page of the hub." }
+          ] },
+          { text: "role" },
+          { type: "vimeo", src: "1182424082", alt: "Financial Planning Hub video", caption: "The Financial Planning Hub, from onboarding to what-if simulations." },
+          { src: "assets/projects/financial planning hub/webp/onboarding_ready_HR.webp", alt: "Hub ready screen", caption: "The hub is ready." }
+        ],
         theme: {
           bg: "#F2F0FA",
           fg: "#161420",
@@ -1258,12 +1283,38 @@
         title: "RemembeRita",
         eyebrow: "Interactive reminder device",
         abstract: `<p>RemembeRita is a reminder device that lives at the threshold of the home. Send it a task from your phone and it holds it as a physical, light-based presence until you consciously resolve it with a gesture. It shifts remembering from mental effort to spatial awareness.</p>`,
-        challenge: "The brief constrained the prototype to a 20x20cm cube, which immediately limited what the object could contain and how it could communicate. Our concept depended on clear, readable feedback between the device and the user through light and interaction, and designing that communication to feel intuitive rather than technical within such a compact form was genuinely hard.",
-        approach: "I was drawn to the expressive potential of light and wanted to make it the main communication channel. The solution was to use a Telegram chatbot as the intermediary between the device and the user, which kept the physical object simple while still enabling real two-way interaction. Building the chatbot and the Arduino code from scratch was new territory for me and I genuinely enjoyed learning both.",
-        role: "Concept definition and interaction modalities · Arduino firmware and device logic · Telegram chatbot development · Object form and light behavior",
+        challenge: `<p>The brief constrained the prototype to a 20x20 cm cube, which immediately limited what the object could contain and how it could communicate.</p>
+          <p>Our concept depended on clear, readable feedback between the device and the user through light and interaction. Designing that communication to feel intuitive rather than technical within such a compact form was the main difficulty.</p>`,
+        approach: `<p><strong>Light as the main channel.</strong> Light became the primary way the object communicates, chosen for its expressive potential: a task stays present as light until it is resolved with a gesture.</p>
+          <p><strong>A chatbot as intermediary.</strong> A Telegram chatbot connects the device and the user, keeping the physical object simple while still enabling real two-way interaction.</p>`,
+        reflection: `<p>Building the chatbot and the Arduino firmware from scratch was new territory, and an opportunity to learn both from the ground up.</p>`,
+        role: [
+          "Concept definition and interaction modalities",
+          "Arduino firmware and device logic",
+          "Telegram chatbot development",
+          "Object form and light behaviour"
+        ],
         services: ["#ProductDesign", "#Prototyping"],
         systemArchitecture: ["#ESP32", "#Arduino", "#TelegramBot", "#NeoPixel"],
-        credits: ["Ayse Ceren Seckin", "A. M. Luz Vanella"],
+        credits: ["Nerea Asensio", "Ayse Ceren Seckin", "A. M. Luz Vanella"],
+        story: [
+          { src: "assets/projects/rememberita/webp/rememberita-1.webp", alt: "Sending a task to RemembeRita from the phone", caption: "Send a task from your phone, and RemembeRita holds it as light." },
+          { text: "challenge" },
+          { src: "assets/projects/rememberita/webp/rememberita-2.webp", alt: "RemembeRita lit up", caption: "A task held as a physical, light-based presence." },
+          { text: "approach" },
+          { row: [
+            { src: "assets/projects/rememberita/webp/rememberita-3.webp", alt: "RemembeRita in the dark", caption: "Light as the main communication channel." },
+            { src: "assets/projects/rememberita/webp/rememberita-4.webp", alt: "The cube in warm light", caption: "The 20x20 cm cube." }
+          ] },
+          { text: "role" },
+          { text: "reflection" },
+          { type: "vimeo", src: "1182424276", alt: "RemembeRita demo", caption: "RemembeRita, the demo." },
+          { row: [
+            { src: "assets/projects/rememberita/webp/rememberita-5.webp", alt: "Resolving a task with a gesture", caption: "Resolving a task with a gesture." },
+            { src: "assets/projects/rememberita/webp/rememberita-6.webp", alt: "RemembeRita light states", caption: "The light states of the object." }
+          ] },
+          { src: "assets/projects/rememberita/webp/rememberita-7.webp", alt: "RemembeRita close-up", caption: "RemembeRita at the threshold of the home." }
+        ],
         theme: {
           bg: "#F4F0EC",
           fg: "#1A1714",
@@ -1503,6 +1554,16 @@
         services: ["#Coding", "#Game", "#UI"],
         systemArchitecture: ["#HTML", "#CSS", "#JS", "#API"],
         credits: [],
+        story: [
+          { src: "assets/projects/lynx 2.0/webp/pc interaction_HR.webp", alt: "Playing Lynx 2.0 on a laptop", caption: "Lynx 2.0: find the right cat before the time runs out." },
+          { row: [
+            { src: "assets/projects/lynx 2.0/webp/pc studio_mockup_HR.webp", alt: "Lynx 2.0 on a desktop", caption: "The game on desktop." },
+            { src: "assets/projects/lynx 2.0/webp/pc_studio desk_HR.webp", alt: "Lynx 2.0 on a laptop", caption: "Cat images and facts fetched live from online APIs." }
+          ] },
+          { src: "assets/projects/lynx 2.0/webp/phone_triplemockup_HR.webp", alt: "Lynx 2.0 on mobile", caption: "A responsive interface with a simple navigation system." },
+          { src: "assets/projects/lynx 2.0/webp/tablet_scene desk_HR.webp", alt: "Lynx 2.0 on a tablet", caption: "The timed grid on tablet." },
+          { type: "vimeo", src: "1182424435", alt: "Lynx 2.0 demo", caption: "Lynx 2.0, the demo." }
+        ],
         theme: {
           bg: "#F7F2DA",
           fg: "#1F1A0B",
@@ -1524,12 +1585,31 @@
         title: "Adaptune",
         eyebrow: "Adaptive music companion",
         abstract: `<p>Adaptune is a compact music companion that reads your context and plays music accordingly. A phone embedded in a small enclosure watches your activity through its camera and translates what it sees into a continuously adapting soundtrack. Two expressive eyes on the screen reflect its current mood.</p>`,
-        challenge: "The brief asked for an AI companion that would integrate naturally into everyday life, which sounds simple but is genuinely hard to get right. Teaching the system to reliably recognise different states — focused work, a gym session, a short break — and map them to the right musical mood required a lot of calibration. Generating the music itself with AI added another layer of complexity, since each track needed to carry a clear emotional intent while still feeling like part of a coherent listening experience.",
-        approach: "We focused obsessively on smoothness. Every transition between states and between songs had to feel soft and considered, never abrupt. We defined a clear set of states so the companion could shift between them with intention, and spent a lot of time tuning the crossfades until the whole system felt alive rather than mechanical. The aesthetic of the little buddy mattered as much as the technical performance.",
-        role: "Interface design and full UI code · Deployment on Netlify · Concept definition and state system · Little companion character and visual personality",
+        challenge: `<p>The brief asked for an AI companion that would integrate naturally into everyday life, which is harder to get right than it sounds.</p>
+          <p>Teaching the system to reliably recognise different states, such as focused work, a gym session or a short break, and map them to the right musical mood required a lot of calibration. Generating the music itself with AI added another layer of complexity, since each track needed a clear emotional intent while still feeling like part of a coherent listening experience.</p>`,
+        approach: `<p><strong>Smoothness above all.</strong> Every transition between states and between songs had to feel soft and considered, never abrupt. We defined a clear set of states so the companion could shift between them with intention, and tuned the crossfades until the whole system felt alive rather than mechanical.</p>
+          <p><strong>A character, not a player.</strong> The aesthetic of the little companion mattered as much as its technical performance: two expressive eyes on the screen reflect its current mood.</p>`,
+        role: [
+          "Interface design and full UI code",
+          "Deployment on Netlify",
+          "Concept definition and state system",
+          "The companion's character and visual personality"
+        ],
         services: ["#Prototyping", "#MachineLearning", "#InteractionDesign", "#ConceptualDesign"],
         systemArchitecture: ["#TensorFlowJS", "#OpenAI", "#FaceAPI", "#WebRTC", "#ComputerVision"],
-        credits: ["Nicholas Vos", "Dajana Seefluth"],
+        credits: ["Nerea Asensio", "Nicholas Vos", "Dajana Seefluth"],
+        story: [
+          { src: "assets/projects/adaptune/webp/adaptune-1.webp", alt: "Adaptune with its expressive eyes", caption: "Adaptune: two expressive eyes reflect the companion's mood." },
+          { text: "challenge" },
+          { src: "assets/projects/adaptune/webp/adaptune-2.webp", alt: "Adaptune in another mood", caption: "Each state has its own mood and its own music." },
+          { text: "approach" },
+          { row: [
+            { src: "assets/projects/adaptune/webp/adaptune-3.webp", alt: "The phone in its enclosure", caption: "A phone embedded in a small enclosure." },
+            { src: "assets/projects/adaptune/webp/adaptune-4.webp", alt: "The enclosure open", caption: "The enclosure and its parts." }
+          ] },
+          { text: "role" },
+          { src: "assets/projects/adaptune/webp/adaptune-5.webp", alt: "Adaptune parts", caption: "The companion, disassembled." }
+        ],
         theme: {
           bg: "#F8EEF0",
           fg: "#231416",
@@ -2119,6 +2199,18 @@
         }));
         track.addEventListener("scroll", update, { passive: true });
         update();
+      });
+
+      // never stretch a small image beyond its real size (it would look blurry)
+      storyEl.querySelectorAll(".story-flow > .story-figure img, .story-chapter > .story-figure img").forEach(img => {
+        const fit = () => {
+          if (!img.naturalWidth) return;
+          const fig = img.closest(".story-figure");
+          fig.style.maxWidth = `${img.naturalWidth}px`;
+          fig.style.marginInline = "auto";
+          fig.style.width = "100%";
+        };
+        img.complete ? fit() : img.addEventListener("load", fit);
       });
 
       // images side by side share one aspect ratio, so their tops, bottoms and captions line up
