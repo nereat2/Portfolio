@@ -959,7 +959,7 @@
               </section>
             </div>
             <div id="detailVisit" hidden>
-              <a id="detailVisitLink" href="#" target="_blank" rel="noopener" class="detail-visit-btn">Visit the project ↗</a>
+              <a id="detailVisitLink" href="#" target="_blank" rel="noopener" class="detail-visit-btn">Visit the project ↗︎</a>
             </div>
           </div>
         </div>
@@ -994,7 +994,6 @@
   <section id="cta" aria-label="Call to action">
     <div class="cta-inner">
       <p class="cta-headline">Open to opportunities,<br>conversations, and good ideas.</p>
-      <p class="cta-sub">Available for internship from July 2026</p>
       <div class="cta-btns">
         <a href="mailto:hello@nereaasensio.me" class="cta-circle-btn">
           <svg viewBox="0 0 140 46" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1790,16 +1789,16 @@
     const slug = params.get("project") || "human-loci";
     const project = PROJECTS[slug] || PROJECTS["human-loci"];
     const PROJECT_ORDER = [
-      "human-loci",
-      "meeting-pond",
       "elen",
       "thea",
-      "rememberita",
+      "philoxenia",
+      "human-loci",
+      "aura-of-words",
+      "meeting-pond",
       "adaptune",
       "financial-planning-hub",
-      "lynx-2-0",
-      "philoxenia",
-      "aura-of-words"
+      "rememberita",
+      "lynx-2-0"
     ];
     const currentIndex = PROJECT_ORDER.indexOf(slug);
     const nextSlug = PROJECT_ORDER[(currentIndex + 1 + PROJECT_ORDER.length) % PROJECT_ORDER.length];
@@ -2160,9 +2159,9 @@
       const flow = project.story.map(renderBlock).join("");
       const sideBlock = (label, html, cls = "") => html ? `<section class="meta-block"><p class="meta-label">${label}</p><div class="meta-value ${cls}">${html}</div></section>` : "";
       const featured = (project.featured || []).length
-        ? `<ul class="meta-list">${project.featured.map(f => `<li>${f.url ? `<a href="${f.url}" target="_blank" rel="noopener">${f.label} ↗</a>` : f.label}</li>`).join("")}</ul>` : "";
+        ? `<ul class="meta-list">${project.featured.map(f => `<li>${f.url ? `<a href="${f.url}" target="_blank" rel="noopener">${f.label} ↗︎</a>` : f.label}</li>`).join("")}</ul>` : "";
       const resources = (project.resources || []).length
-        ? `<ul class="meta-list">${project.resources.map(r => `<li>${r.replace(/>([^<]+)<\/a>/, '>$1 ↗</a>')}</li>`).join("")}</ul>` : "";
+        ? `<ul class="meta-list">${project.resources.map(r => `<li>${r.replace(/>([^<]+)<\/a>/, '>$1 ↗︎</a>')}</li>`).join("")}</ul>` : "";
       storyEl.innerHTML = `
         <aside class="story-side">
           ${sideBlock("Project Type", project.services.join(" "), "tags")}

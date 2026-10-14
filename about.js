@@ -1,8 +1,4 @@
-// ─── NAV SCROLL BORDER ────────────────────────────
-const navEl = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  navEl.classList.toggle('scrolled', window.scrollY > 40);
-}, { passive: true });
+// Nav scroll border is handled in main.js, which this page also loads.
 
 // ─── BALL PITS ────────────────────────────────────
 const pits = new Map();
