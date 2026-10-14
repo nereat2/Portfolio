@@ -69,9 +69,6 @@
       scroll-snap-type: none !important;
     }
 
-    /* old back-link replaced by proper nav */
-    .back-link { display: none !important; }
-
     body {
       margin: 0;
       background: var(--bg);
@@ -85,137 +82,9 @@
       text-decoration: none;
     }
 
-    .back-link {
-      position: fixed;
-      top: 1.8rem;
-      left: 2rem;
-      z-index: 20;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.65rem;
-      font-size: 0.88rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding-bottom: 0.18rem;
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(10px);
-    }
-
     .detail-page {
       width: 100%;
     }
-
-    .detail-hero {
-      height: 100vh;
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      align-items: start;
-      padding: 7rem 2rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      overflow: hidden;
-    }
-
-    .detail-copy-stack {
-      grid-column: 1 / 3;
-      width: 100%;
-      margin-left: auto;
-      position: sticky;
-      top: 6rem;
-      z-index: 3;
-    }
-
-    .detail-copy {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 4rem;
-      align-items: start;
-      width: 100%;
-    }
-
-    .detail-side-meta {
-      grid-column: 1 / 2;
-      display: flex;
-      flex-direction: column;
-      gap: 1.8rem;
-    }
-
-    .detail-main-body {
-      grid-column: 2 / 3;
-      width: 100%;
-    }
-
-    /* Primary copy is relative by default, secondary is absolute */
-    .detail-copy-stack .detail-copy-primary {
-      position: relative;
-      transition: color .45s ease, opacity .45s ease, filter .45s ease;
-    }
-
-    .detail-copy-stack .detail-copy-secondary {
-      position: absolute;
-      inset: 0;
-      top: 0;
-      pointer-events: none;
-      transition: color .45s ease, opacity .45s ease, filter .45s ease;
-    }
-
-    /* Swap relative/absolute positions when exhibition copy is active */
-    body.exhibition-copy-active .detail-copy-stack .detail-copy-primary {
-      position: absolute;
-      inset: 0;
-      top: 0;
-      pointer-events: none;
-    }
-
-    body.exhibition-copy-active .detail-copy-stack .detail-copy-secondary {
-      position: relative;
-      pointer-events: auto;
-    }
-
-    .detail-copy-secondary {
-      opacity: 0;
-    }
-
-    .detail-copy-secondary[hidden] {
-      display: none !important;
-    }
-
-    body.exhibition-copy-active .detail-copy-primary {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    body.exhibition-copy-active .detail-copy-secondary {
-      opacity: 1;
-      pointer-events: auto;
-      color: #000;
-    }
-
-    body.exhibition-copy-active .detail-copy-secondary,
-    body.exhibition-copy-active .detail-copy-secondary .meta-value,
-    body.exhibition-copy-active .detail-copy-secondary .abstract {
-      color: #000;
-    }
-
-    body.exhibition-copy-dimmed .detail-copy-secondary,
-    body.exhibition-copy-dimmed .detail-copy-secondary .meta-value,
-    body.exhibition-copy-dimmed .detail-copy-secondary .abstract {
-      color: var(--soft-muted);
-      filter: blur(4px);
-    }
-
-    body.scrolled-copy .detail-copy-primary,
-    body.scrolled-copy .detail-copy-primary .meta-value,
-    body.scrolled-copy .detail-copy-primary .abstract {
-      color: var(--soft-muted);
-      filter: blur(4px);
-    }
-
-    body:not(.scrolled-copy) .detail-copy-primary { filter: blur(0px); }
-    body:not(.exhibition-copy-dimmed) .detail-copy-secondary { filter: blur(0px); }
 
     .eyebrow {
       margin: 0 0 1rem;
@@ -243,35 +112,12 @@
       transition: color .45s ease;
     }
 
-    .detail-featured {
-      margin-bottom: 1.2rem;
-      padding: 0.7rem 1rem;
-      border-left: 2px solid currentColor;
-      font-size: 0.6875rem;
-      letter-spacing: 0.06em;
-      opacity: 0.75;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-    .detail-featured a {
-      text-decoration: underline;
-    }
-
     .abstract p {
       margin: 0;
     }
 
     .abstract p + p {
       margin-top: 1.5rem;
-    }
-
-    .detail-meta {
-      margin-top: 2.8rem;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1.8rem 2rem;
-      max-width: 42rem;
     }
 
     .meta-block {
@@ -292,16 +138,6 @@
       color: var(--ink);
       line-height: 1.8;
       transition: color .45s ease;
-    }
-
-    /* sidebar metadata (type, architecture, credits) → muted */
-    .detail-side-meta .meta-value {
-      color: var(--muted);
-    }
-
-    /* process section body text (challenge, approach, role) → ink */
-    #detailProcessMeta .meta-value {
-      color: var(--ink);
     }
 
     .meta-list {
@@ -327,70 +163,6 @@
     }
     .meta-value p + p {
       margin-top: 0.9em;
-    }
-
-    .detail-gallery {
-      position: relative;
-      z-index: 2;
-      margin-top: -100vh;
-      padding: 100vh 0 5rem;
-      pointer-events: none;
-    }
-
-    .gallery-list {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-
-    .gallery-item {
-      width: 100%;
-      pointer-events: auto;
-    }
-
-    .gallery-transition-marker {
-      width: 100%;
-      height: 1px;
-    }
-
-    .gallery-transition-marker.chapter-break {
-      height: 100vh;
-    }
-
-    .gallery-item.primary {
-      width: 100vw;
-      margin-left: calc(50% - 50vw);
-      margin-right: calc(50% - 50vw);
-    }
-
-    .gallery-frame {
-      position: relative;
-      overflow: hidden;
-      background: var(--panel);
-      border-radius: 0;
-      min-height: 72vh;
-      display: grid;
-      place-items: end start;
-      isolation: isolate;
-      opacity: 1;
-      transition: opacity 0.35s ease, transform 0.35s var(--ease-out-expo);
-    }
-
-    .gallery-item:not(.primary) .gallery-frame {
-      width: min(1400px, calc(100vw - 4rem));
-      aspect-ratio: 16 / 10;
-      min-height: auto;
-      margin: 0 auto;
-      border-radius: 8px;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.14);
-    }
-
-    .gallery-visual {
-      position: absolute;
-      inset: 0;
-      background-size: cover;
-      background-position: center;
-      transform: scale(1.01);
     }
 
     .gallery-video {
@@ -423,13 +195,6 @@
       transform: translateY(10px);
       transition: opacity .25s ease, transform .25s ease;
       pointer-events: none;
-    }
-
-    .gallery-frame:hover .video-controls,
-    .gallery-frame:focus-within .video-controls {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
     }
 
     @media (hover: none), (pointer: coarse) {
@@ -522,75 +287,6 @@
     }
 
     @media (max-width: 960px) {
-      .detail-hero {
-        grid-template-columns: 1fr;
-        padding: 6rem 1.5rem 0;
-        position: sticky;
-        top: 0;
-        z-index: 1;
-      }
-
-      .detail-copy-stack {
-        grid-column: 1;
-        width: 100%;
-        position: sticky;
-        top: 5rem;
-        z-index: 3;
-      }
-
-      .detail-copy {
-        display: flex;
-        flex-direction: column;
-        gap: 2.5rem;
-        width: 100%;
-      }
-
-      .detail-main-body {
-        order: 1;
-        width: 100%;
-      }
-
-      .detail-side-meta {
-        order: 2;
-        width: 100%;
-        gap: 1.5rem;
-      }
-
-      .detail-copy-secondary {
-        opacity: 0;
-      }
-
-      .detail-copy-secondary .abstract,
-      .detail-copy-secondary .meta-value {
-        color: var(--muted);
-      }
-
-      body.scrolled-copy .detail-copy,
-      body.scrolled-copy .detail-copy .meta-value,
-      body.scrolled-copy .detail-copy .abstract {
-        color: inherit;
-      }
-
-      .detail-meta {
-        grid-template-columns: 1fr;
-      }
-
-      .gallery-item.primary .gallery-frame {
-        min-height: 52vh;
-      }
-
-      .detail-gallery {
-        margin-top: -100vh;
-        padding-top: 100vh;
-      }
-
-      .gallery-transition-marker.chapter-break {
-        height: 60vh;
-      }
-
-      .gallery-item:not(.primary) .gallery-frame {
-        width: min(100%, calc(100vw - 3rem));
-      }
 
       .video-controls {
         left: 1rem;
@@ -604,29 +300,11 @@
         width: 4.5rem;
       }
 
-      .back-link {
-        left: 1.5rem;
-      }
-
       #nextProjectLink {
         font-size: 0.8125rem;
         transform: none;
       }
     }
-    .detail-visit-btn {
-      display: inline-block;
-      margin-top: 1rem;
-      font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      text-decoration: underline;
-      opacity: 0.7;
-      transition: opacity 0.2s;
-    }
-    .detail-visit-btn:hover { opacity: 1; }
-
-    /* ── Story layout: opt-in via project.story; other projects keep the hero + gallery layout ── */
-    body.story-mode .detail-hero,
-    body.story-mode .detail-gallery { display: none; }
 
     .story {
       display: grid;
@@ -901,91 +579,10 @@
   <a href="index.html" id="siteHomeLink" class="nav-brand is-nav" aria-label="Nerea Asensio">Nerea Asensio</a>
 
   <!-- kept hidden; JS references this id to set href and sessionStorage -->
-  <a class="back-link" id="backToWorkLink" href="./index.html" aria-hidden="true" tabindex="-1">Home</a>
 
   <main class="detail-page">
-    <section class="detail-hero">
-      <div class="detail-copy-stack">
-        <div class="detail-copy detail-copy-primary">
-          <div class="detail-side-meta">
-            <section class="meta-block">
-              <p class="meta-label">Project Type</p>
-              <p class="meta-value" id="detailServices"></p>
-            </section>
-            <section class="meta-block">
-              <p class="meta-label">System Architecture</p>
-              <p class="meta-value" id="detailSystemArchitecture"></p>
-            </section>
-            <section class="meta-block">
-              <p class="meta-label">Credits</p>
-              <p class="meta-value" id="detailCredits"></p>
-            </section>
-          </div>
-
-          <div class="detail-main-body">
-            <p class="eyebrow" id="detailEyebrow">Project detail</p>
-            <h1 class="detail-title" id="detailTitle">Project</h1>
-            <div id="detailFeatured" class="detail-featured" hidden></div>
-            <div class="abstract" id="detailAbstract"></div>
-
-            <div class="detail-meta" id="detailProcessMeta" style="margin-top: 2.8rem;" hidden>
-              <section class="meta-block" id="detailChallengeBlock">
-                <p class="meta-label">Challenge</p>
-                <p class="meta-value" id="detailChallenge"></p>
-              </section>
-              <section class="meta-block" id="detailProcessBlock" hidden>
-                <p class="meta-label">Process</p>
-                <div class="meta-value" id="detailProcess"></div>
-              </section>
-              <section class="meta-block" id="detailApproachBlock">
-                <p class="meta-label">Approach</p>
-                <div class="meta-value" id="detailApproach"></div>
-              </section>
-              <section class="meta-block" id="detailRoleBlock">
-                <p class="meta-label">My Role</p>
-                <p class="meta-value" id="detailRole"></p>
-              </section>
-              <section class="meta-block" id="detailOutcomeBlock" hidden>
-                <p class="meta-label">Outcome</p>
-                <p class="meta-value" id="detailOutcome"></p>
-              </section>
-              <section class="meta-block" id="detailReflectionBlock" hidden>
-                <p class="meta-label">Reflection</p>
-                <p class="meta-value" id="detailReflection"></p>
-              </section>
-              <section class="meta-block" id="detailResourcesBlock" hidden>
-                <p class="meta-label">Resources</p>
-                <div class="meta-value" id="detailResources"></div>
-              </section>
-            </div>
-            <div id="detailVisit" hidden>
-              <a id="detailVisitLink" href="#" target="_blank" rel="noopener" class="detail-visit-btn">Visit the project ↗︎</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="detail-copy detail-copy-secondary" id="detailExhibitionCopy" hidden>
-          <div class="detail-side-meta">
-            <section class="meta-block">
-              <p class="meta-label">Credits</p>
-              <p class="meta-value" id="detailExhibitionCredits"></p>
-            </section>
-          </div>
-
-          <div class="detail-main-body">
-            <p class="eyebrow" id="detailExhibitionEyebrow">Exhibition</p>
-            <h1 class="detail-title" id="detailExhibitionTitle">Exhibition</h1>
-            <div class="abstract" id="detailExhibitionAbstract"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section class="story" id="story" hidden></section>
 
-    <section class="detail-gallery">
-      <div class="gallery-list" id="galleryList"></div>
-    </section>
   </main>
 
   <!-- ══════════════════════════════════════
@@ -1034,7 +631,6 @@
   </footer>
 
   <!-- hidden: JS references these IDs for scroll-triggered behaviour -->
-  <button id="detailBackTop" type="button" aria-hidden="true" tabindex="-1" style="display:none"></button>
 
   <script>
     const PROJECTS = {
@@ -1124,23 +720,6 @@
         services: ["#TangibleInteraction", "#EmbodiedInteraction", "#ConceptualDesign", "#DesignResearch"],
         systemArchitecture: ["#PhysicalComputing", "#EmbeddedSystems", "#RFID", "#Microcontroller"],
         credits: ["Nerea Asensio", "Jérémy Martin", "Nicholas Vos"],
-        theme: {
-          bg: "#F3EDE8",
-          fg: "#18180F",
-          muted: "rgba(24,24,15,0.68)",
-          soft: "rgba(24,24,15,0.34)",
-          border: "rgba(24,24,15,0.12)",
-          panel: "rgba(255,255,255,0.4)"
-        },
-        images: [
-          { label: "Product", bg: 'center / cover no-repeat url("assets/projects/human loci/webp/humanloci-main.webp")' },
-          { label: "General view 1", bg: 'center / cover no-repeat url("assets/projects/human loci/webp/humanloci-generalview1.webp")' },
-          { label: "General view 2", bg: 'center / cover no-repeat url("assets/projects/human loci/webp/humanloci-generalview2.webp")' },
-          { label: "General view 3", bg: 'center / cover no-repeat url("assets/projects/human loci/webp/humanloci-generalview3.webp")' },
-          { label: "Detail", bg: 'center / cover no-repeat url("assets/projects/human loci/webp/humanloci-detail1.webp")' },
-          { label: "Interaction 1", bg: 'center / cover no-repeat url("assets/projects/human loci/webp/humanloci-interaction1.webp")' },
-          { label: "Interaction 2", bg: 'center / cover no-repeat url("assets/projects/human loci/webp/humanloci-interaction2.webp")' }
-        ]
       },
       "meeting-pond": {
         title: "Meeting Pond",
@@ -1217,17 +796,6 @@
           ] },
           { src: "assets/projects/meeting pond/webp/mp-slide-7.webp", alt: "Closing slides", caption: "Like in life, a subtle action can travel far and change someone else's state." }
         ],
-        theme: {
-          bg: "#EEF6F2",
-          fg: "#121915",
-          muted: "rgba(18,25,21,0.68)",
-          soft: "rgba(18,25,21,0.34)",
-          border: "rgba(18,25,21,0.12)",
-          panel: "rgba(255,255,255,0.48)"
-        },
-        images: [
-          { label: "System overview", type: "vimeo", src: "1182421737" }
-        ]
       },
       "financial-planning-hub": {
         title: "Financial Planning Hub",
@@ -1261,22 +829,6 @@
           { type: "vimeo", src: "1182424082", alt: "Financial Planning Hub video", caption: "The Financial Planning Hub, from onboarding to what-if simulations." },
           { src: "assets/projects/financial planning hub/webp/onboarding_ready_HR.webp", alt: "Hub ready screen", caption: "The hub is ready." }
         ],
-        theme: {
-          bg: "#F2F0FA",
-          fg: "#161420",
-          muted: "rgba(22,20,32,0.68)",
-          soft: "rgba(22,20,32,0.34)",
-          border: "rgba(22,20,32,0.12)",
-          panel: "rgba(255,255,255,0.46)"
-        },
-        images: [
-          { label: "Overview", type: "vimeo", src: "1182424082" },
-          { label: "Home screen", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/webp/home_screen_1_HR.webp")' },
-          { label: "Main screen", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/webp/main_screen_HR.webp")' },
-          { label: "Dashboard", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/webp/mock_dashboard_HR.webp")' },
-          { label: "Onboarding", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/webp/onboarding_1_HR.webp")' },
-          { label: "Onboarding ready", bg: 'center / cover no-repeat url("assets/projects/financial planning hub/webp/onboarding_ready_HR.webp")' }
-        ]
       },
       "rememberita": {
         title: "RemembeRita",
@@ -1314,24 +866,6 @@
           ] },
           { src: "assets/projects/rememberita/webp/rememberita-7.webp", alt: "RemembeRita close-up", caption: "RemembeRita at the threshold of the home." }
         ],
-        theme: {
-          bg: "#F4F0EC",
-          fg: "#1A1714",
-          muted: "rgba(26,23,20,0.68)",
-          soft: "rgba(26,23,20,0.34)",
-          border: "rgba(26,23,20,0.12)",
-          panel: "rgba(255,255,255,0.46)"
-        },
-        images: [
-          { label: "View 1", bg: 'center / cover no-repeat url("assets/projects/rememberita/webp/rememberita-1.webp")' },
-          { label: "View 2", bg: 'center / cover no-repeat url("assets/projects/rememberita/webp/rememberita-2.webp")' },
-          { label: "View 3", bg: 'center / cover no-repeat url("assets/projects/rememberita/webp/rememberita-3.webp")' },
-          { label: "View 4", bg: 'center / cover no-repeat url("assets/projects/rememberita/webp/rememberita-4.webp")' },
-          { label: "View 5", bg: 'center / cover no-repeat url("assets/projects/rememberita/webp/rememberita-5.webp")' },
-          { label: "View 6", bg: 'center / cover no-repeat url("assets/projects/rememberita/webp/rememberita-6.webp")' },
-          { label: "View 7", bg: 'center / cover no-repeat url("assets/projects/rememberita/webp/rememberita-7.webp")' },
-          { label: "Demo", type: "vimeo", src: "1182424276" }
-        ]
       },
       "thea": {
         title: "Thea",
@@ -1359,6 +893,8 @@
           "Art direction of the project's photo and video documentation",
           "Final presentation design"
         ],
+        reflection: `<p>Designing for health means being precise and careful about everything you propose, because the work touches people's lives directly.</p>
+          <p>The research was the most delicate part: finding people willing to talk about such a sensitive condition was hard, and the interviews required real care. On the technical side, the project opened new territory, exploring sensors and techniques that work directly on the body, and allowed some speculation, since part of the technology we proposed is not ready yet but will be in the future. Above all, it confirmed how central UX becomes when a product lives on someone's body and shapes their everyday decisions. It taught me a great deal, both on the technical side and on the user and research side.</p>`,
         outcome: `<p>A functional prototype across all four workstreams: the device, its physical form, the companion app and the voice agent.</p>
           <p>A multimodal language where stillness and silence are the default: a light gauge, a haptic rhythm and a voice that speaks only when asked or at a true edge. Alongside it, a complete co-design and usability protocol, ready to run with people who live with allergies.</p>`,
         resources: [
@@ -1416,6 +952,7 @@
           { label: "How it was built", html: `<p>Thea was the work of a team of four. Together we carried out the research and the ideation.</p>
             <p><strong>Jérémy Martin</strong> defined the brand and Thea's personality, wrote the voice agent's system prompt, coded the voice interface, designed the co-design protocol and built the final demo. <strong>Nicholas Vos</strong> led the electronics, the sensing firmware and the motion work. <strong>Lucia Ciapessoni</strong> led the 3D modelling, the physical form and the documentation. <strong>I</strong> led the companion app, its UX, UI and onboarding, art-directed the project's photo and video documentation, and designed the final presentation. Photography by Niccolò Quaresima.</p>`, lead: false },
           { text: "role" },
+          { text: "reflection" },
           { text: "outcome" },
           { type: "vimeo", src: "1232759690", alt: "Thea video", caption: "Thea, the project video." },
           { row: [
@@ -1428,9 +965,6 @@
             { src: "assets/projects/thea/webp/thea-photo-2.webp", alt: "Thea open on a blue surface", caption: "Thea among the allergens it helps you sense." }
           ] }
         ],
-        images: [
-          { label: "Thea", bg: 'center / cover no-repeat url("assets/projects/thea/webp/thea-hero.webp")' }
-        ]
       },
       "elen": {
         title: "ELEN",
@@ -1533,18 +1067,6 @@
             ]
           } }
         ],
-        theme: {
-          bg: "#161217",
-          fg: "#F0EAF5",
-          muted: "rgba(240,234,245,0.72)",
-          soft: "rgba(240,234,245,0.34)",
-          border: "rgba(240,234,245,0.12)",
-          panel: "rgba(255,255,255,0.06)"
-        },
-        images: [
-          { label: "Front", bg: 'center / cover no-repeat url("assets/projects/elen/webp/elen-front.webp")' },
-          { label: "ELEN video", type: "vimeo", src: "1182423777" }
-        ]
       },
       "lynx-2-0": {
         title: "Lynx 2.0",
@@ -1563,22 +1085,6 @@
           { src: "assets/projects/lynx 2.0/webp/tablet_scene desk_HR.webp", alt: "Lynx 2.0 on a tablet", caption: "The timed grid on tablet." },
           { type: "vimeo", src: "1182424435", alt: "Lynx 2.0 demo", caption: "Lynx 2.0, the demo." }
         ],
-        theme: {
-          bg: "#F7F2DA",
-          fg: "#1F1A0B",
-          muted: "rgba(31,26,11,0.68)",
-          soft: "rgba(31,26,11,0.34)",
-          border: "rgba(31,26,11,0.12)",
-          panel: "rgba(255,255,255,0.44)"
-        },
-        images: [
-          { label: "PC interaction", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/webp/pc interaction_HR.webp")' },
-          { label: "PC studio mockup", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/webp/pc studio_mockup_HR.webp")' },
-          { label: "PC studio desk", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/webp/pc_studio desk_HR.webp")' },
-          { label: "Phone mockup", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/webp/phone_triplemockup_HR.webp")' },
-          { label: "Tablet desk", bg: 'center / cover no-repeat url("assets/projects/lynx 2.0/webp/tablet_scene desk_HR.webp")' },
-          { label: "Demo", type: "vimeo", src: "1182424435" }
-        ]
       },
       "adaptune": {
         title: "Adaptune",
@@ -1609,21 +1115,6 @@
           { text: "role" },
           { src: "assets/projects/adaptune/webp/adaptune-5.webp", alt: "Adaptune parts", caption: "The companion, disassembled." }
         ],
-        theme: {
-          bg: "#F8EEF0",
-          fg: "#231416",
-          muted: "rgba(35,20,22,0.68)",
-          soft: "rgba(35,20,22,0.34)",
-          border: "rgba(35,20,22,0.12)",
-          panel: "rgba(255,255,255,0.48)"
-        },
-        images: [
-          { label: "View 1", bg: 'center / cover no-repeat url("assets/projects/adaptune/webp/adaptune-1.webp")' },
-          { label: "View 2", bg: 'center / cover no-repeat url("assets/projects/adaptune/webp/adaptune-2.webp")' },
-          { label: "View 3", bg: 'center / cover no-repeat url("assets/projects/adaptune/webp/adaptune-3.webp")' },
-          { label: "View 4", bg: 'center / cover no-repeat url("assets/projects/adaptune/webp/adaptune-4.webp")' },
-          { label: "View 5", bg: 'center / cover no-repeat url("assets/projects/adaptune/webp/adaptune-5.webp")' }
-        ]
       },
       "philoxenia": {
         title: "Philo & Xeni",
@@ -1709,10 +1200,6 @@
         services: ["#UXResearch", "#ServiceDesign", "#AIDesign", "#ConceptualDesign"],
         systemArchitecture: ["#React", "#Vite", "#Vercel", "#SystemPrompts"],
         credits: "Gürünlü Günseli, Nerea Asensio, Mélanie Turano, Peng-Hsuan Lee Jennifer, Walter De Nicola · In collaboration with SPARK Reply",
-        theme: "light",
-        images: [
-          { label: "Philo & Xeni Platform", bg: 'center / cover no-repeat url("assets/projects/philoxenia/webp/philoxenia-main1.webp")' }
-        ]
       },
       "aura-of-words": {
         title: "An Aura of Words",
@@ -1771,17 +1258,6 @@
           { src: "assets/projects/aura-of-words/webp/aura-comparison.webp", alt: "All five auras side by side", caption: "All five auras side by side, sized equally on purpose so that only the colours speak." },
           { src: "assets/projects/aura-of-words/webp/aura-poster.webp", alt: "Poster design for Parco Tassino", caption: "Poster design for Parco Tassino, with a QR code back to the piece: does this portrait match how you see this park?" }
         ],
-        theme: "light",
-        images: [
-          { label: "Opening", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-opening.webp")' },
-          { label: "Framing", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-debate.webp")' },
-          { label: "The six categories", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-categories.webp")' },
-          { label: "Methodology, one review at a time", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-methodology.webp")' },
-          { label: "The map", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-map.webp")' },
-          { label: "Word map detail", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-wordmap.webp")' },
-          { label: "Aura comparison", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-comparison.webp")' },
-          { label: "Poster design", bg: 'center / cover no-repeat url("assets/projects/aura-of-words/webp/aura-poster.webp")' }
-        ]
       }
     };
 
@@ -1803,18 +1279,6 @@
     const currentIndex = PROJECT_ORDER.indexOf(slug);
     const nextSlug = PROJECT_ORDER[(currentIndex + 1 + PROJECT_ORDER.length) % PROJECT_ORDER.length];
 
-    const hexToRgb = hex => {
-      const clean = hex.replace("#", "");
-      const value = clean.length === 3
-        ? clean.split("").map(ch => ch + ch).join("")
-        : clean;
-      return [
-        parseInt(value.slice(0, 2), 16),
-        parseInt(value.slice(2, 4), 16),
-        parseInt(value.slice(4, 6), 16)
-      ];
-    };
-
     document.documentElement.style.setProperty("--bg", "#F5F5F0");
     document.documentElement.style.setProperty("--fg", "#000000");
     document.documentElement.style.setProperty("--muted", "rgba(0,0,0,0.72)");
@@ -1824,288 +1288,9 @@
 
     document.body.style.background = "#F5F5F0";
 
-    document.getElementById("detailEyebrow").textContent = project.eyebrow;
-    document.getElementById("detailTitle").textContent = project.title;
-    document.getElementById("detailAbstract").innerHTML = project.abstract;
-
-    const visitEl = document.getElementById('detailVisit');
-    const visitLink = document.getElementById('detailVisitLink');
-    if (project.visitUrl) {
-      visitLink.href = project.visitUrl;
-      visitEl.hidden = false;
-    } else {
-      visitEl.hidden = true;
-    }
-
-    const featuredEl = document.getElementById('detailFeatured');
-    if (project.featured && project.featured.length) {
-      featuredEl.innerHTML = project.featured.map(f =>
-        f.url
-          ? `<span>★ <a href="${f.url}" target="_blank" rel="noopener">${f.label}</a></span>`
-          : `<span>★ ${f.label}</span>`
-      ).join('');
-      featuredEl.hidden = false;
-    } else {
-      featuredEl.hidden = true;
-    }
-    const processMeta = document.getElementById("detailProcessMeta");
-    if (project.challenge || project.approach || project.role) {
-      document.getElementById("detailChallenge").textContent = project.challenge || "";
-      document.getElementById("detailApproach").innerHTML = project.approach || "";
-      document.getElementById("detailRole").innerHTML = project.role || "";
-      processMeta.hidden = false;
-    } else {
-      processMeta.hidden = true;
-    }
-
-    const toggleBlock = (blockId, valueId, content, isList) => {
-      const block = document.getElementById(blockId);
-      const value = document.getElementById(valueId);
-      if (content && content.length) {
-        value.innerHTML = isList
-          ? `<ul class="meta-list">${content.map(li => `<li>${li}</li>`).join("")}</ul>`
-          : content;
-        block.hidden = false;
-      } else {
-        block.hidden = true;
-      }
-    };
-    toggleBlock("detailProcessBlock", "detailProcess", project.process, true);
-    toggleBlock("detailOutcomeBlock", "detailOutcome", project.outcome, false);
-    toggleBlock("detailReflectionBlock", "detailReflection", project.reflection, false);
-    toggleBlock("detailResourcesBlock", "detailResources", project.resources, true);
-    document.getElementById("detailServices").textContent = project.services.join(" ");
-    document.getElementById("detailSystemArchitecture").textContent = (project.systemArchitecture || []).join(" ");
-    document.getElementById("detailCredits").textContent = Array.isArray(project.credits) ? project.credits.join(", ") : (project.credits || "");
-    const exhibitionCopy = document.getElementById("detailExhibitionCopy");
-    if (project.exhibition) {
-      exhibitionCopy.hidden = false;
-      document.getElementById("detailExhibitionEyebrow").textContent = project.exhibition.eyebrow || "Exhibition";
-      document.getElementById("detailExhibitionTitle").textContent = project.exhibition.title || "Exhibition";
-      document.getElementById("detailExhibitionAbstract").innerHTML = project.exhibition.abstract || "";
-      document.getElementById("detailExhibitionCredits").textContent = (project.exhibition.credits || []).join(", ");
-    } else {
-      exhibitionCopy.hidden = true;
-    }
-    const backToWorkLink = document.getElementById("backToWorkLink");
-    backToWorkLink.href = "./index.html";
-    backToWorkLink.addEventListener("click", () => {
-      sessionStorage.setItem("skipIntroOnce", "1");
-    });
     const nextProjectLink = document.getElementById("nextProjectLink");
     nextProjectLink.href = `./project-detail.html?project=${encodeURIComponent(nextSlug)}`;
-    const backTopButton = document.getElementById("detailBackTop");
-    const toggleBackTop = () => {
-      const nearBottom =
-        window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 300;
-      backTopButton.classList.toggle("visible", nearBottom);
-    };
-    backTopButton.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-    toggleBackTop();
-    window.addEventListener("scroll", toggleBackTop, { passive: true });
     document.title = `${project.title} — Project Detail`;
-
-    const gallery = document.getElementById("galleryList");
-    let exhibitionMarker = null;
-    let exhibitionFirstItem = null;
-    let afterExhibitionBreak = false;
-    project.images.forEach((image, index) => {
-      if (image.type === "section-break") {
-        const marker = document.createElement("div");
-        marker.className = "gallery-transition-marker chapter-break";
-        marker.dataset.key = image.key || "";
-        gallery.appendChild(marker);
-        if (image.key === "exhibition") {
-          exhibitionMarker = marker;
-          afterExhibitionBreak = true;
-        }
-        return;
-      }
-
-      const item = document.createElement("article");
-      item.className = `gallery-item${index === 0 ? " primary" : ""}`;
-
-      if (afterExhibitionBreak && !exhibitionFirstItem) {
-        exhibitionFirstItem = item;
-      }
-
-      const frame = document.createElement("div");
-      frame.className = "gallery-frame";
-
-      let visual;
-      if (image.type === "vimeo") {
-        const playerId = `vimeo-player-${index}`;
-        visual = document.createElement("iframe");
-        visual.className = "gallery-video gallery-vimeo";
-        visual.src = `https://player.vimeo.com/video/${image.src}?autoplay=1&loop=1&muted=1&autopause=0&controls=0&background=0&title=0&byline=0&portrait=0&api=1&player_id=${playerId}`;
-        visual.id = playerId;
-        visual.allow = "autoplay; fullscreen; picture-in-picture";
-        visual.setAttribute("frameborder", "0");
-        visual.setAttribute("allowfullscreen", "");
-      } else if (image.type === "video") {
-        visual = document.createElement("video");
-        visual.className = "gallery-video";
-        visual.src = image.src;
-        visual.autoplay = true;
-        visual.muted = true;
-        visual.loop = true;
-        visual.playsInline = true;
-      } else {
-        visual = document.createElement("div");
-        visual.className = "gallery-visual";
-        visual.style.background = image.bg;
-      }
-
-      if (image.type === "video" || image.type === "vimeo") {
-        const controls = document.createElement("div");
-        controls.className = "video-controls";
-
-        const playButton = document.createElement("button");
-        playButton.className = "video-btn";
-        playButton.type = "button";
-        playButton.textContent = "Pause";
-
-        const timeline = document.createElement("input");
-        timeline.className = "video-range timeline";
-        timeline.type = "range";
-        timeline.min = "0";
-        timeline.max = "100";
-        timeline.step = "0.1";
-        timeline.value = "0";
-
-        const volume = document.createElement("input");
-        volume.className = "video-range volume";
-        volume.type = "range";
-        volume.min = "0";
-        volume.max = "1";
-        volume.step = "0.01";
-        volume.value = "0";
-
-        if (image.type === "vimeo") {
-          let isPaused = false;
-          let duration = 0;
-          let isSeeking = false;
-          const sendToVimeo = payload => {
-            visual.contentWindow?.postMessage(payload, "https://player.vimeo.com");
-          };
-
-          const handleVimeoMessage = event => {
-            if (event.origin !== "https://player.vimeo.com") return;
-            if (event.source !== visual.contentWindow) return;
-
-            let payload = event.data;
-            if (typeof payload === "string") {
-              try {
-                payload = JSON.parse(payload);
-              } catch {
-                return;
-              }
-            }
-
-            if (!payload) return;
-
-            if (payload.event === "play") {
-              isPaused = false;
-              playButton.textContent = "Pause";
-            }
-
-            if (payload.event === "pause") {
-              isPaused = true;
-              playButton.textContent = "Play";
-            }
-
-            if (payload.event === "timeupdate" && payload.data && !isSeeking) {
-              duration = payload.data.duration || duration;
-              if (payload.data.percent != null) {
-                timeline.value = payload.data.percent * 100;
-              } else if (duration > 0 && payload.data.seconds != null) {
-                timeline.value = (payload.data.seconds / duration) * 100;
-              }
-            }
-
-            if (payload.event === "loaded" && payload.data && payload.data.duration) {
-              duration = payload.data.duration;
-            }
-          };
-
-          window.addEventListener("message", handleVimeoMessage);
-
-          visual.addEventListener("load", () => {
-            sendToVimeo({ method: "addEventListener", value: "play" });
-            sendToVimeo({ method: "addEventListener", value: "pause" });
-            sendToVimeo({ method: "addEventListener", value: "timeupdate" });
-            sendToVimeo({ method: "addEventListener", value: "loaded" });
-            sendToVimeo({ method: "setVolume", value: 0 });
-            sendToVimeo({ method: "play" });
-          });
-
-          playButton.addEventListener("click", () => {
-            isPaused = !isPaused;
-            playButton.textContent = isPaused ? "Play" : "Pause";
-            sendToVimeo({ method: isPaused ? "pause" : "play" });
-          });
-
-          volume.addEventListener("input", () => {
-            const level = Number(volume.value);
-            sendToVimeo({ method: "setMuted", value: level === 0 });
-            sendToVimeo({ method: "setVolume", value: level });
-          });
-
-          timeline.addEventListener("input", () => {
-            if (!duration) return;
-            isSeeking = true;
-            sendToVimeo({ method: "setCurrentTime", value: (Number(timeline.value) / 100) * duration });
-          });
-
-          timeline.addEventListener("change", () => {
-            isSeeking = false;
-          });
-        } else {
-          const syncTimeline = () => {
-            if (!visual.duration) return;
-            timeline.value = (visual.currentTime / visual.duration) * 100;
-          };
-
-          const syncPlayState = () => {
-            playButton.textContent = visual.paused ? "Play" : "Pause";
-          };
-
-          playButton.addEventListener("click", () => {
-            if (visual.paused) {
-              visual.play();
-            } else {
-              visual.pause();
-            }
-          });
-
-          timeline.addEventListener("input", () => {
-            if (!visual.duration) return;
-            visual.currentTime = (Number(timeline.value) / 100) * visual.duration;
-          });
-
-          volume.addEventListener("input", () => {
-            visual.muted = false;
-            visual.volume = Number(volume.value);
-          });
-
-          visual.addEventListener("timeupdate", syncTimeline);
-          visual.addEventListener("play", syncPlayState);
-          visual.addEventListener("pause", syncPlayState);
-          visual.addEventListener("loadedmetadata", syncTimeline);
-        }
-
-        controls.appendChild(playButton);
-        controls.appendChild(timeline);
-        controls.appendChild(volume);
-        frame.appendChild(controls);
-      }
-
-      frame.appendChild(visual);
-      item.appendChild(frame);
-      gallery.appendChild(item);
-    });
 
     if (project.story) {
       document.body.classList.add("story-mode");
@@ -2311,142 +1496,6 @@
         }), { threshold: 0.4 }).observe(box);
       });
     }
-
-    let overflowPrimary = 0;
-    let overflowExhibition = 0;
-
-    const recalculateLayout = () => {
-      const isMobile = window.innerWidth <= 960;
-      const topOffset = isMobile ? 5 * 16 : 6 * 16;
-      const bottomPadding = isMobile ? 120 : 260; // Spacious clearance so pictures don't cover the credits too soon
-      const maxVisibleHeight = window.innerHeight - topOffset - bottomPadding;
-      const pauseRoom = isMobile ? 100 : 200; // Extra breathing room before images slide up
-
-      // 1. Calculate Primary Copy Overflow
-      const primaryCopy = document.querySelector(".detail-copy-primary");
-      if (primaryCopy) {
-        const prevTransform = primaryCopy.style.transform;
-        primaryCopy.style.transform = "none";
-        const h = primaryCopy.getBoundingClientRect().height;
-        primaryCopy.style.transform = prevTransform;
-        
-        overflowPrimary = Math.max(0, h - maxVisibleHeight);
-      } else {
-        overflowPrimary = 0;
-      }
-
-      // 2. Calculate Exhibition Copy Overflow
-      const exhibitionCopy = document.querySelector(".detail-copy-secondary");
-      if (project.exhibition && exhibitionCopy) {
-        const prevStyle = exhibitionCopy.style.cssText;
-        exhibitionCopy.style.position = "relative";
-        exhibitionCopy.style.display = "block";
-        exhibitionCopy.style.opacity = "0";
-        exhibitionCopy.style.transform = "none";
-        
-        const h = exhibitionCopy.getBoundingClientRect().height;
-        
-        exhibitionCopy.style.cssText = prevStyle;
-        overflowExhibition = Math.max(0, h - maxVisibleHeight);
-      } else {
-        overflowExhibition = 0;
-      }
-
-      // 3. Update Gallery Padding and Margin to account for primary overflow + pause room
-      const galleryElement = document.querySelector(".detail-gallery");
-      if (galleryElement) {
-        galleryElement.style.marginTop = "-100vh";
-        galleryElement.style.paddingTop = `calc(100vh + ${overflowPrimary}px + ${pauseRoom}px)`;
-      }
-
-      // 4. Update Exhibition Marker height to account for exhibition overflow + pause room
-      if (exhibitionMarker) {
-        const baseHeight = isMobile ? 60 : 100;
-        exhibitionMarker.style.height = `calc(${baseHeight}vh + ${overflowExhibition}px + ${pauseRoom}px)`;
-      }
-    };
-
-    const handleScrollAndTranslation = () => {
-      const y = window.scrollY;
-      const primaryCopy = document.querySelector(".detail-copy-primary");
-      const exhibitionCopy = document.querySelector(".detail-copy-secondary");
-
-      const isExhibitionActive = document.body.classList.contains("exhibition-copy-active");
-      
-      if (!isExhibitionActive) {
-        if (primaryCopy) {
-          const transY = -Math.min(y, overflowPrimary);
-          primaryCopy.style.transform = `translateY(${transY}px)`;
-        }
-        if (exhibitionCopy) {
-          exhibitionCopy.style.transform = "translateY(0px)";
-        }
-      } else {
-        if (primaryCopy) {
-          primaryCopy.style.transform = "translateY(0px)";
-        }
-        
-        if (exhibitionCopy && exhibitionMarker) {
-          const viewportMidpoint = window.innerHeight / 2;
-          const triggerY = exhibitionMarker.offsetTop - viewportMidpoint;
-          const relativeScroll = y - triggerY;
-          
-          if (relativeScroll > 0) {
-            const transY = -Math.min(relativeScroll, overflowExhibition);
-            exhibitionCopy.style.transform = `translateY(${transY}px)`;
-          } else {
-            exhibitionCopy.style.transform = "translateY(0px)";
-          }
-        }
-      }
-    };
-
-    const handleScroll = () => {
-      const firstImage = gallery.querySelector(".gallery-item.primary");
-      if (!firstImage) {
-        document.body.classList.remove("scrolled-copy");
-        document.body.classList.remove("exhibition-copy-active");
-        document.body.classList.remove("exhibition-copy-dimmed");
-        return;
-      }
-
-      const rect = firstImage.getBoundingClientRect();
-      const imageMidpoint = rect.top + (rect.height / 2);
-      const viewportMidpoint = window.innerHeight / 2;
-
-      document.body.classList.toggle("scrolled-copy", imageMidpoint <= viewportMidpoint);
-
-      if (project.exhibition && exhibitionMarker) {
-        const markerRect = exhibitionMarker.getBoundingClientRect();
-        const exhibitionActive = markerRect.top <= viewportMidpoint;
-        document.body.classList.toggle("exhibition-copy-active", exhibitionActive);
-
-        if (exhibitionActive && exhibitionFirstItem) {
-          const exhibitionFirstRect = exhibitionFirstItem.getBoundingClientRect();
-          document.body.classList.toggle("exhibition-copy-dimmed", exhibitionFirstRect.top <= viewportMidpoint);
-        } else {
-          document.body.classList.remove("exhibition-copy-dimmed");
-        }
-      } else {
-        document.body.classList.remove("exhibition-copy-active");
-        document.body.classList.remove("exhibition-copy-dimmed");
-      }
-    };
-
-    recalculateLayout();
-    handleScroll();
-    handleScrollAndTranslation();
-
-    window.addEventListener("scroll", () => {
-      handleScroll();
-      handleScrollAndTranslation();
-    }, { passive: true });
-
-    window.addEventListener("resize", () => {
-      recalculateLayout();
-      handleScroll();
-      handleScrollAndTranslation();
-    });
   </script>
 </body>
 </html>
